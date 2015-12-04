@@ -33,8 +33,7 @@
     self.switch_view.layer.borderColor = [[UIColor blackColor] CGColor];
     self.switch_view.layer.cornerRadius = 5;
     
-//    Neblina *neblina_obj = [[Neblina alloc]init];
-    packet_mutable_data = [[NSMutableData alloc]init];
+    mutable_packet_Data = [[NSMutableData alloc]init];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -50,16 +49,6 @@
 
 -(void)readBinaryFile
 {
-//    NSString *path = [[NSBundle mainBundle] pathForResource:@"QuaternionStream" ofType:@"bin"];//put the path to your file here
-//    fileData = [NSData dataWithContentsOfFile: path];
-//    
-//    fileBytes = (char *)[fileData bytes];
-//    length = [fileData length];
-//    NSLog(@"Length = %lu", (unsigned long)length);
-//    
-//    start_flag = true;
-//    [self.logger_tbl reloadData];
-    
     NSString *path = [[NSBundle mainBundle] pathForResource:@"QuaternionStream" ofType:@"bin"];//put the path to your file here
     fileData = [NSData dataWithContentsOfFile: path];
     length = [fileData length];
@@ -73,15 +62,38 @@
 
 -(void)timerFireMethod
 {
-//    fileBytes = (char *)[fileData bytes];
     NSLog(@"Count = %lu = %lu", (unsigned long)count, deactivate_var);
 
     uint8_t *bytePtr = (uint8_t  * )[fileData bytes];
-    NSData *packet= (__bridge NSData *)((__bridge void *)([NSData dataWithBytes:(void *)(bytePtr+(count*sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))) length:20]));
+    single_packet= (__bridge NSData *)((__bridge void *)([NSData dataWithBytes:(void *)(bytePtr+(count*sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))) length:20]));
+
+    // Appending new packets to mutable data
+    [mutable_packet_Data appendData:single_packet];
     
-    [packet_mutable_data appendData:packet];
-    NSLog(@"Array_Data = %@", packet_mutable_data);
-    
+    // Writing data to DataLogger File
+    char *fileBytes = (char *)[single_packet bytes];
+    NSData *data = [[NSData alloc] initWithBytes:fileBytes length:[single_packet length]];
+    NSString *appFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"DataLogger.txt"];
+
+    if(![[NSFileManager defaultManager] fileExistsAtPath:appFile])
+    {
+        [[NSFileManager defaultManager] createFileAtPath:appFile contents:nil attributes:nil];
+        [data writeToFile:appFile atomically:YES];
+    }
+    else
+    {
+        NSFileHandle *myHandle = [NSFileHandle fileHandleForWritingAtPath:appFile];
+        [myHandle seekToEndOfFile];
+        [myHandle writeData:data];
+    }
+
+//    // Delete data to DataLogger File
+//    NSError *error = nil;
+//    [[NSFileManager defaultManager] removeItemAtPath:appFile error:&error];
+
+    // Reading data to DataLogger File
+    logger_file_Data = [NSData dataWithContentsOfFile:appFile];
+   
     start_flag = true;
     [self.logger_tbl reloadData];
     
@@ -175,42 +187,43 @@
     if (cell == nil)
     {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellidentifire];
-        
-        if (start_flag == true)
-        {
-            void *bytePtr = (__bridge void *)([NSData dataWithData:packet_mutable_data]);
-            
-            Quaternion_t* t= (__bridge Quaternion_t *)([NSData dataWithBytes:(void *)(bytePtr+(indexPath.row*sizeof(Fusion_DataPacket_t))+sizeof(uint32_t)+sizeof(NEB_PKTHDR)) length:MAX_NB_BYTES]);
-            
-            NSLog(@"q0 = %x", (int16_t)t->q[0]);
-            NSLog(@"q1 = %x", (int16_t)t->q[1]);
-            NSLog(@"q2 = %x", (int16_t)t->q[2]);
-            NSLog(@"q3 = %x", (int16_t)t->q[3]);
-            
-            NSString *myString = [NSString stringWithFormat:@" %x %x %x %x", (int16_t)t->q[0], (int16_t)t->q[1],(int16_t)t->q[2],(int16_t)t->q[3]];
-            cell.textLabel.text = myString;
-            
-            [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:deactivate_var-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-        }
     }
+    
+    if (start_flag == true)
+    {
+        void *bytePtr = (__bridge void *)([NSData dataWithData:logger_file_Data]);
+        
+        Quaternion_t* t= (__bridge Quaternion_t *)([NSData dataWithBytes:(void *)(bytePtr+(indexPath.row*sizeof(Fusion_DataPacket_t))+sizeof(uint32_t)+sizeof(NEB_PKTHDR)) length:MAX_NB_BYTES]);
+        
+        NSLog(@"q0 = %x", (int16_t)t->q[0]);
+        NSLog(@"q1 = %x", (int16_t)t->q[1]);
+        NSLog(@"q2 = %x", (int16_t)t->q[2]);
+        NSLog(@"q3 = %x", (int16_t)t->q[3]);
+        
+        NSString *myString = [NSString stringWithFormat:@" %x %x %x %x", (int16_t)t->q[0], (int16_t)t->q[1],(int16_t)t->q[2],(int16_t)t->q[3]];
+        cell.textLabel.text = myString;
+        
+        [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:deactivate_var-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    uint8_t * bytePtr = (uint8_t  * )[fileData bytes];
+    uint8_t * bytePtr = (uint8_t  * )[logger_file_Data bytes];
 
     Quaternion_t *t= (__bridge Quaternion_t *)([NSData dataWithBytes:(void *)(bytePtr+(indexPath.row*sizeof(Fusion_DataPacket_t))+sizeof(uint32_t)+sizeof(NEB_PKTHDR)) length:MAX_NB_BYTES]);
     
-    NSLog(@"q0 = %d", (int16_t)t->q[0]);
-    NSLog(@"q1 = %d", (int16_t)t->q[1]);
-    NSLog(@"q2 = %d", (int16_t)t->q[2]);
-    NSLog(@"q3 = %d", (int16_t)t->q[3]);
+    NSLog(@"q0 = %x", (int16_t)t->q[0]);
+    NSLog(@"q1 = %x", (int16_t)t->q[1]);
+    NSLog(@"q2 = %x", (int16_t)t->q[2]);
+    NSLog(@"q3 = %x", (int16_t)t->q[3]);
 
-    QuaternionA_lbl.text = [NSString stringWithFormat:@"%d", (int16_t)t->q[0]];
-    QuaternionB_lbl.text = [NSString stringWithFormat:@"%d", (int16_t)t->q[1]];
-    QuaternionC_lbl.text = [NSString stringWithFormat:@"%d", (int16_t)t->q[2]];
-    QuaternionD_lbl.text = [NSString stringWithFormat:@"%d", (int16_t)t->q[3]];
+    QuaternionA_lbl.text = [NSString stringWithFormat:@"%x", (int16_t)t->q[0]];
+    QuaternionB_lbl.text = [NSString stringWithFormat:@"%x", (int16_t)t->q[1]];
+    QuaternionC_lbl.text = [NSString stringWithFormat:@"%x", (int16_t)t->q[2]];
+    QuaternionD_lbl.text = [NSString stringWithFormat:@"%x", (int16_t)t->q[3]];
 }
 
 @end

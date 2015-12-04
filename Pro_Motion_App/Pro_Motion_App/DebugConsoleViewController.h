@@ -24,7 +24,10 @@
     NSUInteger deactivate_var;
     
     NSData *fileData;
-    NSMutableData *packet_mutable_data;
+    NSData *single_packet;
+    NSMutableData *mutable_packet_Data;
+    
+    NSData *logger_file_Data;
 }
 
 @property (strong, nonatomic) CBPeripheral *Peripheral;

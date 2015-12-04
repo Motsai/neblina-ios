@@ -182,7 +182,7 @@
                                                     <animations/>
                                                     <state key="normal" title="Button" image="less.png"/>
                                                     <connections>
-                                                        <action selector="btnShowMoreClick:" destination="uCi-tR-bVe" eventType="touchUpInside" id="yyu-1N-YyN"/>
+                                                        <action selector="showmore:" destination="uCi-tR-bVe" eventType="touchUpInside" id="QOB-On-EkD"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
