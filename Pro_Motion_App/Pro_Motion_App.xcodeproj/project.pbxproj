@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		A6579A6B1C1172F00057C700 /* data.plist in Resources */ = {isa = PBXBuildFile; fileRef = A6579A6A1C1172F00057C700 /* data.plist */; };
+		A6579A6D1C11D5EE0057C700 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6579A6C1C11D5EE0057C700 /* SceneKit.framework */; };
+		A6579A701C11DBF60057C700 /* IMUStreamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6579A6F1C11DBF60057C700 /* IMUStreamViewController.m */; };
 		A65B91F01C02FF9D00DB6576 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A65B91EF1C02FF9D00DB6576 /* main.m */; };
 		A65B91F31C02FF9D00DB6576 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A65B91F21C02FF9D00DB6576 /* AppDelegate.m */; };
 		A65B91F61C02FF9D00DB6576 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A65B91F51C02FF9D00DB6576 /* ViewController.m */; };
@@ -82,6 +84,9 @@
 
 /* Begin PBXFileReference section */
 		A6579A6A1C1172F00057C700 /* data.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = data.plist; sourceTree = "<group>"; };
+		A6579A6C1C11D5EE0057C700 /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
+		A6579A6E1C11DBF60057C700 /* IMUStreamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IMUStreamViewController.h; path = ../IMUStreamViewController.h; sourceTree = "<group>"; };
+		A6579A6F1C11DBF60057C700 /* IMUStreamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IMUStreamViewController.m; path = ../IMUStreamViewController.m; sourceTree = "<group>"; };
 		A65B91EB1C02FF9D00DB6576 /* Pro_Motion_App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pro_Motion_App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A65B91EF1C02FF9D00DB6576 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A65B91F11C02FF9D00DB6576 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -160,6 +165,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6579A6D1C11D5EE0057C700 /* SceneKit.framework in Frameworks */,
 				A67EC0EC1C0738FB00987270 /* CoreBluetooth.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -184,8 +190,9 @@
 		A65B91E21C02FF9D00DB6576 = {
 			isa = PBXGroup;
 			children = (
-				A67513811C08967D000F5654 /* Neblina CtrlPanel */,
+				A6579A6C1C11D5EE0057C700 /* SceneKit.framework */,
 				A67EC0EB1C0738FB00987270 /* CoreBluetooth.framework */,
+				A67513811C08967D000F5654 /* Neblina CtrlPanel */,
 				A67513801C085635000F5654 /* Binary Files */,
 				A65B922D1C03531800DB6576 /* Images */,
 				A65B922E1C03533100DB6576 /* Libraries */,
@@ -222,6 +229,8 @@
 				A67623B91C0DB7BF0014F5F3 /* ScannerViewController.m */,
 				A69135C01C047F8E00739E57 /* DebugConsoleViewController.h */,
 				A69135C11C047F8E00739E57 /* DebugConsoleViewController.m */,
+				A6579A6E1C11DBF60057C700 /* IMUStreamViewController.h */,
+				A6579A6F1C11DBF60057C700 /* IMUStreamViewController.m */,
 				A65B91F71C02FF9D00DB6576 /* Main.storyboard */,
 				A6579A6A1C1172F00057C700 /* data.plist */,
 				A65B91FA1C02FF9E00DB6576 /* Assets.xcassets */,
@@ -514,6 +523,7 @@
 				A65B91F31C02FF9D00DB6576 /* AppDelegate.m in Sources */,
 				A6DA90A61C10AEF900C36EFE /* PeripheralTableViewCell.m in Sources */,
 				A65B91F01C02FF9D00DB6576 /* main.m in Sources */,
+				A6579A701C11DBF60057C700 /* IMUStreamViewController.m in Sources */,
 				A67623BA1C0DB7BF0014F5F3 /* ScannedPeripheral.m in Sources */,
 				A67623BB1C0DB7BF0014F5F3 /* ScannerViewController.m in Sources */,
 				A65B923A1C0354D400DB6576 /* SWRevealViewController.m in Sources */,
