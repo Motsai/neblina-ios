@@ -37,7 +37,7 @@
     [super viewDidLoad];
     
     self.title = @"Select Device";
-    dfuServiceUUIDString = @"0df9f021-1532-11e5-8960-0002a5d5c51b";
+    ServiceUUIDString = @"0df9f021-1532-11e5-8960-0002a5d5c51b";
     
     devicesTable.layer.borderColor = [[UIColor blackColor] CGColor];
     devicesTable.layer.borderWidth = 1.0;
@@ -53,9 +53,7 @@
     // Do any additional setup after loading the view.
     peripherals = [NSMutableArray arrayWithArray:@[@"BLE Device 1", @"BLE Device 2", @"BLE Device 3",]];
     
-    selected_row = 1000;
-    expanded_height = 50;
-    collapsed_height= 50;
+    [self didloadedview];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -105,7 +103,7 @@
     }
     else
     {
-        CBUUID *dfuServiceUUID = [CBUUID UUIDWithString:dfuServiceUUIDString];
+        CBUUID *dfuServiceUUID = [CBUUID UUIDWithString:ServiceUUIDString];
 //        CBUUID *ancsServiceUUID = [CBUUID UUIDWithString:ANCSServiceUUIDString];
 //        NSArray *connectedPeripherals = [bluetoothManager retrieveConnectedPeripheralsWithServices:@[dfuServiceUUID, ancsServiceUUID]];
         NSArray *connectedPeripherals = [bluetoothManager retrieveConnectedPeripheralsWithServices:@[dfuServiceUUID]];
@@ -237,21 +235,51 @@
     
 }
 
-
-#pragma mark Table View delegate methods
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+-(void)didloadedview
 {
-    [bluetoothManager stopScan];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    NSDictionary *dTmp = [[NSDictionary alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"data" ofType:@"plist"]];
+    self.arrayOriginal = [dTmp valueForKey:@"Objects"];
     
-    // Call delegate method
-    [self.delegate centralManager:bluetoothManager didPeripheralSelected:[[peripherals objectAtIndex:indexPath.row] peripheral]];
-    
-    Neblina *neblina_obj = [[Neblina alloc]init];
-    [neblina_obj setPeripheral:[[peripherals objectAtIndex:indexPath.row] peripheral]];
+    self.arForTable = [[NSMutableArray alloc] init];
+    [self.arForTable addObjectsFromArray:self.arrayOriginal];
 }
 
+-(IBAction)showmore:(id)sender
+{
+    UITableViewCell *clickedCell = (UITableViewCell *)[[sender superview] superview];
+    NSIndexPath *indexPath = [devicesTable indexPathForCell:clickedCell];
+
+    NSDictionary *d=[self.arForTable objectAtIndex:indexPath.row];
+    if([d valueForKey:@"Objects"])
+    {
+        NSArray *ar=[d valueForKey:@"Objects"];
+        
+        BOOL isAlreadyInserted=NO;
+        
+        for(NSDictionary *dInner in ar )
+        {
+            NSInteger index=[self.arForTable indexOfObjectIdenticalTo:dInner];
+            isAlreadyInserted=(index>0 && index!=NSIntegerMax);
+            if(isAlreadyInserted) break;
+        }
+        
+        if(isAlreadyInserted)
+        {
+            [self miniMizeThisRows:ar];
+        }
+        else
+        {
+            NSUInteger count=indexPath.row+1;
+            NSMutableArray *arCells=[NSMutableArray array];
+            for(NSDictionary *dInner in ar )
+            {
+                [arCells addObject:[NSIndexPath indexPathForRow:count inSection:0]];
+                [self.arForTable insertObject:dInner atIndex:count++];
+            }
+            [devicesTable insertRowsAtIndexPaths:arCells withRowAnimation:UITableViewRowAnimationLeft];
+        }
+    }
+}
 #pragma mark Table View Data Source delegate methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -260,31 +288,10 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return peripherals.count;
+    return [self.arForTable count];
 }
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    NSString *CellIdentifier = [NSString stringWithFormat:@"Cell %ld", (long)indexPath.row];
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-//
-//    if (cell == nil)
-//    {
-//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-//        cell.backgroundColor = [UIColor clearColor];
-//        cell.textLabel.font = [UIFont fontWithName:@"Hevetica-Bold" size:14];
-//        
-//        UIButton *connect_btn = [UIButton buttonWithType:UIButtonTypeSystem];
-//        connect_btn.frame = CGRectMake(100, 10, 200, 34);
-//        [connect_btn setTitle:@"Connect" forState:UIControlStateNormal];
-//        [cell addSubview:connect_btn];
-//        
-//        connect_btn.layer.borderColor = [[UIColor blueColor]CGColor];
-//        connect_btn.layer.borderWidth = 2.0;
-//        connect_btn.layer.cornerRadius = 5.0;
-//    }
-    
-    
     static NSString *CellIdentifier = @"peripheral_cell";
     PeripheralTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 
@@ -297,80 +304,62 @@
     cell.connect_btn.layer.borderWidth = 2.0;
     cell.connect_btn.layer.cornerRadius = 10.0;
     cell.connect_btn.clipsToBounds = YES;
+   
+    cell.devicename_lbl.text=[[self.arForTable objectAtIndex:indexPath.row] valueForKey:@"name"];
+    [cell setIndentationLevel:[[[self.arForTable objectAtIndex:indexPath.row] valueForKey:@"level"] intValue]];
+    
+    if ([[[self.arForTable objectAtIndex:indexPath.row] valueForKey:@"level"] intValue] == 1 || [[[self.arForTable objectAtIndex:indexPath.row] valueForKey:@"level"] intValue] == 2 || [[[self.arForTable objectAtIndex:indexPath.row] valueForKey:@"level"] intValue] == 3)
+    {
+        cell.connect_btn.hidden = YES;
+    }
+    else
+    {
+        cell.connect_btn.hidden = NO;
+    }
 
-    cell.devicename_lbl.text = peripherals[indexPath.row];
-
+    if ([[[self.arForTable objectAtIndex:indexPath.row] valueForKey:@"level"] intValue] == 3)
+    {
+        cell.showmore_btn.hidden = YES;
+    }
+    else
+    {
+        cell.showmore_btn.hidden = NO;
+    }
     return cell;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+#pragma mark Table View delegate methods
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == selected_row)
-    {
-        if (button.tag == 1)
-        {
-            return collapsed_height;
-        }
-        else
-        {
-            return expanded_height;
-        }
-    }
-    else
-    {
-        return collapsed_height;
-    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+   /* [bluetoothManager stopScan];
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    // Call delegate method
+    [self.delegate centralManager:bluetoothManager didPeripheralSelected:[[peripherals objectAtIndex:indexPath.row] peripheral]];
+    
+    Neblina *neblina_obj = [[Neblina alloc]init];
+    [neblina_obj setPeripheral:[[peripherals objectAtIndex:indexPath.row] peripheral]];
+    */
 }
-
--(IBAction)btnShowMoreClick:(id)sender
+-(void)miniMizeThisRows:(NSArray*)ar
 {
-//    PeripheralTableViewCell *cell = (PeripheralTableViewCell*) [button superview];
-//    NSIndexPath *indexPath = [devicesTable indexPathForCell:cell];
-//    selected_row = indexPath.row;
-    
-    button = (UIButton *)sender;
-    
-    UITableViewCell *clickedCell = (UITableViewCell *)[[sender superview] superview];
-    NSIndexPath *indexPath = [devicesTable indexPathForCell:clickedCell];
-    selected_row = indexPath.row;
-
-    if (button.tag == 1)
+    for(NSDictionary *dInner in ar )
     {
-        button.tag = 2;
-        [button setImage:[UIImage imageNamed:@"more.png"] forState:UIControlStateNormal];
+        NSUInteger indexToRemove=[self.arForTable indexOfObjectIdenticalTo:dInner];
+        NSArray *arInner=[dInner valueForKey:@"Objects"];
+        if(arInner && [arInner count]>0)
+        {
+            [self miniMizeThisRows:arInner];
+        }
         
-        expanded_height = 150;
+        if([self.arForTable indexOfObjectIdenticalTo:dInner]!=NSNotFound)
+        {
+            [self.arForTable removeObjectIdenticalTo:dInner];
+            [devicesTable deleteRowsAtIndexPaths:[NSArray arrayWithObject: [NSIndexPath indexPathForRow:indexToRemove inSection:0]] withRowAnimation:UITableViewRowAnimationRight];
+        }
     }
-    else if (button.tag == 2)
-    {
-        button.tag = 1;
-        [button setImage:[UIImage imageNamed:@"less.png"] forState:UIControlStateNormal];
-        
-        collapsed_height = 50;
-    }
-    
-    [devicesTable reloadData];
-}
-
--(UIImage *) getRSSIImage:(int)rssi {
-    // Update RSSI indicator
-    UIImage* image;
-    if (rssi < -90) {
-        image = [UIImage imageNamed: @"Signal_0"];
-    }
-    else if (rssi < -70)
-    {
-        image = [UIImage imageNamed: @"Signal_1"];
-    }
-    else if (rssi < -50)
-    {
-        image = [UIImage imageNamed: @"Signal_2"];
-    }
-    else
-    {
-        image = [UIImage imageNamed: @"Signal_3"];
-    }
-    return image;
 }
 
 @end

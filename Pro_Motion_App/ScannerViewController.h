@@ -13,15 +13,14 @@
 
 @interface ScannerViewController : UIViewController <CBCentralManagerDelegate, UITableViewDelegate, UITableViewDataSource>
 {
-    NSString *dfuServiceUUIDString;
-    NSUInteger expanded_height;
-    NSUInteger collapsed_height;
-    
-    NSUInteger selected_row;
-    NSUInteger row_height;
-    
-    UIButton *button;
+    NSString *ServiceUUIDString;
+
+    UIButton *button;    
 }
+
+@property (nonatomic, retain) NSArray *arrayOriginal;
+@property (nonatomic, retain) NSMutableArray *arForTable;
+
 @property (strong, nonatomic) CBCentralManager *bluetoothManager;
 @property (weak, nonatomic) IBOutlet UITableView *devicesTable;
 @property (weak, nonatomic) IBOutlet UIButton *start_stop_scanning_lbl;

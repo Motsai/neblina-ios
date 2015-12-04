@@ -10,8 +10,8 @@
 
 @interface PeripheralTableViewCell : UITableViewCell
 
-@property (nonatomic, retain)IBOutlet UIButton *showmore_btn;
 @property (nonatomic, retain)IBOutlet UILabel *devicename_lbl;
 @property (nonatomic, retain)IBOutlet UIButton *connect_btn;
+@property (nonatomic, retain)IBOutlet UIButton *showmore_btn;
 
 @end

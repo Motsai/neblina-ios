@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Objects</key>
+	<array>
+		<dict>
+			<key>name</key>
+			<string>BLE Device 1</string>
+			<key>level</key>
+			<integer>0</integer>
+			<key>Objects</key>
+			<array>
+				<dict>
+					<key>name</key>
+					<string>Service 1</string>
+					<key>level</key>
+					<integer>1</integer>
+					<key>Objects</key>
+					<array>
+						<dict>
+							<key>name</key>
+							<string>Characteristic 1</string>
+							<key>level</key>
+							<integer>2</integer>
+							<key>Objects</key>
+							<array>
+								<dict>
+									<key>name</key>
+									<string>Value 1</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+								<dict>
+									<key>name</key>
+									<string>Value  2</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+								<dict>
+									<key>name</key>
+									<string>Value  3</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>name</key>
+							<string>Characteristic 2</string>
+							<key>level</key>
+							<integer>2</integer>
+							<key>Objects</key>
+							<array>
+								<dict>
+									<key>name</key>
+									<string> Value  1</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+								<dict>
+									<key>name</key>
+									<string> Value  2</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+								<dict>
+									<key>name</key>
+									<string> Value  3</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Service 2</string>
+					<key>level</key>
+					<integer>1</integer>
+					<key>Objects</key>
+					<array>
+						<dict>
+							<key>name</key>
+							<string>Characteristic 1</string>
+							<key>level</key>
+							<integer>2</integer>
+							<key>Objects</key>
+							<array>
+								<dict>
+									<key>name</key>
+									<string>Value 1</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+								<dict>
+									<key>name</key>
+									<string>Value  2</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+								<dict>
+									<key>name</key>
+									<string>Value  3</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>name</key>
+							<string>Characteristic 2</string>
+							<key>level</key>
+							<integer>2</integer>
+							<key>Objects</key>
+							<array>
+								<dict>
+									<key>name</key>
+									<string> Value  1</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+								<dict>
+									<key>name</key>
+									<string> Value  2</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+								<dict>
+									<key>name</key>
+									<string> Value  3</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>BLE Device 2</string>
+			<key>level</key>
+			<integer>0</integer>
+			<key>Objects</key>
+			<array>
+				<dict>
+					<key>name</key>
+					<string>Service 1</string>
+					<key>level</key>
+					<integer>1</integer>
+					<key>Objects</key>
+					<array>
+						<dict>
+							<key>name</key>
+							<string>Characteristic 1</string>
+							<key>level</key>
+							<integer>2</integer>
+							<key>Objects</key>
+							<array>
+								<dict>
+									<key>name</key>
+									<string>Value 1</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+								<dict>
+									<key>name</key>
+									<string>Value  2</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+								<dict>
+									<key>name</key>
+									<string>Value  3</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>name</key>
+							<string>Characteristic 2</string>
+							<key>level</key>
+							<integer>2</integer>
+							<key>Objects</key>
+							<array>
+								<dict>
+									<key>name</key>
+									<string> Value  1</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+								<dict>
+									<key>name</key>
+									<string> Value  2</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+								<dict>
+									<key>name</key>
+									<string> Value  3</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Service 2</string>
+					<key>level</key>
+					<integer>1</integer>
+					<key>Objects</key>
+					<array>
+						<dict>
+							<key>name</key>
+							<string>Characteristic 1</string>
+							<key>level</key>
+							<integer>2</integer>
+							<key>Objects</key>
+							<array>
+								<dict>
+									<key>name</key>
+									<string>Value 1</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+								<dict>
+									<key>name</key>
+									<string>Value  2</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+								<dict>
+									<key>name</key>
+									<string>Value  3</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>name</key>
+							<string>Characteristic 2</string>
+							<key>level</key>
+							<integer>2</integer>
+							<key>Objects</key>
+							<array>
+								<dict>
+									<key>name</key>
+									<string> Value  1</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+								<dict>
+									<key>name</key>
+									<string> Value  2</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+								<dict>
+									<key>name</key>
+									<string> Value  3</string>
+									<key>level</key>
+									<integer>3</integer>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

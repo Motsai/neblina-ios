@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A6579A6B1C1172F00057C700 /* data.plist in Resources */ = {isa = PBXBuildFile; fileRef = A6579A6A1C1172F00057C700 /* data.plist */; };
 		A65B91F01C02FF9D00DB6576 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A65B91EF1C02FF9D00DB6576 /* main.m */; };
 		A65B91F31C02FF9D00DB6576 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A65B91F21C02FF9D00DB6576 /* AppDelegate.m */; };
 		A65B91F61C02FF9D00DB6576 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A65B91F51C02FF9D00DB6576 /* ViewController.m */; };
@@ -80,6 +81,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A6579A6A1C1172F00057C700 /* data.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = data.plist; sourceTree = "<group>"; };
 		A65B91EB1C02FF9D00DB6576 /* Pro_Motion_App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pro_Motion_App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A65B91EF1C02FF9D00DB6576 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A65B91F11C02FF9D00DB6576 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 				A69135C01C047F8E00739E57 /* DebugConsoleViewController.h */,
 				A69135C11C047F8E00739E57 /* DebugConsoleViewController.m */,
 				A65B91F71C02FF9D00DB6576 /* Main.storyboard */,
+				A6579A6A1C1172F00057C700 /* data.plist */,
 				A65B91FA1C02FF9E00DB6576 /* Assets.xcassets */,
 				A65B91FC1C02FF9E00DB6576 /* LaunchScreen.storyboard */,
 				A65B91FF1C02FF9E00DB6576 /* Info.plist */,
@@ -479,6 +482,7 @@
 				A67513791C084536000F5654 /* Feature_dfu@3x.png in Resources */,
 				A65B91F91C02FF9D00DB6576 /* Main.storyboard in Resources */,
 				A675137F1C084536000F5654 /* Feature_rsac@3x.png in Resources */,
+				A6579A6B1C1172F00057C700 /* data.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
