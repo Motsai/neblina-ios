@@ -8,18 +8,19 @@
 
 #import "IMUStreamViewController.h"
 
-@interface IMUStreamViewController ()
-
-@end
-
 @implementation IMUStreamViewController
+@synthesize string_value;
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    NSLog(@"Data = %@", string_value);
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }

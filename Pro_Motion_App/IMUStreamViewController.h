@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import <SceneKit/SceneKit.h>
 @interface IMUStreamViewController : UIViewController
+
+@property (nonatomic, retain)IBOutlet SCNView *accelerometer_view;
+@property (nonatomic, retain)IBOutlet SCNView *gyroscope_view;
+@property (nonatomic, retain)NSString *string_value;
 
 @end

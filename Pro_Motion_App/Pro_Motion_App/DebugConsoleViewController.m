@@ -7,6 +7,7 @@
 //
 
 #import "DebugConsoleViewController.h"
+#import "IMUStreamViewController.h"
 #import "neblina.h"
 #import "FusionEngineDataTypes.h"
 #import "Pro_Motion_App-Swift.h"
@@ -47,6 +48,11 @@
     [self readBinaryFile];
 }
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+}
+
 -(void)readBinaryFile
 {
     NSString *path = [[NSBundle mainBundle] pathForResource:@"QuaternionStream" ofType:@"bin"];//put the path to your file here
@@ -71,9 +77,9 @@
     [mutable_packet_Data appendData:single_packet];
     
     // Writing data to DataLogger File
-    char *fileBytes = (char *)[single_packet bytes];
+    uint8_t *fileBytes = (uint8_t *)[single_packet bytes];
     NSData *data = [[NSData alloc] initWithBytes:fileBytes length:[single_packet length]];
-    NSString *appFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"DataLogger.txt"];
+    NSString *appFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"DataLogger.bin"];
 
     if(![[NSFileManager defaultManager] fileExistsAtPath:appFile])
     {
@@ -91,8 +97,8 @@
 //    NSError *error = nil;
 //    [[NSFileManager defaultManager] removeItemAtPath:appFile error:&error];
 
-    // Reading data to DataLogger File
-    logger_file_Data = [NSData dataWithContentsOfFile:appFile];
+//    // Reading data to DataLogger File
+//    logger_file_Data = [NSData dataWithContentsOfFile:appFile];
    
     start_flag = true;
     [self.logger_tbl reloadData];
@@ -103,11 +109,6 @@
     }
     
     count ++;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - action method
@@ -167,6 +168,39 @@
     }
 }
 
+-(IBAction)Start_Stop_Logging:(UIButton *)button
+{
+    // To Start & Stop Logging Data.
+    
+    if (button.tag == 1)
+    {
+        button.tag = 2;
+        [button setTitle:@"Stop Logging" forState:UIControlStateNormal];
+    }
+    else if (button.tag == 2)
+    {
+        button.tag = 1;
+        [button setTitle:@"Start Logging" forState:UIControlStateNormal];
+    }
+}
+
+-(IBAction)ConnectDevices:(id)sender
+{
+    // Open Control Panel to scan devices.
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Make sure your segue name in storyboard is the same as this line
+    if ([[segue identifier] isEqualToString:@"IMUIdentifire"])
+    {
+        // Get reference to the destination view controller
+        IMUStreamViewController *IMU_object = [segue destinationViewController];
+        // Pass any objects to the view controller here, like...
+        IMU_object.string_value = @"Passed_Data";
+    }
+}
+
 #pragma mark - Table view data source
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -191,7 +225,7 @@
     
     if (start_flag == true)
     {
-        void *bytePtr = (__bridge void *)([NSData dataWithData:logger_file_Data]);
+        void *bytePtr = (__bridge void *)([NSData dataWithData:mutable_packet_Data]);
         
         Quaternion_t* t= (__bridge Quaternion_t *)([NSData dataWithBytes:(void *)(bytePtr+(indexPath.row*sizeof(Fusion_DataPacket_t))+sizeof(uint32_t)+sizeof(NEB_PKTHDR)) length:MAX_NB_BYTES]);
         
@@ -211,7 +245,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    uint8_t * bytePtr = (uint8_t  * )[logger_file_Data bytes];
+    uint8_t * bytePtr = (uint8_t  * )[mutable_packet_Data bytes];
 
     Quaternion_t *t= (__bridge Quaternion_t *)([NSData dataWithBytes:(void *)(bytePtr+(indexPath.row*sizeof(Fusion_DataPacket_t))+sizeof(uint32_t)+sizeof(NEB_PKTHDR)) length:MAX_NB_BYTES]);
     
@@ -225,5 +259,6 @@
     QuaternionC_lbl.text = [NSString stringWithFormat:@"%x", (int16_t)t->q[2]];
     QuaternionD_lbl.text = [NSString stringWithFormat:@"%x", (int16_t)t->q[3]];
 }
+
 
 @end

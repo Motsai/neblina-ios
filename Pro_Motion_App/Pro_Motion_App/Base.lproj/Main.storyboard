@@ -262,6 +262,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="IMU Streaming" id="Zmc-5w-BXF"/>
+                    <connections>
+                        <outlet property="accelerometer_view" destination="AB4-Ud-fcZ" id="2Oo-9v-wLr"/>
+                        <outlet property="gyroscope_view" destination="Aa2-4h-Y2m" id="3Ty-FP-pRU"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2uj-ev-wEv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -777,15 +781,18 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="cDw-Sk-8Ai">
+                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="cDw-Sk-8Ai">
                                 <rect key="frame" x="394" y="700" width="354" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <animations/>
                                 <color key="backgroundColor" red="0.28235294119999998" green="0.75294117650000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="22"/>
-                                <state key="normal" title="Logging">
+                                <state key="normal" title="Start Logging">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="Start_Stop_Logging:" destination="IbR-ym-acK" eventType="touchUpInside" id="tJy-0I-eey"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="AsA-zN-9sh">
                                 <rect key="frame" x="394" y="872" width="354" height="60"/>
@@ -807,7 +814,7 @@
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="n7i-Fi-9bx" kind="push" id="eBM-AD-6l3"/>
+                                    <segue destination="n7i-Fi-9bx" kind="push" identifier="IMUIdentifire" id="eBM-AD-6l3"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="jFU-Dn-wpg">
@@ -819,6 +826,9 @@
                                 <state key="normal" title="Connect">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="ConnectDevices:" destination="IbR-ym-acK" eventType="touchUpInside" id="A5P-WO-WPA"/>
+                                </connections>
                             </button>
                         </subviews>
                         <animations/>
