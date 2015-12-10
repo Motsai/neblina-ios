@@ -47,6 +47,8 @@
 		A67623BA1C0DB7BF0014F5F3 /* ScannedPeripheral.m in Sources */ = {isa = PBXBuildFile; fileRef = A67623B61C0DB7BF0014F5F3 /* ScannedPeripheral.m */; };
 		A67623BB1C0DB7BF0014F5F3 /* ScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A67623B91C0DB7BF0014F5F3 /* ScannerViewController.m */; };
 		A67EC0EC1C0738FB00987270 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A67EC0EB1C0738FB00987270 /* CoreBluetooth.framework */; };
+		A68E7E2C1C195FB500EDD675 /* APLGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = A68E7E2B1C195FB500EDD675 /* APLGraphView.m */; };
+		A68E7E2E1C19635800EDD675 /* wheel_test2fixed.bin in Resources */ = {isa = PBXBuildFile; fileRef = A68E7E2D1C19635800EDD675 /* wheel_test2fixed.bin */; };
 		A69135BF1C047F0F00739E57 /* QuaternionStream.bin in Resources */ = {isa = PBXBuildFile; fileRef = A69135BE1C047F0F00739E57 /* QuaternionStream.bin */; };
 		A69135C21C047F8E00739E57 /* DebugConsoleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A69135C11C047F8E00739E57 /* DebugConsoleViewController.m */; };
 		A6DA90A61C10AEF900C36EFE /* PeripheralTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A6DA90A51C10AEF900C36EFE /* PeripheralTableViewCell.m */; };
@@ -140,6 +142,9 @@
 		A67623B81C0DB7BF0014F5F3 /* ScannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScannerViewController.h; path = ../ScannerViewController.h; sourceTree = "<group>"; };
 		A67623B91C0DB7BF0014F5F3 /* ScannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScannerViewController.m; path = ../ScannerViewController.m; sourceTree = "<group>"; };
 		A67EC0EB1C0738FB00987270 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		A68E7E2A1C195FB500EDD675 /* APLGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APLGraphView.h; sourceTree = "<group>"; };
+		A68E7E2B1C195FB500EDD675 /* APLGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APLGraphView.m; sourceTree = "<group>"; };
+		A68E7E2D1C19635800EDD675 /* wheel_test2fixed.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = wheel_test2fixed.bin; sourceTree = "<group>"; };
 		A69135BE1C047F0F00739E57 /* QuaternionStream.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = QuaternionStream.bin; sourceTree = "<group>"; };
 		A69135C01C047F8E00739E57 /* DebugConsoleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugConsoleViewController.h; sourceTree = "<group>"; };
 		A69135C11C047F8E00739E57 /* DebugConsoleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebugConsoleViewController.m; sourceTree = "<group>"; };
@@ -231,6 +236,8 @@
 				A69135C11C047F8E00739E57 /* DebugConsoleViewController.m */,
 				A6579A6E1C11DBF60057C700 /* IMUStreamViewController.h */,
 				A6579A6F1C11DBF60057C700 /* IMUStreamViewController.m */,
+				A68E7E2A1C195FB500EDD675 /* APLGraphView.h */,
+				A68E7E2B1C195FB500EDD675 /* APLGraphView.m */,
 				A65B91F71C02FF9D00DB6576 /* Main.storyboard */,
 				A6579A6A1C1172F00057C700 /* data.plist */,
 				A65B91FA1C02FF9E00DB6576 /* Assets.xcassets */,
@@ -315,6 +322,7 @@
 		A67513801C085635000F5654 /* Binary Files */ = {
 			isa = PBXGroup;
 			children = (
+				A68E7E2D1C19635800EDD675 /* wheel_test2fixed.bin */,
 				A6F2EF281C048D6200A417CE /* EulerAngleStream.bin */,
 				A6F2EF291C048D6200A417CE /* ForceStream.bin */,
 				A6F2EF2A1C048D6200A417CE /* IMUStream.bin */,
@@ -486,6 +494,7 @@
 				A6F2EF341C048D6200A417CE /* PedometerStream.bin in Resources */,
 				A65B92261C03158100DB6576 /* settings@3x.png in Resources */,
 				A67513351C08345A000F5654 /* logo_2.png in Resources */,
+				A68E7E2E1C19635800EDD675 /* wheel_test2fixed.bin in Resources */,
 				A6F2EF301C048D6200A417CE /* ForceStream.bin in Resources */,
 				A65B922C1C0315B200DB6576 /* menu@3x.png in Resources */,
 				A67513791C084536000F5654 /* Feature_dfu@3x.png in Resources */,
@@ -527,6 +536,7 @@
 				A67623BA1C0DB7BF0014F5F3 /* ScannedPeripheral.m in Sources */,
 				A67623BB1C0DB7BF0014F5F3 /* ScannerViewController.m in Sources */,
 				A65B923A1C0354D400DB6576 /* SWRevealViewController.m in Sources */,
+				A68E7E2C1C195FB500EDD675 /* APLGraphView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -84,6 +84,10 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.accel_view.clipsToBounds = YES;
+    self.gyro_view.clipsToBounds = YES;
+
     [self readBinaryFile];
     
     
