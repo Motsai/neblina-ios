@@ -55,6 +55,9 @@
 
 -(void)readBinaryFile
 {
+    logging_btn.tag = 2;
+    [logging_btn setTitle:@"Stop Logging" forState:UIControlStateNormal];
+
     NSString *path = [[NSBundle mainBundle] pathForResource:@"QuaternionStream" ofType:@"bin"];//put the path to your file here
     fileData = [NSData dataWithContentsOfFile: path];
     length = [fileData length];
@@ -106,6 +109,9 @@
     if (count == deactivate_var)
     {
         [timer invalidate];
+        
+        logging_btn.tag = 1;
+        [logging_btn setTitle:@"Start Logging" forState:UIControlStateNormal];
     }
     
     count ++;
@@ -176,11 +182,22 @@
     {
         button.tag = 2;
         [button setTitle:@"Stop Logging" forState:UIControlStateNormal];
+        
+        deactivate_var = length/20;
+        
+        if (count >= deactivate_var)
+        {
+            count = 0;
+        }
+
+        float timeInterval = 0.04;
+        timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timerFireMethod) userInfo:nil repeats:YES];
     }
     else if (button.tag == 2)
     {
         button.tag = 1;
         [button setTitle:@"Start Logging" forState:UIControlStateNormal];
+        [timer invalidate];
     }
 }
 
