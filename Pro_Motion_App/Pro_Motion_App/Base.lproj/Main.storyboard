@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15C30" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="I6I-F1-GvH">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="I6I-F1-GvH">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -230,11 +230,6 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <sceneKitView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="AB4-Ud-fcZ">
-                                <rect key="frame" x="20" y="134" width="728" height="350"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <animations/>
-                            </sceneKitView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="seG-gI-Jf1">
                                 <rect key="frame" x="0.0" y="514" width="768" height="6"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
@@ -252,19 +247,26 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <sceneKitView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Aa2-4h-Y2m">
-                                <rect key="frame" x="20" y="590" width="728" height="350"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                            <view contentMode="scaleToFill" id="Uoq-4Y-uHC" customClass="APLGraphView">
+                                <rect key="frame" x="20" y="154" width="728" height="284"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <animations/>
-                            </sceneKitView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view contentMode="scaleToFill" id="QEu-Ld-AEt" customClass="APLGraphView">
+                                <rect key="frame" x="20" y="599" width="728" height="350"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="IMU Streaming" id="Zmc-5w-BXF"/>
                     <connections>
-                        <outlet property="accelerometer_view" destination="AB4-Ud-fcZ" id="2Oo-9v-wLr"/>
-                        <outlet property="gyroscope_view" destination="Aa2-4h-Y2m" id="3Ty-FP-pRU"/>
+                        <outlet property="accel_view" destination="Uoq-4Y-uHC" id="Zch-3w-5MG"/>
+                        <outlet property="gyro_view" destination="QEu-Ld-AEt" id="3PT-DS-o8Q"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2uj-ev-wEv" userLabel="First Responder" sceneMemberID="firstResponder"/>
