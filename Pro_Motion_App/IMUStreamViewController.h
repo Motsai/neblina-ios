@@ -8,10 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import <SceneKit/SceneKit.h>
+#import "APLGraphView.h"
+
 @interface IMUStreamViewController : UIViewController
 
 @property (nonatomic, retain)IBOutlet SCNView *accelerometer_view;
 @property (nonatomic, retain)IBOutlet SCNView *gyroscope_view;
 @property (nonatomic, retain)NSString *string_value;
+@property (weak, nonatomic) IBOutlet APLGraphView *accel_view;
+@property (weak, nonatomic) IBOutlet APLGraphView *gyro_view;
 
 @end
