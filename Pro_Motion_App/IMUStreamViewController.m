@@ -13,20 +13,13 @@
 
 @implementation IMUStreamViewController
 {
-    BOOL start_flag;
+    //   BOOL start_flag;
     
     NSUInteger length;
-    NSUInteger index;
     NSUInteger count;
     NSUInteger deactivate_var;
-    
     NSData *fileData;
-    NSData *single_packet;
-    NSMutableData *mutable_packet_Data;
-    
-    NSData *logger_file_Data;
     NSTimer* timer;
-    uint8_t* bytePtr;
     
 }
 @synthesize string_value;
@@ -38,7 +31,6 @@
     fileData = [NSData dataWithContentsOfFile: path];
     length = [fileData length];
     NSLog(@"Length = %lu", (unsigned long)length);
-    bytePtr = (uint8_t  * )[fileData bytes];
     deactivate_var = length/20;
     float timeInterval = 0.04;
     count=0;
@@ -46,30 +38,62 @@
     timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timerFireMethod) userInfo:nil repeats:YES];
 }
 
+
 -(void)timerFireMethod
 {
     NSLog(@"Count = %lu = %lu", (unsigned long)count, deactivate_var);
     
+    Byte single_packet1 [20];
+    int16_t orient_x,orient_y,orient_z,accel_x,accel_y,accel_z;
     
-    single_packet= (__bridge NSData *)((__bridge void *)([NSData dataWithBytes:(void *)(bytePtr+(count*sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))) length:20]));
-    uint8_t *fileBytes = (uint8_t *)[single_packet bytes];
- 
-    IMU_6Axis_t* imu= (__bridge IMU_6Axis_t *)([NSData dataWithBytes:(void *)(fileBytes+(sizeof(NEB_PKTHDR)+sizeof(uint32_t))) length:12]);
+    int8_t nCmd;
+    [fileData getBytes:&nCmd range:NSMakeRange(count*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))+3,1)];
     
-    
-    NSLog(@"Accel X is = %x", (int16_t)imu->Acc.Data[0]);
-    NSLog(@"Accel Y is = %x", (int16_t)imu->Acc.Data[1]);
-    NSLog(@"Accel Z is = %x", (int16_t)imu->Acc.Data[2]);
-    NSLog(@"Gyro X is = %x", (int16_t)imu->Gyr.Data[0]);
-    NSLog(@"Gyro Y is = %x", (int16_t)imu->Gyr.Data[1]);
-    NSLog(@"Gyro Z is = %x", (int16_t)imu->Gyr.Data[2]);
-    
-    // update the accel graph
-    [self.accel_view addX:(int16_t)imu->Acc.Data[0] y:(int16_t)imu->Acc.Data[1] z:(int16_t)imu->Acc.Data[2]];
-    
-    //update the gyro graph
-    [self.gyro_view addX:(int16_t)imu->Gyr.Data[0] y:(int16_t)imu->Gyr.Data[1] z:(int16_t)imu->Gyr.Data[2]];   // NSLog(@"q3 = %x", (int16_t)t->q[3]);
-    
+    // checking for MAG packe
+    if(nCmd == 12)
+    {
+        
+        [fileData getBytes:single_packet1 range:NSMakeRange(count*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
+        [fileData getBytes:&orient_x range:NSMakeRange(count*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))+8,2)];
+        [fileData getBytes:&orient_y range:NSMakeRange(count*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))+10,2)];
+        [fileData getBytes:&orient_z range:NSMakeRange(count*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))+12,2)];
+        [fileData getBytes:&accel_x range:NSMakeRange(count*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))+14,2)];
+        [fileData getBytes:&accel_y range:NSMakeRange(count*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))+16,2)];
+        [fileData getBytes:&accel_z range:NSMakeRange(count*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))+18,2)];
+        
+        orient_x = (int16_t)CFSwapInt16HostToLittle(orient_x);
+        orient_y = (int16_t)CFSwapInt16HostToLittle(orient_y);
+        orient_z = (int16_t)CFSwapInt16HostToLittle(orient_z);
+        
+        accel_x = (int16_t)CFSwapInt16HostToLittle(accel_x);
+        accel_y = (int16_t)CFSwapInt16HostToLittle(accel_y);
+        accel_z = (int16_t)CFSwapInt16HostToLittle(accel_z);
+        
+        NSLog(@"Accel is = %d, %d, %d", accel_x,accel_y,accel_z);
+        NSLog(@"Mag is = %d, %d, %d", orient_x,orient_y,orient_z);
+        
+        int scalefactor = 200;
+        orient_x = orient_x/scalefactor;
+        orient_y = orient_y/scalefactor;
+        orient_z = orient_z/scalefactor;
+        
+        accel_x = accel_x/scalefactor;
+        accel_y = accel_y/scalefactor;
+        accel_z = accel_z/scalefactor;
+        
+        
+        //NSLog(@"Scaled down Accel is = %d, %d, %d", accel_x,accel_y,accel_z);
+        //NSLog(@"Scaled down Mag is = %d, %d, %d", orient_x,orient_y,orient_z);
+        // update the accel graph
+        [self.accel_view addX:accel_x y:accel_y z:accel_z];
+        
+        //update the gyro graph
+        [self.gyro_view addX:orient_x y:orient_y z:orient_z];
+    }
+    else
+    {
+        NSLog(@"Not a MAG packet. Packet number is %lu", (unsigned long)count);
+    }
     
     
     if (count == deactivate_var)
@@ -79,6 +103,7 @@
     
     count ++;
 }
+
 
 - (void)viewDidLoad
 {
