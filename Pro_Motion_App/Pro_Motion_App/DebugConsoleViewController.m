@@ -58,7 +58,14 @@
     logging_btn.tag = 2;
     [logging_btn setTitle:@"Stop Logging" forState:UIControlStateNormal];
 
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"wheel_test2fixed" ofType:@"bin"];//put the path to your file here
+    /* Test Files 
+     1. QuaternionStream.bin
+     2. ForceStream.bin
+     2. EulerAngleStream.bin
+     4. IMUStream.bin
+    */
+     
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"QuaternionStream" ofType:@"bin"];//put the path to your file here
     fileData = [NSData dataWithContentsOfFile: path];
     length = [fileData length];
     NSLog(@"Length = %lu", (unsigned long)length);
@@ -250,6 +257,7 @@
         [self handleDataAndParse:pktData];
         NSString *myString1 = [NSString stringWithFormat:@"%@",[NSData dataWithBytes:single_packet2 length:20]];
         cell.textLabel.text = myString1;
+        [cell.textLabel setFont:[UIFont systemFontOfSize:17]];
         
         [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:([mutable_packet_Data length]/20)-1 inSection:0] atScrollPosition:NULL animated:YES];
     }
@@ -283,8 +291,6 @@
     switch(nCmd)
     {
         case 12: // MAG Data
-            
-            
             [pktData getBytes:&mag_orient_x range:NSMakeRange(8,2)];
             [pktData getBytes:&mag_orient_y range:NSMakeRange(10,2)];
             [pktData getBytes:&mag_orient_z range:NSMakeRange(12,2)];
