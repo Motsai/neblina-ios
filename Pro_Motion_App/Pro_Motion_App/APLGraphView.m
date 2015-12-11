@@ -137,10 +137,10 @@ void DrawGridlines(CGContextRef context, CGFloat x, CGFloat width)
          */
         _layer.delegate = self;
         /*
-         This sets our coordinate system such that it has an origin of 0.0,-56 and a size of 32,112.
+         This sets our coordinate system such that it has an origin of 0.0,-88 and a size of 32,112.
          This would need to be changed if you change either the number of pixel values that a segment represented, or if you changed the size of the graph view.
          */
-        _layer.bounds = CGRectMake(-0.0, -56.0, 32.0, 112.0);
+        _layer.bounds = CGRectMake(-0.0, -88.0, 32.0, 112.0);
         /*
          Disable blending as this layer consists of non-transperant content. Unlike UIView, a CALayer defaults to opaque=NO
          */
@@ -280,26 +280,86 @@ void DrawGridlines(CGContextRef context, CGFloat x, CGFloat width)
     CGContextSetFillColorWithColor(context, graphBackgroundColor());
     CGContextFillRect(context, self.bounds);
 
-    CGContextTranslateCTM(context, 0.0, 56.0);
+    CGContextTranslateCTM(context, 0.0, 240.0);
 
     // Draw the grid lines.
-    DrawGridlines(context, 26.0, 6.0);
+    DrawGridlines(context, 204.0, 32.0);
 
     // Draw the text.
-    UIFont *systemFont = [UIFont systemFontOfSize:12.0];
+    UIFont *systemFont = [UIFont fontWithName:@"Helvetica-Bold" size:18];
     NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
     textStyle.lineBreakMode = NSLineBreakByWordWrapping;
     textStyle.alignment = NSTextAlignmentRight;
     NSDictionary *dictionary = @{ NSFontAttributeName: systemFont, NSParagraphStyleAttributeName: textStyle};
 
+    CGFloat width = 48.0;
+    CGFloat height = 32.0;
+    
     [[UIColor whiteColor] set];
-    [@"+3.0" drawInRect:CGRectMake(2.0, -56.0, 24.0, 16.0) withAttributes:dictionary];
-    [@"+2.0" drawInRect:CGRectMake(2.0, -40.0, 24.0, 16.0) withAttributes:dictionary];
-    [@"+3.0" drawInRect:CGRectMake(2.0, -24.0, 24.0, 16.0) withAttributes:dictionary];
-    [@"0.0" drawInRect:CGRectMake(2.0,  -08.0, 24.0, 16.0) withAttributes:dictionary];
-    [@"-1.0" drawInRect:CGRectMake(2.0,  08.0, 24.0, 16.0) withAttributes:dictionary];
-    [@"-2.0" drawInRect:CGRectMake(2.0,  24.0, 24.0, 16.0) withAttributes:dictionary];
-    [@"-3.0" drawInRect:CGRectMake(2.0,  40.0, 24.0, 16.0) withAttributes:dictionary];
+    
+    [@"+15.0" drawInRect:CGRectMake(0.0, -240.0, width, height) withAttributes:dictionary];
+    [@"+14.0" drawInRect:CGRectMake(0.0, -224.0, width, height) withAttributes:dictionary];
+    [@"+13.0" drawInRect:CGRectMake(0.0, -208.0, width, height) withAttributes:dictionary];
+    [@"+12.0" drawInRect:CGRectMake(0.0, -192.0, width, height) withAttributes:dictionary];
+    [@"+11.0" drawInRect:CGRectMake(0.0, -176.0, width, height) withAttributes:dictionary];
+    [@"+10.0" drawInRect:CGRectMake(0.0, -160.0, width, height) withAttributes:dictionary];
+    [@"+9.0"  drawInRect:CGRectMake(0.0, -144.0, width, height) withAttributes:dictionary];
+    [@"+8.0"  drawInRect:CGRectMake(0.0, -128.0, width, height) withAttributes:dictionary];
+    [@"+7.0"  drawInRect:CGRectMake(0.0, -112.0, width, height) withAttributes:dictionary];
+    [@"+6.0"  drawInRect:CGRectMake(0.0, -96.0,  width, height) withAttributes:dictionary];
+    [@"+5.0"  drawInRect:CGRectMake(0.0, -80.0,  width, height) withAttributes:dictionary];
+    [@"+4.0"  drawInRect:CGRectMake(0.0, -64.0,  width, height) withAttributes:dictionary];
+    [@"+3.0"  drawInRect:CGRectMake(0.0, -48.0,  width, height) withAttributes:dictionary];
+    [@"+2.0"  drawInRect:CGRectMake(0.0, -32.0,  width, height) withAttributes:dictionary];
+    [@"+1.0"  drawInRect:CGRectMake(0.0, -16.0,  width, height) withAttributes:dictionary];
+    [@"0.0"  drawInRect:CGRectMake(0.0,   00.0,  width, height) withAttributes:dictionary];
+    [@"-1.0"  drawInRect:CGRectMake(0.0,  16.0,  width, height) withAttributes:dictionary];
+    [@"-2.0"  drawInRect:CGRectMake(0.0,  32.0,  width, height) withAttributes:dictionary];
+    [@"-3.0"  drawInRect:CGRectMake(0.0,  48.0,  width, height) withAttributes:dictionary];
+    [@"-4.0"  drawInRect:CGRectMake(0.0,  64.0,  width, height) withAttributes:dictionary];
+    [@"-5.0"  drawInRect:CGRectMake(0.0,  80.0,  width, height) withAttributes:dictionary];
+    [@"-6.0"  drawInRect:CGRectMake(0.0,  96.0,  width, height) withAttributes:dictionary];
+    [@"-7.0"  drawInRect:CGRectMake(0.0,  112.0, width, height) withAttributes:dictionary];
+    [@"-8.0"  drawInRect:CGRectMake(0.0,  128.0, width, height) withAttributes:dictionary];
+    [@"-9.0"  drawInRect:CGRectMake(0.0,  144.0, width, height) withAttributes:dictionary];
+    [@"-10.0" drawInRect:CGRectMake(0.0,  160.0, width, height) withAttributes:dictionary];
+    [@"-11.0" drawInRect:CGRectMake(0.0,  176.0, width, height) withAttributes:dictionary];
+    [@"-12.0" drawInRect:CGRectMake(0.0,  192.0, width, height) withAttributes:dictionary];
+    [@"-13.0" drawInRect:CGRectMake(0.0,  208.0, width, height) withAttributes:dictionary];
+    [@"-14.0" drawInRect:CGRectMake(0.0,  224.0, width, height) withAttributes:dictionary];
+    [@"-15.0" drawInRect:CGRectMake(0.0,  240.0, width, height) withAttributes:dictionary];
+
+//    [@"+15.0" drawInRect:CGRectMake(0.0, -222.0, width, height) withAttributes:dictionary];
+//    [@"+14.0" drawInRect:CGRectMake(0.0, -206.0, width, height) withAttributes:dictionary];
+//    [@"+13.0" drawInRect:CGRectMake(0.0, -190.0, width, height) withAttributes:dictionary];
+//    [@"+12.0" drawInRect:CGRectMake(0.0, -174.0, width, height) withAttributes:dictionary];
+//    [@"+11.0" drawInRect:CGRectMake(0.0, -168.0, width, height) withAttributes:dictionary];
+//    [@"+10.0" drawInRect:CGRectMake(0.0, -152.0, width, height) withAttributes:dictionary];
+//    [@"+9.0"  drawInRect:CGRectMake(0.0, -136.0, width, height) withAttributes:dictionary];
+//    [@"+8.0"  drawInRect:CGRectMake(0.0, -120.0, width, height) withAttributes:dictionary];
+//    [@"+7.0"  drawInRect:CGRectMake(0.0, -104.0, width, height) withAttributes:dictionary];
+//    [@"+6.0"  drawInRect:CGRectMake(0.0, -88.0,  width, height) withAttributes:dictionary];
+//    [@"+5.0"  drawInRect:CGRectMake(0.0, -72.0,  width, height) withAttributes:dictionary];
+//    [@"+4.0"  drawInRect:CGRectMake(0.0, -56.0,  width, height) withAttributes:dictionary];
+//    [@"+3.0"  drawInRect:CGRectMake(0.0, -40.0,  width, height) withAttributes:dictionary];
+//    [@"+2.0"  drawInRect:CGRectMake(0.0, -24.0,  width, height) withAttributes:dictionary];
+//    [@"+1.0"  drawInRect:CGRectMake(0.0, -08.0,  width, height) withAttributes:dictionary];
+//    [@"0.0"  drawInRect:CGRectMake(0.0,   00.0,  width, height) withAttributes:dictionary];
+//    [@"-1.0"  drawInRect:CGRectMake(0.0,  08.0,  width, height) withAttributes:dictionary];
+//    [@"-2.0"  drawInRect:CGRectMake(0.0,  24.0,  width, height) withAttributes:dictionary];
+//    [@"-3.0"  drawInRect:CGRectMake(0.0,  40.0,  width, height) withAttributes:dictionary];
+//    [@"-4.0"  drawInRect:CGRectMake(0.0,  56.0,  width, height) withAttributes:dictionary];
+//    [@"-5.0"  drawInRect:CGRectMake(0.0,  72.0,  width, height) withAttributes:dictionary];
+//    [@"-6.0"  drawInRect:CGRectMake(0.0,  88.0,  width, height) withAttributes:dictionary];
+//    [@"-7.0"  drawInRect:CGRectMake(0.0,  104.0, width, height) withAttributes:dictionary];
+//    [@"-8.0"  drawInRect:CGRectMake(0.0,  120.0, width, height) withAttributes:dictionary];
+//    [@"-9.0"  drawInRect:CGRectMake(0.0,  136.0, width, height) withAttributes:dictionary];
+//    [@"-10.0" drawInRect:CGRectMake(0.0,  152.0, width, height) withAttributes:dictionary];
+//    [@"-11.0" drawInRect:CGRectMake(0.0,  168.0, width, height) withAttributes:dictionary];
+//    [@"-12.0" drawInRect:CGRectMake(0.0,  174.0, width, height) withAttributes:dictionary];
+//    [@"-13.0" drawInRect:CGRectMake(0.0,  190.0, width, height) withAttributes:dictionary];
+//    [@"-14.0" drawInRect:CGRectMake(0.0,  206.0, width, height) withAttributes:dictionary];
+//    [@"-15.0" drawInRect:CGRectMake(0.0,  222.0, width, height) withAttributes:dictionary];
 
 //    [@"+3.0" drawInRect:CGRectMake(2.0, -56.0, 24.0, 16.0) withFont:systemFont lineBreakMode:NSLineBreakByWordWrapping alignment:NSTextAlignmentRight];
 //    [@"+2.0" drawInRect:CGRectMake(2.0, -40.0, 24.0, 16.0) withFont:systemFont lineBreakMode:NSLineBreakByWordWrapping alignment:NSTextAlignmentRight];
@@ -365,8 +425,10 @@ void DrawGridlines(CGContextRef context, CGFloat x, CGFloat width)
     /*
      Create the text view and add it as a subview. We keep a weak reference to that view afterwards for laying out the segment layers.
      */
-    APLGraphTextView *text = [[APLGraphTextView alloc] initWithFrame:CGRectMake(0.0, 0.0, 32.0, 112.0)];
+//    APLGraphTextView *text = [[APLGraphTextView alloc] initWithFrame:CGRectMake(0.0, 0.0, 32.0, 112.0)];
+    APLGraphTextView *text = [[APLGraphTextView alloc] initWithFrame:CGRectMake(0.0, 20.0, 50.0, 500)];
     [self addSubview:text];
+
     _textView = text;
     
     /*
@@ -404,7 +466,7 @@ void DrawGridlines(CGContextRef context, CGFloat x, CGFloat width)
  kSegmentInitialPosition defines the initial position of a segment that is meant to be displayed on the left side of the graph.
  This positioning is meant so that a few entries must be added to the segment's history before it becomes visible to the user. This value could be tweaked a little bit with varying results, but the X coordinate should never be larger than 16 (the center of the text view) or the zero values in the segment's history will be exposed to the user.
  */
-#define kSegmentInitialPosition CGPointMake(14.0, 56.0);
+#define kSegmentInitialPosition CGPointMake(50.0, 240.0);
 
 
 /*
@@ -472,7 +534,7 @@ void DrawGridlines(CGContextRef context, CGFloat x, CGFloat width)
 
     // Draw the grid lines.
     CGFloat width = self.bounds.size.width;
-    CGContextTranslateCTM(context, 0.0, 56.0);
+    CGContextTranslateCTM(context, 0.0, 88.0);
     DrawGridlines(context, 0.0, width);
 }
 
