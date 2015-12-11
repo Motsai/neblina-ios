@@ -58,7 +58,7 @@
     logging_btn.tag = 2;
     [logging_btn setTitle:@"Stop Logging" forState:UIControlStateNormal];
 
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"QuaternionStream" ofType:@"bin"];//put the path to your file here
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"wheel_test2fixed" ofType:@"bin"];//put the path to your file here
     fileData = [NSData dataWithContentsOfFile: path];
     length = [fileData length];
     NSLog(@"Length = %lu", (unsigned long)length);
@@ -72,12 +72,21 @@
 -(void)timerFireMethod
 {
     NSLog(@"Count = %lu = %lu", (unsigned long)count, deactivate_var);
+    
+    if (count == deactivate_var)
+    {
+        [timer invalidate];
+        
+        logging_btn.tag = 1;
+        [logging_btn setTitle:@"Start Logging" forState:UIControlStateNormal];
+        return;
+    }
 
-    uint8_t *bytePtr = (uint8_t  * )[fileData bytes];
-    single_packet= (__bridge NSData *)((__bridge void *)([NSData dataWithBytes:(void *)(bytePtr+(count*sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))) length:20]));
-
+    Byte single_packet1[20];
+    [fileData getBytes:single_packet1 range:NSMakeRange(count*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
     // Appending new packets to mutable data
-    [mutable_packet_Data appendData:single_packet];
+    
+    [mutable_packet_Data appendData:[NSData dataWithBytes:single_packet1 length:20]];
     
     // Writing data to DataLogger File
     uint8_t *fileBytes = (uint8_t *)[single_packet bytes];
@@ -96,23 +105,9 @@
         [myHandle writeData:data];
     }
 
-//    // Delete data to DataLogger File
-//    NSError *error = nil;
-//    [[NSFileManager defaultManager] removeItemAtPath:appFile error:&error];
-
-//    // Reading data to DataLogger File
-//    logger_file_Data = [NSData dataWithContentsOfFile:appFile];
-   
     start_flag = true;
     [self.logger_tbl reloadData];
     
-    if (count == deactivate_var)
-    {
-        [timer invalidate];
-        
-        logging_btn.tag = 1;
-        [logging_btn setTitle:@"Start Logging" forState:UIControlStateNormal];
-    }
     
     count ++;
 }
@@ -226,8 +221,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    return [pckt_data count];;
-    return deactivate_var;
+    return [mutable_packet_Data length]/20;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -242,19 +236,22 @@
     
     if (start_flag == true)
     {
-        void *bytePtr = (__bridge void *)([NSData dataWithData:mutable_packet_Data]);
+        if( [mutable_packet_Data length]/20 < count)
+        {
+            NSLog(@"Returning empty cell");
+            return cell;
+        }
         
-        Quaternion_t* t= (__bridge Quaternion_t *)([NSData dataWithBytes:(void *)(bytePtr+(indexPath.row*sizeof(Fusion_DataPacket_t))+sizeof(uint32_t)+sizeof(NEB_PKTHDR)) length:MAX_NB_BYTES]);
+        Byte single_packet2[20];
+        [mutable_packet_Data getBytes:single_packet2 range:NSMakeRange(indexPath.row*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
+        //NSLog(@"%@", [NSData dataWithBytes:single_packet2 length:20]);
+        NSData* pktData = [NSData dataWithBytes:single_packet2 length:20];
+        // parse data and diplay on labels
+        [self handleDataAndParse:pktData];
+        NSString *myString1 = [NSString stringWithFormat:@"%@",[NSData dataWithBytes:single_packet2 length:20]];
+        cell.textLabel.text = myString1;
         
-        NSLog(@"q0 = %x", (int16_t)t->q[0]);
-        NSLog(@"q1 = %x", (int16_t)t->q[1]);
-        NSLog(@"q2 = %x", (int16_t)t->q[2]);
-        NSLog(@"q3 = %x", (int16_t)t->q[3]);
-        
-        NSString *myString = [NSString stringWithFormat:@" %x %x %x %x", (int16_t)t->q[0], (int16_t)t->q[1],(int16_t)t->q[2],(int16_t)t->q[3]];
-        cell.textLabel.text = myString;
-        
-        [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:deactivate_var-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:([mutable_packet_Data length]/20)-1 inSection:0] atScrollPosition:NULL animated:YES];
     }
 
     return cell;
@@ -262,19 +259,106 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    uint8_t * bytePtr = (uint8_t  * )[mutable_packet_Data bytes];
-
-    Quaternion_t *t= (__bridge Quaternion_t *)([NSData dataWithBytes:(void *)(bytePtr+(indexPath.row*sizeof(Fusion_DataPacket_t))+sizeof(uint32_t)+sizeof(NEB_PKTHDR)) length:MAX_NB_BYTES]);
     
-    NSLog(@"q0 = %x", (int16_t)t->q[0]);
-    NSLog(@"q1 = %x", (int16_t)t->q[1]);
-    NSLog(@"q2 = %x", (int16_t)t->q[2]);
-    NSLog(@"q3 = %x", (int16_t)t->q[3]);
+    Byte single_packet2[20];
+    [mutable_packet_Data getBytes:single_packet2 range:NSMakeRange(indexPath.row*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
+    
+    NSData* pktData = [NSData dataWithBytes:single_packet2 length:20];
+    // parse data and diplay on labels
+    [self handleDataAndParse:pktData];
+    
+}
 
-    QuaternionA_lbl.text = [NSString stringWithFormat:@"%x", (int16_t)t->q[0]];
-    QuaternionB_lbl.text = [NSString stringWithFormat:@"%x", (int16_t)t->q[1]];
-    QuaternionC_lbl.text = [NSString stringWithFormat:@"%x", (int16_t)t->q[2]];
-    QuaternionD_lbl.text = [NSString stringWithFormat:@"%x", (int16_t)t->q[3]];
+-(void) handleDataAndParse:(NSData *)pktData
+{
+    
+    int nCmd=0;
+   
+    [pktData getBytes:&nCmd range:NSMakeRange(3,1)];
+    
+    int16_t mag_orient_x,mag_orient_y,mag_orient_z,mag_accel_x,mag_accel_y,mag_accel_z;
+    int16_t q0, q1,q2,q3;
+    int16_t yaw,pitch,roll;
+    int16_t fext_x,fext_y,fext_z;
+    switch(nCmd)
+    {
+        case 12: // MAG Data
+            
+            
+            [pktData getBytes:&mag_orient_x range:NSMakeRange(8,2)];
+            [pktData getBytes:&mag_orient_y range:NSMakeRange(10,2)];
+            [pktData getBytes:&mag_orient_z range:NSMakeRange(12,2)];
+            [pktData getBytes:&mag_accel_x range:NSMakeRange(14,2)];
+            [pktData getBytes:&mag_accel_y range:NSMakeRange(16,2)];
+            [pktData getBytes:&mag_accel_z range:NSMakeRange(18,2)];
+            
+            mag_orient_x = (int16_t)CFSwapInt16HostToLittle(mag_orient_x);
+            mag_orient_y = (int16_t)CFSwapInt16HostToLittle(mag_orient_y);
+            mag_orient_z = (int16_t)CFSwapInt16HostToLittle(mag_orient_z);
+            
+            mag_accel_x = (int16_t)CFSwapInt16HostToLittle(mag_accel_x);
+            mag_accel_y = (int16_t)CFSwapInt16HostToLittle(mag_accel_y);
+            mag_accel_z = (int16_t)CFSwapInt16HostToLittle(mag_accel_z);
+            
+            NSLog(@"Accel is = %d, %d, %d", mag_accel_x,mag_accel_y,mag_accel_z);
+            NSLog(@"Mag is = %d, %d, %d", mag_orient_x,mag_orient_y,mag_orient_z);
+            break;
+            
+        case 4: // Quaternion data
+            [pktData getBytes:&q0 range:NSMakeRange(8,2)];
+            [pktData getBytes:&q1 range:NSMakeRange(10,2)];
+            [pktData getBytes:&q2 range:NSMakeRange(12,2)];
+            [pktData getBytes:&q3 range:NSMakeRange(14,2)];
+            q0 = (int16_t)CFSwapInt16HostToLittle(q0);
+            q1 = (int16_t)CFSwapInt16HostToLittle(q1);
+            q2 = (int16_t)CFSwapInt16HostToLittle(q2);
+            q3 = (int16_t)CFSwapInt16HostToLittle(q3);
+            NSLog(@"Quaternion data is = %d, %d, %d %d", q0,q1,q2,q3);
+            
+            QuaternionA_lbl.text = [NSString stringWithFormat:@"%d",q0];
+            QuaternionB_lbl.text = [NSString stringWithFormat:@"%d",q1];
+            QuaternionC_lbl.text = [NSString stringWithFormat:@"%d",q2];
+            QuaternionD_lbl.text = [NSString stringWithFormat:@"%d",q3];
+            
+            break;
+            
+        case 5: // Euler
+            [pktData getBytes:&yaw range:NSMakeRange(8,2)];
+            [pktData getBytes:&pitch range:NSMakeRange(10,2)];
+            [pktData getBytes:&roll range:NSMakeRange(12,2)];
+            
+            yaw = (int16_t)CFSwapInt16HostToLittle(yaw);
+            pitch = (int16_t)CFSwapInt16HostToLittle(pitch);
+            roll = (int16_t)CFSwapInt16HostToLittle(roll);
+            
+            NSLog(@"Euler data Yaw = %d, pitch = %d, Roll = %d", yaw,pitch,roll);
+            
+            _Pitch_lbl.text = [NSString stringWithFormat:@"%d",pitch];
+            _Yaw_lbl.text = [NSString stringWithFormat:@"%d",yaw];
+            _Roll_lbl.text = [NSString stringWithFormat:@"%d",roll];
+            break;
+            
+        case 6: // Ext Force
+            [pktData getBytes:&fext_x range:NSMakeRange(8,2)];
+            [pktData getBytes:&fext_y range:NSMakeRange(10,2)];
+            [pktData getBytes:&fext_z range:NSMakeRange(12,2)];
+            
+            fext_x = (int16_t)CFSwapInt16HostToLittle(fext_x);
+            fext_y = (int16_t)CFSwapInt16HostToLittle(fext_y);
+            fext_z = (int16_t)CFSwapInt16HostToLittle(fext_z);
+            
+            NSLog(@"External Force vector x = %d, y = %d, z = %d", fext_x,fext_y,fext_z);
+            
+            _GravityX_lbl.text = [NSString stringWithFormat:@"%d",fext_x];
+            _GravityY_lbl.text = [NSString stringWithFormat:@"%d",fext_y];
+            _GravityZ_lbl.text = [NSString stringWithFormat:@"%d",fext_z];
+            
+            break;
+            
+        default:
+            break;
+            
+    }
 }
 
 
