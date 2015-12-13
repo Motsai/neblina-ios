@@ -205,6 +205,7 @@
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="Z2Q-68-ilp"/>
                     <connections>
                         <outlet property="devicesTable" destination="XKC-66-pGD" id="5P7-Zt-vKA"/>
                         <outlet property="start_stop_scanning_lbl" destination="Kpj-Yx-XZ6" id="Z4q-Ir-PuW"/>
@@ -787,7 +788,7 @@
                                 <rect key="frame" x="394" y="700" width="354" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <animations/>
-                                <color key="backgroundColor" red="0.28235294119999998" green="0.75294117650000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.33333333333333331" blue="0.55294117647058827" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="22"/>
                                 <state key="normal" title="Start Logging">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -810,7 +811,7 @@
                                 <rect key="frame" x="394" y="872" width="354" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <animations/>
-                                <color key="backgroundColor" red="0.28235294119999998" green="0.75294117650000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="22"/>
                                 <state key="normal" title="IMU Streaming">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -823,13 +824,14 @@
                                 <rect key="frame" x="394" y="786" width="354" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <animations/>
-                                <color key="backgroundColor" red="0.28235294119999998" green="0.75294117650000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="22"/>
                                 <state key="normal" title="Connect">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="ConnectDevices:" destination="IbR-ym-acK" eventType="touchUpInside" id="A5P-WO-WPA"/>
+                                    <segue destination="uCi-tR-bVe" kind="push" id="eOm-q9-7c7"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -975,4 +977,7 @@
         <image name="menu.png" width="44" height="44"/>
         <image name="settings.png" width="44" height="44"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="eOm-q9-7c7"/>
+    </inferredMetricsTieBreakers>
 </document>

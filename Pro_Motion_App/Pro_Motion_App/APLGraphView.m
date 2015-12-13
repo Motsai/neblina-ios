@@ -283,14 +283,14 @@ void DrawGridlines(CGContextRef context, CGFloat x, CGFloat width)
     CGContextTranslateCTM(context, 0.0, 240.0);
 
     // Draw the grid lines.
-    DrawGridlines(context, 204.0, 32.0);
+    DrawGridlines(context, 504.0, 32.0);
 
     // Draw the text.
     UIFont *systemFont = [UIFont fontWithName:@"Helvetica-Bold" size:18];
     NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
     textStyle.lineBreakMode = NSLineBreakByWordWrapping;
     textStyle.alignment = NSTextAlignmentRight;
-    NSDictionary *dictionary = @{ NSFontAttributeName: systemFont, NSParagraphStyleAttributeName: textStyle};
+    NSDictionary *dictionary = @{ NSFontAttributeName: systemFont, NSParagraphStyleAttributeName: textStyle, NSForegroundColorAttributeName: [UIColor whiteColor], NSBackgroundColorAttributeName: [UIColor clearColor]};
 
     CGFloat width = 48.0;
     CGFloat height = 32.0;
@@ -328,46 +328,6 @@ void DrawGridlines(CGContextRef context, CGFloat x, CGFloat width)
     [@"-13.0" drawInRect:CGRectMake(0.0,  208.0, width, height) withAttributes:dictionary];
     [@"-14.0" drawInRect:CGRectMake(0.0,  224.0, width, height) withAttributes:dictionary];
     [@"-15.0" drawInRect:CGRectMake(0.0,  240.0, width, height) withAttributes:dictionary];
-
-//    [@"+15.0" drawInRect:CGRectMake(0.0, -222.0, width, height) withAttributes:dictionary];
-//    [@"+14.0" drawInRect:CGRectMake(0.0, -206.0, width, height) withAttributes:dictionary];
-//    [@"+13.0" drawInRect:CGRectMake(0.0, -190.0, width, height) withAttributes:dictionary];
-//    [@"+12.0" drawInRect:CGRectMake(0.0, -174.0, width, height) withAttributes:dictionary];
-//    [@"+11.0" drawInRect:CGRectMake(0.0, -168.0, width, height) withAttributes:dictionary];
-//    [@"+10.0" drawInRect:CGRectMake(0.0, -152.0, width, height) withAttributes:dictionary];
-//    [@"+9.0"  drawInRect:CGRectMake(0.0, -136.0, width, height) withAttributes:dictionary];
-//    [@"+8.0"  drawInRect:CGRectMake(0.0, -120.0, width, height) withAttributes:dictionary];
-//    [@"+7.0"  drawInRect:CGRectMake(0.0, -104.0, width, height) withAttributes:dictionary];
-//    [@"+6.0"  drawInRect:CGRectMake(0.0, -88.0,  width, height) withAttributes:dictionary];
-//    [@"+5.0"  drawInRect:CGRectMake(0.0, -72.0,  width, height) withAttributes:dictionary];
-//    [@"+4.0"  drawInRect:CGRectMake(0.0, -56.0,  width, height) withAttributes:dictionary];
-//    [@"+3.0"  drawInRect:CGRectMake(0.0, -40.0,  width, height) withAttributes:dictionary];
-//    [@"+2.0"  drawInRect:CGRectMake(0.0, -24.0,  width, height) withAttributes:dictionary];
-//    [@"+1.0"  drawInRect:CGRectMake(0.0, -08.0,  width, height) withAttributes:dictionary];
-//    [@"0.0"  drawInRect:CGRectMake(0.0,   00.0,  width, height) withAttributes:dictionary];
-//    [@"-1.0"  drawInRect:CGRectMake(0.0,  08.0,  width, height) withAttributes:dictionary];
-//    [@"-2.0"  drawInRect:CGRectMake(0.0,  24.0,  width, height) withAttributes:dictionary];
-//    [@"-3.0"  drawInRect:CGRectMake(0.0,  40.0,  width, height) withAttributes:dictionary];
-//    [@"-4.0"  drawInRect:CGRectMake(0.0,  56.0,  width, height) withAttributes:dictionary];
-//    [@"-5.0"  drawInRect:CGRectMake(0.0,  72.0,  width, height) withAttributes:dictionary];
-//    [@"-6.0"  drawInRect:CGRectMake(0.0,  88.0,  width, height) withAttributes:dictionary];
-//    [@"-7.0"  drawInRect:CGRectMake(0.0,  104.0, width, height) withAttributes:dictionary];
-//    [@"-8.0"  drawInRect:CGRectMake(0.0,  120.0, width, height) withAttributes:dictionary];
-//    [@"-9.0"  drawInRect:CGRectMake(0.0,  136.0, width, height) withAttributes:dictionary];
-//    [@"-10.0" drawInRect:CGRectMake(0.0,  152.0, width, height) withAttributes:dictionary];
-//    [@"-11.0" drawInRect:CGRectMake(0.0,  168.0, width, height) withAttributes:dictionary];
-//    [@"-12.0" drawInRect:CGRectMake(0.0,  174.0, width, height) withAttributes:dictionary];
-//    [@"-13.0" drawInRect:CGRectMake(0.0,  190.0, width, height) withAttributes:dictionary];
-//    [@"-14.0" drawInRect:CGRectMake(0.0,  206.0, width, height) withAttributes:dictionary];
-//    [@"-15.0" drawInRect:CGRectMake(0.0,  222.0, width, height) withAttributes:dictionary];
-
-//    [@"+3.0" drawInRect:CGRectMake(2.0, -56.0, 24.0, 16.0) withFont:systemFont lineBreakMode:NSLineBreakByWordWrapping alignment:NSTextAlignmentRight];
-//    [@"+2.0" drawInRect:CGRectMake(2.0, -40.0, 24.0, 16.0) withFont:systemFont lineBreakMode:NSLineBreakByWordWrapping alignment:NSTextAlignmentRight];
-//    [@"+1.0" drawInRect:CGRectMake(2.0, -24.0, 24.0, 16.0) withFont:systemFont lineBreakMode:NSLineBreakByWordWrapping alignment:NSTextAlignmentRight];
-//    [@" 0.0" drawInRect:CGRectMake(2.0,  -8.0, 24.0, 16.0) withFont:systemFont lineBreakMode:NSLineBreakByWordWrapping alignment:NSTextAlignmentRight];
-//    [@"-1.0" drawInRect:CGRectMake(2.0,   8.0, 24.0, 16.0) withFont:systemFont lineBreakMode:NSLineBreakByWordWrapping alignment:NSTextAlignmentRight];
-//    [@"-2.0" drawInRect:CGRectMake(2.0,  24.0, 24.0, 16.0) withFont:systemFont lineBreakMode:NSLineBreakByWordWrapping alignment:NSTextAlignmentRight];
-//    [@"-3.0" drawInRect:CGRectMake(2.0,  40.0, 24.0, 16.0) withFont:systemFont lineBreakMode:NSLineBreakByWordWrapping alignment:NSTextAlignmentRight];
 }
 
 @end
