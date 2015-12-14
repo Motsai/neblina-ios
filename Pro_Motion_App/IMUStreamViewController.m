@@ -72,7 +72,7 @@
         NSLog(@"Accel is = %d, %d, %d", accel_x,accel_y,accel_z);
         NSLog(@"Mag is = %d, %d, %d", orient_x,orient_y,orient_z);
         
-        int scalefactor = 200;
+        int scalefactor = 1000;
         orient_x = orient_x/scalefactor;
         orient_y = orient_y/scalefactor;
         orient_z = orient_z/scalefactor;
