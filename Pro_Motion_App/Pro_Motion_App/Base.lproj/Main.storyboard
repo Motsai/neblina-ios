@@ -1106,33 +1106,6 @@
                                         </subviews>
                                         <animations/>
                                     </view>
-                                    <view contentMode="scaleToFill" id="zPB-Xu-INW">
-                                        <rect key="frame" x="8" y="469" width="338" height="41"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Test 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8KE-F1-0GX">
-                                                <rect key="frame" x="8" y="5" width="183" height="31"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                                <animations/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <segmentedControl opaque="NO" tag="12" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="HgR-Tc-gTl">
-                                                <rect key="frame" x="209" y="6" width="121" height="29"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                <animations/>
-                                                <segments>
-                                                    <segment title="OFF"/>
-                                                    <segment title="ON"/>
-                                                </segments>
-                                                <connections>
-                                                    <action selector="switchAction:" destination="IbR-ym-acK" eventType="valueChanged" id="E7L-gt-WvP"/>
-                                                </connections>
-                                            </segmentedControl>
-                                        </subviews>
-                                        <animations/>
-                                    </view>
                                 </subviews>
                                 <animations/>
                             </view>
@@ -1231,7 +1204,6 @@
                         <outlet property="switch_pedometer" destination="IDa-Al-hWW" id="vQy-Ei-GiD"/>
                         <outlet property="switch_quaternion" destination="7wd-Wd-hN6" id="3yN-iL-ExC"/>
                         <outlet property="switch_record" destination="ooe-hR-S7h" id="VyC-0s-f7f"/>
-                        <outlet property="switch_test1" destination="HgR-Tc-gTl" id="dP6-9k-wbl"/>
                         <outlet property="switch_traj_distance" destination="YdB-LA-OuZ" id="der-eJ-708"/>
                         <outlet property="switch_traj_record" destination="76l-qE-UWm" id="Jw8-ZE-Ygk"/>
                         <outlet property="switch_view" destination="WDO-Af-7Ff" id="ruO-5K-N9a"/>

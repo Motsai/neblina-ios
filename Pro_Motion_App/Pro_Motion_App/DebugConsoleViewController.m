@@ -15,7 +15,7 @@
 @implementation DebugConsoleViewController
 
 @synthesize logging_btn, connect_btn;
-@synthesize switch_9axis, switch_euler, switch_external, switch_heading, switch_magnetometer, switch_motindata, switch_pedometer,switch_quaternion, switch_record,switch_test1,switch_traj_distance,switch_traj_record;
+@synthesize switch_9axis, switch_euler, switch_external, switch_heading, switch_magnetometer, switch_motindata, switch_pedometer,switch_quaternion, switch_record, switch_traj_distance, switch_traj_record;
 @synthesize QuaternionA_lbl, QuaternionB_lbl, QuaternionC_lbl, QuaternionD_lbl;
 @synthesize timer;
 
@@ -33,8 +33,6 @@
     self.switch_view.layer.borderWidth = 2;
     self.switch_view.layer.borderColor = [[UIColor blackColor] CGColor];
     self.switch_view.layer.cornerRadius = 5;
-    
-    mutable_packet_Data = [[NSMutableData alloc]init];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -45,7 +43,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:YES];
-    [self readBinaryFile];
+    [self readBinaryFile:@"wheel_test2fixed"];
 }
 
 - (void)didReceiveMemoryWarning
@@ -53,19 +51,34 @@
     [super didReceiveMemoryWarning];
 }
 
--(void)readBinaryFile
+-(void)readBinaryFile:(NSString *)filename
 {
+    // Delete/Remove already created file & write a fresh data into it every time.
+    appFile_path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"DataLogger.bin"];
+    if(![[NSFileManager defaultManager] fileExistsAtPath:appFile_path])
+    {
+        [[NSFileManager defaultManager] createFileAtPath:appFile_path contents:[NSData data] attributes:nil];
+    }
+
     logging_btn.tag = 2;
     [logging_btn setTitle:@"Stop Logging" forState:UIControlStateNormal];
 
     /* Test Files 
      1. QuaternionStream.bin
-     2. ForceStream.bin
      2. EulerAngleStream.bin
+     3. ForceStream.bin
      4. IMUStream.bin
     */
-     
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"QuaternionStream" ofType:@"bin"];//put the path to your file here
+    
+    count = 0;
+    length = 0;
+    deactivate_var = 0;
+    mutable_packet_Data = [[NSMutableData alloc]init];
+    [timer invalidate];
+    [self.logger_tbl reloadData];
+    
+    // Read Data File
+    NSString *path = [[NSBundle mainBundle] pathForResource:filename ofType:@"bin"];//put the path to your file here
     fileData = [NSData dataWithContentsOfFile: path];
     length = [fileData length];
     NSLog(@"Length = %lu", (unsigned long)length);
@@ -91,23 +104,22 @@
 
     Byte single_packet1[20];
     [fileData getBytes:single_packet1 range:NSMakeRange(count*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
+
     // Appending new packets to mutable data
-    
     [mutable_packet_Data appendData:[NSData dataWithBytes:single_packet1 length:20]];
     
     // Writing data to DataLogger File
     uint8_t *fileBytes = (uint8_t *)[single_packet bytes];
     NSData *data = [[NSData alloc] initWithBytes:fileBytes length:[single_packet length]];
-    NSString *appFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"DataLogger.bin"];
-
-    if(![[NSFileManager defaultManager] fileExistsAtPath:appFile])
+    
+    if(![[NSFileManager defaultManager] fileExistsAtPath:appFile_path])
     {
-        [[NSFileManager defaultManager] createFileAtPath:appFile contents:nil attributes:nil];
-        [data writeToFile:appFile atomically:YES];
+        [[NSFileManager defaultManager] createFileAtPath:appFile_path contents:nil attributes:nil];
+        [data writeToFile:appFile_path atomically:YES];
     }
     else
     {
-        NSFileHandle *myHandle = [NSFileHandle fileHandleForWritingAtPath:appFile];
+        NSFileHandle *myHandle = [NSFileHandle fileHandleForWritingAtPath:appFile_path];
         [myHandle seekToEndOfFile];
         [myHandle writeData:data];
     }
@@ -123,55 +135,92 @@
 
 -(IBAction)switchAction:(UISegmentedControl *)segment
 {
-    Neblina *neblina_obj = [[Neblina alloc]init];
-    NSLog(@"Selected Segment = %ld", segment.selectedSegmentIndex);
+//    Neblina *neblina_obj = [[Neblina alloc]init];
+//    NSLog(@"Selected Segment = %ld", segment.selectedSegmentIndex);
     
+    last_selected_segment_controller.selectedSegmentIndex = 0;
     if (segment.tag == 1)
     {
-        [neblina_obj SixAxisIMU_Stream:switch_9axis.selectedSegmentIndex];
+        [self readBinaryFile:@"wheel_test2fixed"];
+        last_selected_segment_controller = segment;
+        
+//        [neblina_obj SixAxisIMU_Stream:switch_9axis.selectedSegmentIndex];
     }
     else if (segment.tag == 2)
     {
-        [neblina_obj QuaternionStream:switch_quaternion.selectedSegmentIndex];
+        [self readBinaryFile:@"QuaternionStream"];
+        last_selected_segment_controller = segment;
+        
+//        [neblina_obj QuaternionStream:switch_quaternion.selectedSegmentIndex];
     }
     else if (segment.tag == 3)
     {
-        [neblina_obj EulerAngleStream:switch_euler.selectedSegmentIndex];
+        [self readBinaryFile:@"EulerAngleStream"];
+        last_selected_segment_controller = segment;
+
+//        [neblina_obj EulerAngleStream:switch_euler.selectedSegmentIndex];
     }
     else if (segment.tag == 4)
     {
-        [neblina_obj ExternalForceStream:switch_external.selectedSegmentIndex];
+        [self readBinaryFile:@"ForceStream"];
+        last_selected_segment_controller = segment;
+
+//        [neblina_obj ExternalForceStream:switch_external.selectedSegmentIndex];
     }
     else if (segment.tag == 5)
     {
-        [neblina_obj PedometerStream:switch_pedometer.selectedSegmentIndex];
+        [self readBinaryFile:@"PedometerStream"];
+        last_selected_segment_controller = segment;
+
+//        [neblina_obj PedometerStream:switch_pedometer.selectedSegmentIndex];
     }
     else if (segment.tag == 6)
     {
-        [neblina_obj TrajectoryRecord:switch_traj_record.selectedSegmentIndex];
+//        [self readBinaryFile:@"ForceStream"];
+        last_selected_segment_controller = segment;
+
+//        [neblina_obj TrajectoryRecord:switch_traj_record.selectedSegmentIndex];
     }
     else if (segment.tag == 7)
     {
-        [neblina_obj TrajectoryDistanceData:switch_traj_distance.selectedSegmentIndex];
+        [self readBinaryFile:@"TrajectoryDistanceStream"];
+        last_selected_segment_controller = segment;
+
+//        [neblina_obj TrajectoryDistanceData:switch_traj_distance.selectedSegmentIndex];
     }
     else if (segment.tag == 8)
     {
-        [neblina_obj MagStream:switch_magnetometer.selectedSegmentIndex];
+        [self readBinaryFile:@"MAGStream"];
+        last_selected_segment_controller = segment;
+
+//        [neblina_obj MagStream:switch_magnetometer.selectedSegmentIndex];
     }
     else if (segment.tag == 9)
     {
-        [neblina_obj MotionStream:switch_motindata.selectedSegmentIndex];
+        [self readBinaryFile:@"MotionStateStream"];
+        last_selected_segment_controller = segment;
+
+//        [neblina_obj MotionStream:switch_motindata.selectedSegmentIndex];
     }
     else if (segment.tag == 10)
     {
-        [neblina_obj RecorderErase:switch_record.selectedSegmentIndex];
+        [self readBinaryFile:@"ForceStream"];
+        last_selected_segment_controller = segment;
+
+//        [neblina_obj RecorderErase:switch_record.selectedSegmentIndex];
     }
     else if (segment.tag == 11)
     {
-        [neblina_obj Recorder:switch_heading.selectedSegmentIndex];
+        [self readBinaryFile:@"ForceStream"];
+        last_selected_segment_controller = segment;
+
+//        [neblina_obj Recorder:switch_heading.selectedSegmentIndex];
     }
     else if (segment.tag == 12)
     {
+        [self readBinaryFile:@"ForceStream"];
+        last_selected_segment_controller = segment;
+
 //        [neblina_obj SixAxisIMU_Stream:switch_record.selectedSegmentIndex];
     }
 }

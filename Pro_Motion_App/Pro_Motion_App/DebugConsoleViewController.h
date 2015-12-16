@@ -27,7 +27,10 @@
     NSData *single_packet;
     NSMutableData *mutable_packet_Data;
     
+    NSString *appFile_path;
     NSData *logger_file_Data;
+    
+    UISegmentedControl *last_selected_segment_controller;
 }
 
 @property (strong, nonatomic) CBPeripheral *Peripheral;
@@ -59,7 +62,6 @@
 @property(nonatomic, retain)IBOutlet UISegmentedControl *switch_motindata;
 @property(nonatomic, retain)IBOutlet UISegmentedControl *switch_record;
 @property(nonatomic, retain)IBOutlet UISegmentedControl *switch_heading;
-@property(nonatomic, retain)IBOutlet UISegmentedControl *switch_test1;
 
 @property(nonatomic, retain)IBOutlet UIButton *logging_btn;
 @property(nonatomic, retain)IBOutlet UIButton *connect_btn;
