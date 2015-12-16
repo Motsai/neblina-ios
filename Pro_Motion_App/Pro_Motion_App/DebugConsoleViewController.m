@@ -33,6 +33,7 @@
     self.switch_view.layer.borderWidth = 2;
     self.switch_view.layer.borderColor = [[UIColor blackColor] CGColor];
     self.switch_view.layer.cornerRadius = 5;
+    mutable_packet_Data = [[NSMutableData alloc]init];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -73,7 +74,7 @@
     count = 0;
     length = 0;
     deactivate_var = 0;
-    mutable_packet_Data = [[NSMutableData alloc]init];
+    [mutable_packet_Data setLength:0];
     [timer invalidate];
     [self.logger_tbl reloadData];
     
@@ -106,7 +107,13 @@
     [fileData getBytes:single_packet1 range:NSMakeRange(count*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
     
     // Appending new packets to mutable data
+    if (count>400)
+    {
+        NSRange range = NSMakeRange(0, 19);
+        [mutable_packet_Data replaceBytesInRange:range withBytes:NULL length:0];
+    }
     [mutable_packet_Data appendData:[NSData dataWithBytes:single_packet1 length:20]];
+
     
     // Writing data to DataLogger File
     uint8_t *fileBytes = (uint8_t *)[single_packet bytes];
@@ -302,11 +309,11 @@
     
     if (start_flag == true)
     {
-        if( [mutable_packet_Data length]/20 < count)
-        {
-            NSLog(@"Returning empty cell");
-            return cell;
-        }
+//        if( [mutable_packet_Data length]/20 < count)
+//        {
+//            NSLog(@"Returning empty cell");
+//            return cell;
+//        }
         
         Byte single_packet2[20];
         [mutable_packet_Data getBytes:single_packet2 range:NSMakeRange(indexPath.row*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
