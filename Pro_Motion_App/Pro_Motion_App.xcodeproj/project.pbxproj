@@ -51,6 +51,9 @@
 		A66B254C1C2151320067F844 /* launch-sublogo.png in Resources */ = {isa = PBXBuildFile; fileRef = A66B254A1C2151320067F844 /* launch-sublogo.png */; };
 		A66B254E1C21637C0067F844 /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A66B254D1C21637C0067F844 /* Icon-60@2x.png */; };
 		A66B25521C2165EF0067F844 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A66B25511C2165EF0067F844 /* Icon.png */; };
+		A66B255A1C2169430067F844 /* TrajectoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A66B25591C2169430067F844 /* TrajectoryViewController.m */; };
+		A66B255D1C2169680067F844 /* LocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A66B255C1C2169680067F844 /* LocationViewController.m */; };
+		A66B25601C21697F0067F844 /* 9AxisViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A66B255F1C21697F0067F844 /* 9AxisViewController.m */; };
 		A675136B1C084460000F5654 /* Feature_proximity.png in Resources */ = {isa = PBXBuildFile; fileRef = A67513681C084460000F5654 /* Feature_proximity.png */; };
 		A675136C1C084460000F5654 /* Feature_proximity@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A67513691C084460000F5654 /* Feature_proximity@2x.png */; };
 		A675136D1C084460000F5654 /* Feature_proximity@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A675136A1C084460000F5654 /* Feature_proximity@3x.png */; };
@@ -160,6 +163,12 @@
 		A66B254A1C2151320067F844 /* launch-sublogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "launch-sublogo.png"; sourceTree = "<group>"; };
 		A66B254D1C21637C0067F844 /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@2x.png"; sourceTree = "<group>"; };
 		A66B25511C2165EF0067F844 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		A66B25581C2169430067F844 /* TrajectoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrajectoryViewController.h; sourceTree = "<group>"; };
+		A66B25591C2169430067F844 /* TrajectoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrajectoryViewController.m; sourceTree = "<group>"; };
+		A66B255B1C2169680067F844 /* LocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationViewController.h; sourceTree = "<group>"; };
+		A66B255C1C2169680067F844 /* LocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationViewController.m; sourceTree = "<group>"; };
+		A66B255E1C21697F0067F844 /* 9AxisViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 9AxisViewController.h; sourceTree = "<group>"; };
+		A66B255F1C21697F0067F844 /* 9AxisViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = 9AxisViewController.m; sourceTree = "<group>"; };
 		A67513681C084460000F5654 /* Feature_proximity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Feature_proximity.png; sourceTree = "<group>"; };
 		A67513691C084460000F5654 /* Feature_proximity@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Feature_proximity@2x.png"; sourceTree = "<group>"; };
 		A675136A1C084460000F5654 /* Feature_proximity@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Feature_proximity@3x.png"; sourceTree = "<group>"; };
@@ -176,9 +185,9 @@
 		A67513831C08969B000F5654 /* neblina.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = neblina.h; sourceTree = "<group>"; };
 		A67623AE1C0C30810014F5F3 /* Pro_Motion_App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pro_Motion_App-Bridging-Header.h"; sourceTree = "<group>"; };
 		A67623AF1C0C30820014F5F3 /* Neblina.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Neblina.swift; sourceTree = "<group>"; };
-		A67623B51C0DB7BF0014F5F3 /* ScannedPeripheral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScannedPeripheral.h; sourceTree = "<group>"; };
-		A67623B61C0DB7BF0014F5F3 /* ScannedPeripheral.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScannedPeripheral.m; sourceTree = "<group>"; };
-		A67623B71C0DB7BF0014F5F3 /* ScannerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScannerDelegate.h; sourceTree = "<group>"; };
+		A67623B51C0DB7BF0014F5F3 /* ScannedPeripheral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScannedPeripheral.h; path = ../ScannedPeripheral.h; sourceTree = "<group>"; };
+		A67623B61C0DB7BF0014F5F3 /* ScannedPeripheral.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScannedPeripheral.m; path = ../ScannedPeripheral.m; sourceTree = "<group>"; };
+		A67623B71C0DB7BF0014F5F3 /* ScannerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScannerDelegate.h; path = ../ScannerDelegate.h; sourceTree = "<group>"; };
 		A67623B81C0DB7BF0014F5F3 /* ScannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScannerViewController.h; path = ../ScannerViewController.h; sourceTree = "<group>"; };
 		A67623B91C0DB7BF0014F5F3 /* ScannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScannerViewController.m; path = ../ScannerViewController.m; sourceTree = "<group>"; };
 		A67EC0EB1C0738FB00987270 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
@@ -241,7 +250,6 @@
 				A67513801C085635000F5654 /* Binary Files */,
 				A65B922D1C03531800DB6576 /* Images */,
 				A65B922E1C03533100DB6576 /* Libraries */,
-				A67623B41C0DB7A80014F5F3 /* ScannerViewDelegate */,
 				A65B91ED1C02FF9D00DB6576 /* Pro_Motion_App */,
 				A65B92071C02FF9E00DB6576 /* Pro_Motion_AppTests */,
 				A65B92121C02FF9E00DB6576 /* Pro_Motion_AppUITests */,
@@ -268,16 +276,11 @@
 				A65B91F51C02FF9D00DB6576 /* ViewController.m */,
 				A65B923B1C035E9E00DB6576 /* SliderViewController.h */,
 				A65B923C1C035E9E00DB6576 /* SliderViewController.m */,
-				A6DA90A41C10AEF900C36EFE /* PeripheralTableViewCell.h */,
-				A6DA90A51C10AEF900C36EFE /* PeripheralTableViewCell.m */,
-				A67623B81C0DB7BF0014F5F3 /* ScannerViewController.h */,
-				A67623B91C0DB7BF0014F5F3 /* ScannerViewController.m */,
-				A69135C01C047F8E00739E57 /* DebugConsoleViewController.h */,
-				A69135C11C047F8E00739E57 /* DebugConsoleViewController.m */,
-				A6579A6E1C11DBF60057C700 /* IMUStreamViewController.h */,
-				A6579A6F1C11DBF60057C700 /* IMUStreamViewController.m */,
-				A68E7E2A1C195FB500EDD675 /* APLGraphView.h */,
-				A68E7E2B1C195FB500EDD675 /* APLGraphView.m */,
+				A66B25571C2168300067F844 /* MCP */,
+				A66B25531C2166D80067F844 /* Debug Console */,
+				A66B25541C2166E30067F844 /* 9Axis Tracking */,
+				A66B25551C2166F20067F844 /* Trajectory Tracking */,
+				A66B25561C2167120067F844 /* Location Tracking */,
 				A65B91F71C02FF9D00DB6576 /* Main.storyboard */,
 				A6579A6A1C1172F00057C700 /* data.plist */,
 				A65B91FA1C02FF9E00DB6576 /* Assets.xcassets */,
@@ -387,6 +390,60 @@
 			name = "App iCons";
 			sourceTree = "<group>";
 		};
+		A66B25531C2166D80067F844 /* Debug Console */ = {
+			isa = PBXGroup;
+			children = (
+				A69135C01C047F8E00739E57 /* DebugConsoleViewController.h */,
+				A69135C11C047F8E00739E57 /* DebugConsoleViewController.m */,
+				A6579A6E1C11DBF60057C700 /* IMUStreamViewController.h */,
+				A6579A6F1C11DBF60057C700 /* IMUStreamViewController.m */,
+				A68E7E2A1C195FB500EDD675 /* APLGraphView.h */,
+				A68E7E2B1C195FB500EDD675 /* APLGraphView.m */,
+			);
+			name = "Debug Console";
+			sourceTree = "<group>";
+		};
+		A66B25541C2166E30067F844 /* 9Axis Tracking */ = {
+			isa = PBXGroup;
+			children = (
+				A66B255E1C21697F0067F844 /* 9AxisViewController.h */,
+				A66B255F1C21697F0067F844 /* 9AxisViewController.m */,
+			);
+			name = "9Axis Tracking";
+			sourceTree = "<group>";
+		};
+		A66B25551C2166F20067F844 /* Trajectory Tracking */ = {
+			isa = PBXGroup;
+			children = (
+				A66B25581C2169430067F844 /* TrajectoryViewController.h */,
+				A66B25591C2169430067F844 /* TrajectoryViewController.m */,
+			);
+			name = "Trajectory Tracking";
+			sourceTree = "<group>";
+		};
+		A66B25561C2167120067F844 /* Location Tracking */ = {
+			isa = PBXGroup;
+			children = (
+				A66B255B1C2169680067F844 /* LocationViewController.h */,
+				A66B255C1C2169680067F844 /* LocationViewController.m */,
+			);
+			name = "Location Tracking";
+			sourceTree = "<group>";
+		};
+		A66B25571C2168300067F844 /* MCP */ = {
+			isa = PBXGroup;
+			children = (
+				A67623B81C0DB7BF0014F5F3 /* ScannerViewController.h */,
+				A67623B91C0DB7BF0014F5F3 /* ScannerViewController.m */,
+				A6DA90A41C10AEF900C36EFE /* PeripheralTableViewCell.h */,
+				A6DA90A51C10AEF900C36EFE /* PeripheralTableViewCell.m */,
+				A67623B51C0DB7BF0014F5F3 /* ScannedPeripheral.h */,
+				A67623B61C0DB7BF0014F5F3 /* ScannedPeripheral.m */,
+				A67623B71C0DB7BF0014F5F3 /* ScannerDelegate.h */,
+			);
+			name = MCP;
+			sourceTree = "<group>";
+		};
 		A67513801C085635000F5654 /* Binary Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -412,16 +469,6 @@
 				A67623AE1C0C30810014F5F3 /* Pro_Motion_App-Bridging-Header.h */,
 			);
 			name = "Neblina CtrlPanel";
-			sourceTree = "<group>";
-		};
-		A67623B41C0DB7A80014F5F3 /* ScannerViewDelegate */ = {
-			isa = PBXGroup;
-			children = (
-				A67623B51C0DB7BF0014F5F3 /* ScannedPeripheral.h */,
-				A67623B61C0DB7BF0014F5F3 /* ScannedPeripheral.m */,
-				A67623B71C0DB7BF0014F5F3 /* ScannerDelegate.h */,
-			);
-			name = ScannerViewDelegate;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -615,13 +662,16 @@
 			files = (
 				A65B923D1C035E9E00DB6576 /* SliderViewController.m in Sources */,
 				A67623B01C0C30820014F5F3 /* Neblina.swift in Sources */,
+				A66B255A1C2169430067F844 /* TrajectoryViewController.m in Sources */,
 				A65B91F61C02FF9D00DB6576 /* ViewController.m in Sources */,
 				A69135C21C047F8E00739E57 /* DebugConsoleViewController.m in Sources */,
 				A65B91F31C02FF9D00DB6576 /* AppDelegate.m in Sources */,
 				A6DA90A61C10AEF900C36EFE /* PeripheralTableViewCell.m in Sources */,
 				A65B91F01C02FF9D00DB6576 /* main.m in Sources */,
 				A6579A701C11DBF60057C700 /* IMUStreamViewController.m in Sources */,
+				A66B255D1C2169680067F844 /* LocationViewController.m in Sources */,
 				A67623BA1C0DB7BF0014F5F3 /* ScannedPeripheral.m in Sources */,
+				A66B25601C21697F0067F844 /* 9AxisViewController.m in Sources */,
 				A67623BB1C0DB7BF0014F5F3 /* ScannerViewController.m in Sources */,
 				A65B923A1C0354D400DB6576 /* SWRevealViewController.m in Sources */,
 				A68E7E2C1C195FB500EDD675 /* APLGraphView.m in Sources */,
