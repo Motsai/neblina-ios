@@ -25,11 +25,11 @@
 {
     [super viewDidLoad];
     start_flag = false;
-
+    
     self.logger_tbl.layer.borderWidth = 2;
     self.logger_tbl.layer.borderColor = [[UIColor blackColor] CGColor];
     self.logger_tbl.layer.cornerRadius = 5;
-
+    
     self.switch_view.layer.borderWidth = 2;
     self.switch_view.layer.borderColor = [[UIColor blackColor] CGColor];
     self.switch_view.layer.cornerRadius = 5;
@@ -59,16 +59,16 @@
     {
         [[NSFileManager defaultManager] createFileAtPath:appFile_path contents:[NSData data] attributes:nil];
     }
-
+    
     logging_btn.tag = 2;
     [logging_btn setTitle:@"Stop Logging" forState:UIControlStateNormal];
-
-    /* Test Files 
+    
+    /* Test Files
      1. QuaternionStream.bin
      2. EulerAngleStream.bin
      3. ForceStream.bin
      4. IMUStream.bin
-    */
+     */
     
     count = 0;
     length = 0;
@@ -101,10 +101,10 @@
         [logging_btn setTitle:@"Start Logging" forState:UIControlStateNormal];
         return;
     }
-
+    
     Byte single_packet1[20];
     [fileData getBytes:single_packet1 range:NSMakeRange(count*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
-
+    
     // Appending new packets to mutable data
     [mutable_packet_Data appendData:[NSData dataWithBytes:single_packet1 length:20]];
     
@@ -123,7 +123,7 @@
         [myHandle seekToEndOfFile];
         [myHandle writeData:data];
     }
-
+    
     start_flag = true;
     [self.logger_tbl reloadData];
     
@@ -135,8 +135,8 @@
 
 -(IBAction)switchAction:(UISegmentedControl *)segment
 {
-//    Neblina *neblina_obj = [[Neblina alloc]init];
-//    NSLog(@"Selected Segment = %ld", segment.selectedSegmentIndex);
+    //    Neblina *neblina_obj = [[Neblina alloc]init];
+    //    NSLog(@"Selected Segment = %ld", segment.selectedSegmentIndex);
     
     last_selected_segment_controller.selectedSegmentIndex = 0;
     if (segment.tag == 1)
@@ -144,84 +144,84 @@
         [self readBinaryFile:@"wheel_test2fixed"];
         last_selected_segment_controller = segment;
         
-//        [neblina_obj SixAxisIMU_Stream:switch_9axis.selectedSegmentIndex];
+        //        [neblina_obj SixAxisIMU_Stream:switch_9axis.selectedSegmentIndex];
     }
     else if (segment.tag == 2)
     {
         [self readBinaryFile:@"QuaternionStream"];
         last_selected_segment_controller = segment;
         
-//        [neblina_obj QuaternionStream:switch_quaternion.selectedSegmentIndex];
+        //        [neblina_obj QuaternionStream:switch_quaternion.selectedSegmentIndex];
     }
     else if (segment.tag == 3)
     {
         [self readBinaryFile:@"EulerAngleStream"];
         last_selected_segment_controller = segment;
-
-//        [neblina_obj EulerAngleStream:switch_euler.selectedSegmentIndex];
+        
+        //        [neblina_obj EulerAngleStream:switch_euler.selectedSegmentIndex];
     }
     else if (segment.tag == 4)
     {
         [self readBinaryFile:@"ForceStream"];
         last_selected_segment_controller = segment;
-
-//        [neblina_obj ExternalForceStream:switch_external.selectedSegmentIndex];
+        
+        //        [neblina_obj ExternalForceStream:switch_external.selectedSegmentIndex];
     }
     else if (segment.tag == 5)
     {
         [self readBinaryFile:@"PedometerStream"];
         last_selected_segment_controller = segment;
-
-//        [neblina_obj PedometerStream:switch_pedometer.selectedSegmentIndex];
+        
+        //        [neblina_obj PedometerStream:switch_pedometer.selectedSegmentIndex];
     }
     else if (segment.tag == 6)
     {
-//        [self readBinaryFile:@"ForceStream"];
+        //        [self readBinaryFile:@"ForceStream"];
         last_selected_segment_controller = segment;
-
-//        [neblina_obj TrajectoryRecord:switch_traj_record.selectedSegmentIndex];
+        
+        //        [neblina_obj TrajectoryRecord:switch_traj_record.selectedSegmentIndex];
     }
     else if (segment.tag == 7)
     {
         [self readBinaryFile:@"TrajectoryDistanceStream"];
         last_selected_segment_controller = segment;
-
-//        [neblina_obj TrajectoryDistanceData:switch_traj_distance.selectedSegmentIndex];
+        
+        //        [neblina_obj TrajectoryDistanceData:switch_traj_distance.selectedSegmentIndex];
     }
     else if (segment.tag == 8)
     {
         [self readBinaryFile:@"MAGStream"];
         last_selected_segment_controller = segment;
-
-//        [neblina_obj MagStream:switch_magnetometer.selectedSegmentIndex];
+        
+        //        [neblina_obj MagStream:switch_magnetometer.selectedSegmentIndex];
     }
     else if (segment.tag == 9)
     {
         [self readBinaryFile:@"MotionStateStream"];
         last_selected_segment_controller = segment;
-
-//        [neblina_obj MotionStream:switch_motindata.selectedSegmentIndex];
+        
+        //        [neblina_obj MotionStream:switch_motindata.selectedSegmentIndex];
     }
     else if (segment.tag == 10)
     {
         [self readBinaryFile:@"ForceStream"];
         last_selected_segment_controller = segment;
-
-//        [neblina_obj RecorderErase:switch_record.selectedSegmentIndex];
+        
+        //        [neblina_obj RecorderErase:switch_record.selectedSegmentIndex];
     }
     else if (segment.tag == 11)
     {
         [self readBinaryFile:@"ForceStream"];
         last_selected_segment_controller = segment;
-
-//        [neblina_obj Recorder:switch_heading.selectedSegmentIndex];
+        
+        //        [neblina_obj Recorder:switch_heading.selectedSegmentIndex];
     }
     else if (segment.tag == 12)
     {
         [self readBinaryFile:@"ForceStream"];
         last_selected_segment_controller = segment;
-
-//        [neblina_obj SixAxisIMU_Stream:switch_record.selectedSegmentIndex];
+        
+        //        [neblina_obj SixAxisIMU_Stream:switch_record.selectedSegmentIndex];
     }
 }
 
@@ -240,7 +240,7 @@
         {
             count = 0;
         }
-
+        
         float timeInterval = 0.04;
         timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timerFireMethod) userInfo:nil repeats:YES];
     }
@@ -284,7 +284,7 @@
 {
     NSString *cellidentifire = [NSString stringWithFormat:@"cell_%ld", (long)indexPath.row];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellidentifire];
-
+    
     if (cell == nil)
     {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellidentifire];
@@ -310,7 +310,7 @@
         
         [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:([mutable_packet_Data length]/20)-1 inSection:0] atScrollPosition:NULL animated:YES];
     }
-
+    
     return cell;
 }
 
@@ -330,7 +330,7 @@
 {
     
     int nCmd=0;
-   
+    
     [pktData getBytes:&nCmd range:NSMakeRange(3,1)];
     
     int16_t mag_orient_x,mag_orient_y,mag_orient_z,mag_accel_x,mag_accel_y,mag_accel_z;
