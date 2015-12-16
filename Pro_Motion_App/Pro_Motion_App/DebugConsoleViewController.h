@@ -28,9 +28,7 @@
     NSMutableData *mutable_packet_Data;
     
     NSString *appFile_path;
-    NSData *logger_file_Data;
-    
-    UISegmentedControl *last_selected_segment_controller;
+    NSData *logger_file_Data;    
 }
 
 @property (strong, nonatomic) CBPeripheral *Peripheral;

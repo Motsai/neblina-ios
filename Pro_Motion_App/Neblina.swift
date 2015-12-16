@@ -175,7 +175,10 @@ class Neblina : NSObject, CBPeripheralDelegate {
 			pkbuf[8] = 0
 		}
         
-		device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        if let device = device
+        {
+            device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        }
 	}
 
 	func SixAxisIMU_Stream(Enable:Bool)
@@ -195,7 +198,11 @@ class Neblina : NSObject, CBPeripheralDelegate {
 		{
 			pkbuf[8] = 0
 		}
-		device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        
+        if let device = device
+        {
+            device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        }
 	}
 	
 	func QuaternionStream(Enable:Bool)
@@ -215,7 +222,11 @@ class Neblina : NSObject, CBPeripheralDelegate {
 		{
 			pkbuf[8] = 0
 		}
-		device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        
+        if let device = device
+        {
+            device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        }
 	}
 	
 	func EulerAngleStream(Enable:Bool)
@@ -235,7 +246,11 @@ class Neblina : NSObject, CBPeripheralDelegate {
 		{
 			pkbuf[8] = 0
 		}
-		device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        
+        if let device = device
+        {
+            device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        }
 	}
 	
 	func ExternalForceStream(Enable:Bool)
@@ -255,7 +270,11 @@ class Neblina : NSObject, CBPeripheralDelegate {
 		{
 			pkbuf[8] = 0
 		}
-		device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        
+        if let device = device
+        {
+            device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        }
 	}
 	
 	func PedometerStream(Enable:Bool)
@@ -275,7 +294,11 @@ class Neblina : NSObject, CBPeripheralDelegate {
 		{
 			pkbuf[8] = 0
 		}
-		device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        
+        if let device = device
+        {
+            device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        }
 	}
 	
 	func TrajectoryRecord(Enable:Bool)
@@ -295,7 +318,11 @@ class Neblina : NSObject, CBPeripheralDelegate {
 		{
 			pkbuf[8] = 0
 		}
-		device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        
+        if let device = device
+        {
+            device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        }
 	}
 	
 	func TrajectoryDistanceData(Enable:Bool)
@@ -315,7 +342,11 @@ class Neblina : NSObject, CBPeripheralDelegate {
 		{
 			pkbuf[8] = 0
 		}
-		device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        
+        if let device = device
+        {
+            device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        }
 	}
 	
 	func MagStream(Enable:Bool)
@@ -335,7 +366,11 @@ class Neblina : NSObject, CBPeripheralDelegate {
 		{
 			pkbuf[8] = 0
 		}
-		device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        
+        if let device = device
+        {
+            device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        }
 	}
 	
 	func RecorderErase(Enable:Bool) {
@@ -354,8 +389,11 @@ class Neblina : NSObject, CBPeripheralDelegate {
 		{
 			pkbuf[8] = 0
 		}
-		device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
-		
+        
+        if let device = device
+        {
+            device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        }
 	}
 	
 	func Recorder(Enable:Bool) {
@@ -374,7 +412,11 @@ class Neblina : NSObject, CBPeripheralDelegate {
 		{
 			pkbuf[8] = 0
 		}
-		device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        
+        if let device = device
+        {
+            device.writeValue(NSData(bytes: UnsafeMutablePointer<Void>(pkbuf), length: 20), forCharacteristic: ctrlChar, type: CBCharacteristicWriteType.WithoutResponse)
+        }
 	}
 	
 	func UpdateMotionFeatures() {
