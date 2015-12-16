@@ -29,7 +29,7 @@ CGColorRef graphBackgroundColor()
     static CGColorRef c = NULL;
     if (c == NULL)
     {
-        c = CreateDeviceGrayColor(0.6, 1.0);
+        c = CreateDeviceGrayColor(0.2, 1.0);
     }
     return c;
 }
@@ -290,7 +290,7 @@ void DrawGridlines(CGContextRef context, CGFloat x, CGFloat width)
     NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
     textStyle.lineBreakMode = NSLineBreakByWordWrapping;
     textStyle.alignment = NSTextAlignmentRight;
-    NSDictionary *dictionary = @{ NSFontAttributeName: systemFont, NSParagraphStyleAttributeName: textStyle, NSForegroundColorAttributeName: [UIColor whiteColor], NSBackgroundColorAttributeName: [UIColor blackColor]};
+    NSDictionary *dictionary = @{ NSFontAttributeName: systemFont, NSParagraphStyleAttributeName: textStyle, NSForegroundColorAttributeName: [UIColor whiteColor], NSBackgroundColorAttributeName: [UIColor clearColor]};
 
     CGFloat label_width = 100.0;
     CGFloat label_height = 25.0;
