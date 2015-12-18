@@ -22,23 +22,32 @@
 #define MOTION_FEATURE Motion_Feature_t
 
 //all fusion engine commands
-#define Downsample 0x01
-#define MotionState 0x02
-#define IMU_Data 0x03
-#define Quaternion 0x04
-#define EulerAngle 0x05
-#define ExtForce 0x06
-#define SetFusionType 0x07
-#define TrajectoryRecStart 0x08
-#define TrajectoryRecStop 0x09
-#define TrajectoryDistance 0x0A
-#define Pedometer 0x0B
-#define MAG_Data 0x0C
-#define SittingStanding	0x0D
-#define FlashEraseAll 0x0E
-#define FlashRecordStartStop 0x0F
-#define FlashPlaybackStartStop 0x10
+#define Downsample 				0x01
+#define MotionState 			0x02
+#define IMU_Data 				0x03
+#define Quaternion 				0x04
+#define EulerAngle 				0x05
+#define ExtForce 				0x06
+#define SetFusionType 			0x07
+#define TrajectoryRecStartStop 	0x08
+//#define TrajectoryRecStop 0x09
+#define TrajectoryInfo 			0x09
+#define Pedometer 				0x0A
+#define MAG_Data 				0x0B
+#define SittingStanding			0x0C
+#define LockHeadingRef			0x0D
+#define SetAccRange				0x0E
+#define DisableAllStreaming		0x0F
+#define ResetTimeStamp 			0x10
+///////////////////////////////////////////////
 
+//Accelerometer full scale modes
+#define ACC_FS_MODE_2G		0x00
+#define ACC_FS_MODE_4G		0x01
+#define ACC_FS_MODE_8G		0x02
+#define ACC_FS_MODE_16G		0x03
+
+#define TrajectoryDistance TrajectoryInfo
 
 #pragma pack(push, 1)
 
@@ -87,10 +96,16 @@ typedef struct steps_t { //steps and pedometer data types
 	uint8_t spm; //cadence: number of steps per minute
 }steps_t;
 
+typedef struct wheels_t { //wheel rotation data type
+	uint8_t rot_detect; //detection of a full 360 degrees rotation gives 1. It also returns 1, if no rotation has been detected for 5 seconds
+	uint32_t wheel_rot_cnt; //number of wheel rotations done so far
+	uint16_t rpm; //rounds per minute
+}wheels_t;
+
 typedef struct sit_stand_t {
-	uint8_t sit_stand_mode; //0: sitting, 1: standing
-	uint32_t sit_time;
-	uint32_t stand_time;
+	uint8_t sit_stand_mode; //0: sitting, 1: standing, 2: no change
+	uint32_t sit_time; //in seconds
+	uint32_t stand_time; //in seconds
 }sit_stand_t;
 
 typedef enum{
@@ -106,6 +121,8 @@ typedef struct Motion_Feature_t{ //all features
 	Euler_fxp_t angles; //6 bytes
 	Fext_Vec16_t force; //6 bytes
 	Euler_fxp_t angles_err; //6 bytes: error in Euler angles compared to a reference trajectory
+	uint16_t motiontrack_cntr; //shows how many times the pre-recorded track has been repeated
+	uint8_t motiontrack_progress; //the percentage showing how much of a pre-recorded track has been covered
 	uint32_t TimeStamp; //4 bytes: in microseconds
 	steps_t steps;
 	int16_t direction;
