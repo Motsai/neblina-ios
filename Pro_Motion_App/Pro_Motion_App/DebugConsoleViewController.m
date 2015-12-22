@@ -323,7 +323,7 @@
         [self handleDataAndParse:pktData];
         NSString *myString1 = [NSString stringWithFormat:@"%@",[NSData dataWithBytes:single_packet2 length:20]];
         cell.textLabel.text = myString1;
-        [cell.textLabel setFont:[UIFont systemFontOfSize:17]];
+        [cell.textLabel setFont:[UIFont systemFontOfSize:12]];
         
         [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:([mutable_packet_Data length]/20)-1 inSection:0] atScrollPosition:NULL animated:YES];
     }

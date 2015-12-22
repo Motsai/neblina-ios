@@ -51,7 +51,7 @@
     bluetoothManager = [[CBCentralManager alloc]initWithDelegate:self queue:centralQueue];
     
     // Do any additional setup after loading the view.
-    peripherals = [NSMutableArray arrayWithArray:@[@"BLE Device 1", @"BLE Device 2", @"BLE Device 3",]];
+    //peripherals = [NSMutableArray arrayWithArray:@[@"BLE Device 1", @"BLE Device 2", @"BLE Device 3",]];
     
     [self didloadedview];
 }
@@ -210,7 +210,8 @@
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
     // Scanner uses other queue to send events. We must edit UI in the main queue
-    //NSLog(@"scanned peripheral : %@",peripheral.name);
+   // NSLog(@"scanned peripheral : %@",peripheral.name);
+       
     dispatch_async(dispatch_get_main_queue(),
     ^{
         // Add the sensor to the list and reload deta set
