@@ -30,7 +30,6 @@
 #define ExtForce 				0x06
 #define SetFusionType 			0x07
 #define TrajectoryRecStartStop 	0x08
-//#define TrajectoryRecStop 0x09
 #define TrajectoryInfo 			0x09
 #define Pedometer 				0x0A
 #define MAG_Data 				0x0B
