@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <SceneKit/SceneKit.h>
+#import "DataSimulator.h"
 
-@interface _AxisViewController : UIViewController
+@interface _AxisViewController : UIViewController <DataSimulatorDelegate>
 
 @property(nonatomic, retain) IBOutlet SCNView *viewpoint1;
 @property(nonatomic, retain) IBOutlet SCNView *viewpoint2;

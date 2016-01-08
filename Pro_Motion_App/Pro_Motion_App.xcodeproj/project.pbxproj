@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A126FBE1C3F16A700D689B0 /* DataSimulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A126FBD1C3F16A700D689B0 /* DataSimulator.m */; };
+		5A126FC01C3F1A5500D689B0 /* QuatRotationClockwiseX.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A126FBF1C3F1A5500D689B0 /* QuatRotationClockwiseX.bin */; };
+		5A126FC41C3F1A6900D689B0 /* QuatRotationClockwiseY.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A126FC11C3F1A6900D689B0 /* QuatRotationClockwiseY.bin */; };
+		5A126FC51C3F1A6900D689B0 /* QuatRotationClockwiseZ.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A126FC21C3F1A6900D689B0 /* QuatRotationClockwiseZ.bin */; };
+		5A126FC61C3F1A6900D689B0 /* QuatRotationRandom.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A126FC31C3F1A6900D689B0 /* QuatRotationRandom.bin */; };
+		5A126FC81C3F1A7E00D689B0 /* head.dae in Resources */ = {isa = PBXBuildFile; fileRef = 5A126FC71C3F1A7E00D689B0 /* head.dae */; };
 		A60C4D871C1D8411004E5FFE /* Feature_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A60C4D841C1D8411004E5FFE /* Feature_background.png */; };
 		A60C4D881C1D8411004E5FFE /* Feature_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A60C4D851C1D8411004E5FFE /* Feature_background@2x.png */; };
 		A60C4D891C1D8411004E5FFE /* Feature_background@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A60C4D861C1D8411004E5FFE /* Feature_background@3x.png */; };
@@ -108,6 +114,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5A126FBC1C3F16A700D689B0 /* DataSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSimulator.h; sourceTree = "<group>"; };
+		5A126FBD1C3F16A700D689B0 /* DataSimulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataSimulator.m; sourceTree = "<group>"; };
+		5A126FBF1C3F1A5500D689B0 /* QuatRotationClockwiseX.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = QuatRotationClockwiseX.bin; sourceTree = "<group>"; };
+		5A126FC11C3F1A6900D689B0 /* QuatRotationClockwiseY.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = QuatRotationClockwiseY.bin; sourceTree = "<group>"; };
+		5A126FC21C3F1A6900D689B0 /* QuatRotationClockwiseZ.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = QuatRotationClockwiseZ.bin; sourceTree = "<group>"; };
+		5A126FC31C3F1A6900D689B0 /* QuatRotationRandom.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = QuatRotationRandom.bin; sourceTree = "<group>"; };
+		5A126FC71C3F1A7E00D689B0 /* head.dae */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml.dae; path = head.dae; sourceTree = "<group>"; };
 		A60C4D841C1D8411004E5FFE /* Feature_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Feature_background.png; sourceTree = "<group>"; };
 		A60C4D851C1D8411004E5FFE /* Feature_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Feature_background@2x.png"; sourceTree = "<group>"; };
 		A60C4D861C1D8411004E5FFE /* Feature_background@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Feature_background@3x.png"; sourceTree = "<group>"; };
@@ -287,6 +300,8 @@
 				A65B91FC1C02FF9E00DB6576 /* LaunchScreen.storyboard */,
 				A65B91FF1C02FF9E00DB6576 /* Info.plist */,
 				A65B91EE1C02FF9D00DB6576 /* Supporting Files */,
+				5A126FBC1C3F16A700D689B0 /* DataSimulator.h */,
+				5A126FBD1C3F16A700D689B0 /* DataSimulator.m */,
 			);
 			path = Pro_Motion_App;
 			sourceTree = "<group>";
@@ -447,6 +462,11 @@
 		A67513801C085635000F5654 /* Binary Files */ = {
 			isa = PBXGroup;
 			children = (
+				5A126FC71C3F1A7E00D689B0 /* head.dae */,
+				5A126FC11C3F1A6900D689B0 /* QuatRotationClockwiseY.bin */,
+				5A126FC21C3F1A6900D689B0 /* QuatRotationClockwiseZ.bin */,
+				5A126FC31C3F1A6900D689B0 /* QuatRotationRandom.bin */,
+				5A126FBF1C3F1A5500D689B0 /* QuatRotationClockwiseX.bin */,
 				A68E7E2D1C19635800EDD675 /* wheel_test2fixed.bin */,
 				A6F2EF281C048D6200A417CE /* EulerAngleStream.bin */,
 				A6F2EF291C048D6200A417CE /* ForceStream.bin */,
@@ -538,6 +558,7 @@
 				TargetAttributes = {
 					A65B91EA1C02FF9D00DB6576 = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = M9G2K5W3T4;
 					};
 					A65B92031C02FF9E00DB6576 = {
 						CreatedOnToolsVersion = 7.1;
@@ -581,6 +602,7 @@
 				A66B25311C214C4D0067F844 /* iTunesArtwork.png in Resources */,
 				A675137B1C084536000F5654 /* Feature_hrs@2x.png in Resources */,
 				A65B92251C03158100DB6576 /* settings@2x.png in Resources */,
+				5A126FC51C3F1A6900D689B0 /* QuatRotationClockwiseZ.bin in Resources */,
 				A675137E1C084536000F5654 /* Feature_rsac@2x.png in Resources */,
 				A65B92241C03158100DB6576 /* settings.png in Resources */,
 				A675136B1C084460000F5654 /* Feature_proximity.png in Resources */,
@@ -602,6 +624,7 @@
 				A67513771C084536000F5654 /* Feature_dfu.png in Resources */,
 				A69135BF1C047F0F00739E57 /* QuaternionStream.bin in Resources */,
 				A65B91FB1C02FF9E00DB6576 /* Assets.xcassets in Resources */,
+				5A126FC01C3F1A5500D689B0 /* QuatRotationClockwiseX.bin in Resources */,
 				A67513781C084536000F5654 /* Feature_dfu@2x.png in Resources */,
 				A6DA90AF1C10B4DB00C36EFE /* less.png in Resources */,
 				A65B922A1C0315B200DB6576 /* menu.png in Resources */,
@@ -613,7 +636,10 @@
 				A6F2EF311C048D6200A417CE /* IMUStream.bin in Resources */,
 				A66B25471C214C5B0067F844 /* Icon-Small@2x.png in Resources */,
 				A6F2EF331C048D6200A417CE /* MotionStateStream.bin in Resources */,
+				5A126FC81C3F1A7E00D689B0 /* head.dae in Resources */,
+				5A126FC61C3F1A6900D689B0 /* QuatRotationRandom.bin in Resources */,
 				A65B922B1C0315B200DB6576 /* menu@2x.png in Resources */,
+				5A126FC41C3F1A6900D689B0 /* QuatRotationClockwiseY.bin in Resources */,
 				A66B252A1C214C4D0067F844 /* Icon-60.png in Resources */,
 				A66B25401C214C5B0067F844 /* Icon-40@3x.png in Resources */,
 				A6F2EF321C048D6200A417CE /* MAGStream.bin in Resources */,
@@ -669,6 +695,7 @@
 				A6DA90A61C10AEF900C36EFE /* PeripheralTableViewCell.m in Sources */,
 				A65B91F01C02FF9D00DB6576 /* main.m in Sources */,
 				A6579A701C11DBF60057C700 /* IMUStreamViewController.m in Sources */,
+				5A126FBE1C3F16A700D689B0 /* DataSimulator.m in Sources */,
 				A66B255D1C2169680067F844 /* LocationViewController.m in Sources */,
 				A67623BA1C0DB7BF0014F5F3 /* ScannedPeripheral.m in Sources */,
 				A66B25601C21697F0067F844 /* 9AxisViewController.m in Sources */,
@@ -771,7 +798,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_MODULE_NAME = Pro_Motion_App;
-				PROVISIONING_PROFILE = "ef25bb28-731f-4ed4-9c25-451136888c86";
+				PROVISIONING_PROFILE = "9822a101-2a4c-46da-b08a-352a4e53f8a3";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
@@ -812,7 +839,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_MODULE_NAME = Pro_Motion_App;
-				PROVISIONING_PROFILE = "ef25bb28-731f-4ed4-9c25-451136888c86";
+				PROVISIONING_PROFILE = "9822a101-2a4c-46da-b08a-352a4e53f8a3";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
 				VALIDATE_PRODUCT = YES;
@@ -824,12 +851,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: 7725965 Canada Inc (M9G2K5W3T4)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Pro_Motion_App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.motsai.promotionapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ef25bb28-731f-4ed4-9c25-451136888c86";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Pro_Motion_App-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -840,12 +869,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: 7725965 Canada Inc (M9G2K5W3T4)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Pro_Motion_App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.motsai.promotionapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ef25bb28-731f-4ed4-9c25-451136888c86";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Pro_Motion_App-Bridging-Header.h";
 			};
 			name = Release;
