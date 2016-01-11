@@ -34,29 +34,30 @@ SCNScene* scene2;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    scene = [SCNScene sceneNamed:@"head.dae"];
-    _viewpoint1.allowsCameraControl = YES;
+    scene = [SCNScene sceneNamed:@"ship.scn"];
+    _viewpoint1.allowsCameraControl = NO;
     _viewpoint1.autoenablesDefaultLighting = YES;
     _viewpoint1.backgroundColor = [UIColor blackColor];
     _viewpoint1.scene = scene;
    
-    scene2 = [SCNScene sceneNamed:@"head.dae"];
-    _viewpoint2.allowsCameraControl = YES;
+    scene2 = [SCNScene sceneNamed:@"ship.scn"];
+    _viewpoint2.allowsCameraControl = NO;
     _viewpoint2.autoenablesDefaultLighting = YES;
     _viewpoint2.backgroundColor = [UIColor blackColor];
     _viewpoint2.scene = scene2;
     
-    // to switch to Side view of the head - uncomment the below 2 lines
-    //_viewpoint2.pointOfView.position = SCNVector3Make(500, 0, 50);
-    //_viewpoint2.pointOfView.eulerAngles = SCNVector3Make(M_PI_2,0,M_PI_2);
-    
     // Top View of the head
-    _viewpoint2.pointOfView.position = SCNVector3Make(0, 25, 525);
-    _viewpoint2.pointOfView.eulerAngles = SCNVector3Make(0,0,-M_PI);
+    //NSLog(@"Point of view: %f %f %f",_viewpoint1.pointOfView.position.x,_viewpoint1.pointOfView.position.y,_viewpoint1.pointOfView.position.z);
+   // NSLog(@"Point of view euler angles: %f %f %f",_viewpoint1.pointOfView.eulerAngles.x,_viewpoint1.pointOfView.eulerAngles.y,_viewpoint1.pointOfView.eulerAngles.z);
+    _viewpoint1.pointOfView.position = SCNVector3Make(0, 0, 17);
+    _viewpoint2.pointOfView.position = SCNVector3Make(0, 17, 0);
+    _viewpoint2.pointOfView.eulerAngles = SCNVector3Make(-M_PI_2,0,0);
     
-    // to switch to Bottom view of the head - uncomment the below 2 lines
-    //_viewpoint2.pointOfView.position = SCNVector3Make(0, 25, -500);
-    //_viewpoint2.pointOfView.eulerAngles = SCNVector3Make(M_PI,0,0);
+    // to switch to Side view - uncomment the below 2 lines
+    //_viewpoint2.pointOfView.position = SCNVector3Make(17, 0, 0);
+    //_viewpoint2.pointOfView.eulerAngles = SCNVector3Make(0,M_PI_2,0);
+
+    
 
 }
 
