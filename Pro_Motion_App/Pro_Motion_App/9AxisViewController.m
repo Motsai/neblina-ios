@@ -7,32 +7,47 @@
 //
 
 #import "9AxisViewController.h"
+@import GLKit;
 
 @interface _AxisViewController ()
 
 @end
 
 @implementation _AxisViewController
-DataSimulator* dataSim;
+DataSimulator* dataSim1;
 SCNScene* scene;
 SCNScene* scene2;
+int16_t max_count = 15;
+int16_t cnt = 15;
+int16_t xf = 0;
+int16_t yf = 0;
+int16_t zf = 0;
+NSData* lastPacket;
+
 
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    dataSim = [[DataSimulator alloc] init];
-    dataSim.delegate = self;
+    
   
 }
 
 -(void) viewDidAppear:(BOOL)animated
 {
-     [dataSim readBinaryFile:@"QuatRotationRandom"];
+    
+    
+    dataSim1 = [DataSimulator sharedInstance];
+    dataSim1.delegate = self;
+    [self updateLoggingBtnStatus];
+    
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    
     
     scene = [SCNScene sceneNamed:@"ship.scn"];
     _viewpoint1.allowsCameraControl = NO;
@@ -56,14 +71,19 @@ SCNScene* scene2;
     // to switch to Side view - uncomment the below 2 lines
     //_viewpoint2.pointOfView.position = SCNVector3Make(17, 0, 0);
     //_viewpoint2.pointOfView.eulerAngles = SCNVector3Make(0,M_PI_2,0);
-
+    //[dataSim start];
     
-
+    if([dataSim1 isLoggingStopped])
+    {
+        lastPacket = [dataSim1 getPacketAt:[dataSim1 getTotalPackets]-1];
+        [self handleDataAndParse:lastPacket];
+    }
+    
 }
 
 -(void) viewWillDisappear:(BOOL)animated
 {
-    [dataSim reset];
+    dataSim1.delegate = nil;
 }
 
 // This is called on the delegate to handle the data packet
@@ -71,6 +91,7 @@ SCNScene* scene2;
 {
     
     int nCmd=0;
+    lastPacket = pktData;
     
     [pktData getBytes:&nCmd range:NSMakeRange(3,1)];
     
@@ -101,16 +122,17 @@ SCNScene* scene2;
             NSLog(@"Accel is = %d, %d, %d", mag_accel_x,mag_accel_y,mag_accel_z);
             NSLog(@"Mag is = %d, %d, %d", mag_orient_x,mag_orient_y,mag_orient_z);
             
-            // move it approp
+            // move it approp - no action is there in the reference code
             
-            [SCNTransaction begin];
-            [SCNTransaction setDisableActions:YES];
-            [rootNode runAction:[SCNAction rotateByX:(float)mag_orient_x/32767 y:(float)mag_orient_y/32767 z:(float)mag_orient_z/32767 duration:0]];
+           // [SCNTransaction begin];
+           // [SCNTransaction setDisableActions:YES];
+           // [_viewpoint1.scene.rootNode runAction:[SCNAction rotateByX:(float)mag_orient_x/32767 y:(float)mag_orient_y/32767 z:(float)mag_orient_z/32767 duration:0]];
+           // [_viewpoint2.scene.rootNode runAction:[SCNAction rotateByX:(float)mag_orient_x/32767 y:(float)mag_orient_y/32767 z:(float)mag_orient_z/32767 duration:0]];
+           
+          //  [SCNTransaction commit];
             
-            
-            
-            [SCNTransaction commit];
-            
+            // update the labels
+            //[self updateQuatLabelswithX:mag_orient_x withY:mag_orient_y withZ:mag_orient_z withA:0];
             
             break;
             
@@ -125,22 +147,25 @@ SCNScene* scene2;
             q3 = (int16_t)CFSwapInt16HostToLittle(q3);
             NSLog(@"Quaternion data is = %d, %d, %d %d", q0,q1,q2,q3);
             
+            //int a = (Int16(data.data.0) & 0xff) | (Int16(data.data.1) << 8);
+            
             [SCNTransaction begin];
             [SCNTransaction setDisableActions:YES];
             
             [SCNTransaction setAnimationDuration:0];
-            // divide by 32767 to get it into the [-1,1] range..mentioned in Metal documentation
-            _viewpoint1.scene.rootNode.rotation = SCNVector4Make( (float)q0/32767, (float)q1/32767, (float)q2/32767, (float)q3/32767);
+            float f_q0 = (float)q0/32768.0;
+            float f_q1 = (float)q1/32768.0;
+            float f_q2 = (float)q2/32768.0;
+            float f_q3 = (float)q3/32768.0;
             
-            _viewpoint2.scene.rootNode.rotation = SCNVector4Make( (float)q0/32767, (float)q1/32767, (float)q2/32767, (float)q3/32767);
+            // divide by 32768.0 to get it into the [-1,1] range..mentioned in Metal documentation
+        
+            _viewpoint1.scene.rootNode.orientation = SCNVector4Make(f_q0, f_q1, f_q2, f_q3);
+            _viewpoint2.scene.rootNode.orientation = SCNVector4Make(f_q0, f_q1, f_q2, f_q3);
             
-            
-            [SCNTransaction commit];
+          [SCNTransaction commit];
             // update the labels
-            _QuaternionA_lbl.text = [NSString stringWithFormat:@"%d",q0];
-            _QuaternionB_lbl.text = [NSString stringWithFormat:@"%d",q1];
-            _QuaternionC_lbl.text = [NSString stringWithFormat:@"%d",q2];
-            _QuaternionD_lbl.text = [NSString stringWithFormat:@"%d",q3];
+            [self updateQuatLabelswithX:f_q0 withY:f_q1 withZ:f_q2 withA:f_q3];
             
             break;
             
@@ -153,18 +178,26 @@ SCNScene* scene2;
             pitch = (int16_t)CFSwapInt16HostToLittle(pitch);
             roll = (int16_t)CFSwapInt16HostToLittle(roll);
             
-            NSLog(@"Euler data Yaw = %d, pitch = %d, Roll = %d", yaw,pitch,roll);
+            float f_xrot = (float)yaw / 10.0;
+            float f_yrot = (float)pitch / 10.0;
+            float f_zrot = (float)roll / 10.0;
+            
+            
+            NSLog(@"Euler data Yaw = %f, pitch = %f, Roll = %f", f_xrot,f_yrot,f_zrot);
             
             [SCNTransaction begin];
             [SCNTransaction setDisableActions:YES];
             
-            rootNode.eulerAngles = SCNVector3Make(yaw, pitch, roll);
+            _viewpoint1.scene.rootNode.eulerAngles = SCNVector3Make(GLKMathDegreesToRadians(180) - GLKMathDegreesToRadians(f_yrot), GLKMathDegreesToRadians(f_xrot), GLKMathDegreesToRadians(180) - GLKMathDegreesToRadians(f_zrot));
+            
+            _viewpoint2.scene.rootNode.eulerAngles = SCNVector3Make(GLKMathDegreesToRadians(180) - GLKMathDegreesToRadians(f_yrot), GLKMathDegreesToRadians(f_xrot), GLKMathDegreesToRadians(180) - GLKMathDegreesToRadians(f_zrot));
+            
             [SCNTransaction commit];
             
             // update the labels
-            _Pitch_lbl.text = [NSString stringWithFormat:@"%d",pitch];
-            _Yaw_lbl.text = [NSString stringWithFormat:@"%d",yaw];
-            _Roll_lbl.text = [NSString stringWithFormat:@"%d",roll];
+            _Pitch_lbl.text = [NSString stringWithFormat:@"%f",f_xrot];
+            _Yaw_lbl.text = [NSString stringWithFormat:@"%f",f_yrot];
+            _Roll_lbl.text = [NSString stringWithFormat:@"%f",f_zrot];;
             
             
             break;
@@ -180,10 +213,59 @@ SCNScene* scene2;
             
             NSLog(@"External Force vector x = %d, y = %d, z = %d", fext_x,fext_y,fext_z);
             
+            int16_t f_fext_x = fext_x / 1600;
+            int16_t f_fext_y = fext_y / 1600;
+            int16_t f_fext_z = fext_z / 1600;
+            
+            cnt -= 1;
+            if (cnt <= 0) {
+                cnt = max_count;
+                //if (xf != xq || yf != yq || zf != zq) {
+                SCNVector3 pos = SCNVector3Make((float)f_fext_x/cnt, (float)f_fext_y/cnt, (float)f_fext_z/cnt);
+                
+                //let pos = SCNVector3(CGFloat(yf), CGFloat(xf), CGFloat(zf))
+                //SCNTransaction.flush()
+                //SCNTransaction.begin()
+                //SCNTransaction.setAnimationDuration(0.1)
+                //let action = SCNAction.moveTo(pos, duration: 0.1)
+                _viewpoint1.scene.rootNode.position = pos;
+                _viewpoint2.scene.rootNode.position = pos;
+                //SCNTransaction.commit()
+                //ship.runAction(action)
+                
+                xf = f_fext_x;
+                yf = f_fext_y;
+                zf = f_fext_z;
+                //}
+            }
+            else {
+                //if (abs(xf) <= abs(xq)) {
+                xf += f_fext_x;
+                //}
+                //if (abs(yf) <= abs(yq)) {
+                yf += f_fext_y;
+                //}
+                //if (abs(xf) <= abs(xq)) {
+                zf += f_fext_z;
+                //}
+                /*	if (xq == 0 && yq == 0 && zq == 0) {
+                 //cnt = 1
+                 xf = 0
+                 yf = 0
+                 zf = 0
+                 //if (cnt <= 1) {
+                 //ship.removeAllActions()
+                 //	ship.position = SCNVector3(CGFloat(yf), CGFloat(xf), CGFloat(zf))
+                 //}
+                 
+                 }*/
+            }
+            
+            
             // update the labels
-            _GravityX_lbl.text = [NSString stringWithFormat:@"%d",fext_x];
-            _GravityY_lbl.text = [NSString stringWithFormat:@"%d",fext_y];
-            _GravityZ_lbl.text = [NSString stringWithFormat:@"%d",fext_z];
+            _GravityX_lbl.text = [NSString stringWithFormat:@"%d",f_fext_x];
+            _GravityY_lbl.text = [NSString stringWithFormat:@"%d",f_fext_y];
+            _GravityZ_lbl.text = [NSString stringWithFormat:@"%d",f_fext_z];
             break;
             
         default:
@@ -192,7 +274,14 @@ SCNScene* scene2;
     }
 }
 
-
+- (void)updateQuatLabelswithX:(float)x withY:(float)y withZ:(float)z withA:(float)a
+{
+    // update the labels
+    _QuaternionA_lbl.text = [NSString stringWithFormat:@"%f",x];
+    _QuaternionB_lbl.text = [NSString stringWithFormat:@"%f",y];
+    _QuaternionC_lbl.text = [NSString stringWithFormat:@"%f",z];
+    _QuaternionD_lbl.text = [NSString stringWithFormat:@"%f",a];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -221,4 +310,35 @@ SCNScene* scene2;
 }
 */
 
+-(void) updateLoggingBtnStatus
+{
+    if([dataSim1 isLoggingStopped])
+    {
+        _logging_btn.tag = 1;
+        [_logging_btn setTitle:@"Start Logging" forState:UIControlStateNormal];
+    }
+    else
+    {
+        _logging_btn.tag = 2;
+        [_logging_btn setTitle:@"Stop Logging" forState:UIControlStateNormal];
+    }
+}
+
+
+- (IBAction)startstopLogging:(UIButton*)button {
+    
+    if (button.tag == 1)
+    {
+        button.tag = 2;
+        [button setTitle:@"Stop Logging" forState:UIControlStateNormal];
+        [dataSim1 start];
+    }
+    else if (button.tag == 2)
+    {
+        button.tag = 1;
+        [button setTitle:@"Start Logging" forState:UIControlStateNormal];
+        [dataSim1 pause];
+    }
+
+}
 @end

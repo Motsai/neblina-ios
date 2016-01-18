@@ -9,11 +9,18 @@
 #import <UIKit/UIKit.h>
 #import <SceneKit/SceneKit.h>
 #import "APLGraphView.h"
+#import "Pro_Motion_App-Swift.h"
+#import "DataSimulator.h"
+@import Charts;
 
-@interface IMUStreamViewController : UIViewController
+
+@interface IMUStreamViewController : UIViewController <DataSimulatorDelegate, ChartViewDelegate>
 
 @property (nonatomic, retain)NSString *string_value;
-@property (weak, nonatomic) IBOutlet APLGraphView *accel_view;
-@property (weak, nonatomic) IBOutlet APLGraphView *gyro_view;
+
+@property (weak, nonatomic) IBOutlet LineChartView *accel_view;
+@property (weak, nonatomic) IBOutlet LineChartView *gyros_view;
+@property (weak, nonatomic) IBOutlet UIButton *logging_btn;
+- (IBAction)startstopLogging:(UIButton*)button;
 
 @end

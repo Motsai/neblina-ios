@@ -8,12 +8,31 @@
 
 #import "ViewController.h"
 #import "SWRevealViewController.h"
+#import "DataSimulator.h"
 
 @implementation ViewController
+BOOL bFileQuat;
+DataSimulator* dataSim;
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // Setup the simulator
+    bFileQuat = true;
+    
+    dataSim = [DataSimulator sharedInstance];
+    [dataSim readBinaryFile:@"QuatRotationRandom"];
+    //[dataSim readBinaryFile:@"wheel_test2fixed"];
+    //[dataSim readBinaryFile:@"DataLogger"];
+    //[dataSim readBinaryFile:@"EulerAngleStream"];
+    //[dataSim readBinaryFile:@"ForceStream"];
+    
+    
+    
+    //[dataSim pause];
+   
     
     SWRevealViewController *revealViewController = self.revealViewController;
     if ( revealViewController )
@@ -29,4 +48,18 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)changeSimulatorFile:(id)sender {
+    if(bFileQuat == true)
+    {
+        bFileQuat = false;
+        _lbl_SimFile.text = @"wheel_test2fixed.bin";
+        [dataSim readBinaryFile:@"wheel_test2fixed"];
+    }
+    else
+    {
+        bFileQuat = true;
+        _lbl_SimFile.text = @"QuatRotationRandom.bin";
+        [dataSim readBinaryFile:@"QuatRotationRandom"];
+    }
+}
 @end

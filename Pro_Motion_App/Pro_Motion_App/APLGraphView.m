@@ -29,7 +29,8 @@ CGColorRef graphBackgroundColor()
     static CGColorRef c = NULL;
     if (c == NULL)
     {
-        c = CreateDeviceGrayColor(0.2, 1.0);
+       // c = CreateDeviceGrayColor(0.2, 1.0);
+        c = CreateDeviceRGBColor(1,0,0,0);
     }
     return c;
 }
@@ -201,11 +202,11 @@ void DrawGridlines(CGContextRef context, CGFloat x, CGFloat width)
 -(void)drawLayer:(CALayer*)l inContext:(CGContextRef)context
 {
     // Fill in the background.
-    CGContextSetFillColorWithColor(context, graphBackgroundColor());
+    CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
     CGContextFillRect(context, self.layer.bounds);
 
     // Draw the grid lines.
-    DrawGridlines(context, 0.0, 32.0);
+    //DrawGridlines(context, 0.0, 32.0);
 
     // Draw the graph.
     CGPoint lines[64];
@@ -283,7 +284,7 @@ void DrawGridlines(CGContextRef context, CGFloat x, CGFloat width)
     CGContextTranslateCTM(context, 0.0, 250.0);
 
     // Draw the grid lines.
-    DrawGridlines(context, 600.0, 25.0);
+    //DrawGridlines(context, 600.0, 25.0);
 
     // Draw the left hand side y-axis text.
     UIFont *systemFont = [UIFont fontWithName:@"Helvetica-Bold" size:18];

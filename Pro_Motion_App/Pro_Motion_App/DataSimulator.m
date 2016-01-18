@@ -12,6 +12,8 @@
 #import "Pro_Motion_App-Swift.h"
 
 
+
+
 @implementation DataSimulator
 NSTimer *timer;
 NSUInteger count;
@@ -19,9 +21,35 @@ NSUInteger deactivate_var;
 
 NSData *fileData;
 NSData *single_packet;
-NSMutableData *mutable_packet_Data;
 NSUInteger length;
+NSString *appFile_path;
+NSData *logger_file_Data;
+float timeInterval = 0.04;
+static NSMutableData *_mutable_packet_Data;
+BOOL timer_fired;
+NSFileHandle *myHandle;
 
+
++ (DataSimulator*)sharedInstance
+{
+    // 1
+    static DataSimulator *_sharedInstance = nil;
+    
+    // 2
+    static dispatch_once_t oncePredicate;
+    
+    // 3
+    dispatch_once(&oncePredicate, ^{
+        _sharedInstance = [[DataSimulator alloc] init];
+        _mutable_packet_Data = [[NSMutableData alloc] init];
+    });
+    return _sharedInstance;
+}
+
+-(NSMutableData*) getReceivedPackets
+{
+    return _mutable_packet_Data;
+}
 
 -(void)timerFireMethod
 {
@@ -29,17 +57,53 @@ NSUInteger length;
     
     if (count == deactivate_var)
     {
-        [timer invalidate];
+        [self pause];
         return;
     }
     
     Byte single_packet1[20];
     [fileData getBytes:single_packet1 range:NSMakeRange(count*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
     
+    // mutable_packet_data should only contain 400 packets. If more than 400, remove 1st packet and append at the end.
+//    if (count>1500)
+//    {
+//        NSRange range = NSMakeRange(0, 19);
+//        [_mutable_packet_Data replaceBytesInRange:range withBytes:NULL length:0];
+//        [self pause];
+//    }
+    [_mutable_packet_Data appendData:[NSData dataWithBytes:single_packet1 length:20]];
+    
+    // Writing data to DataLogger File
+    uint8_t *fileBytes = (uint8_t *)[single_packet bytes];
+    NSData *data = [[NSData alloc] initWithBytes:fileBytes length:[single_packet length]];
+    
+    if(![[NSFileManager defaultManager] fileExistsAtPath:appFile_path])
+    {
+        [[NSFileManager defaultManager] createFileAtPath:appFile_path contents:nil attributes:nil];
+        [data writeToFile:appFile_path atomically:YES];
+    }
+    else
+    {
+         myHandle = [NSFileHandle fileHandleForWritingAtPath:appFile_path];
+        [myHandle seekToEndOfFile];
+        [myHandle writeData:data];
+    }
+
+    
     [_delegate handleDataAndParse:[NSData dataWithBytes:single_packet1 length:20]];
     count ++;
     
 }
+
+-(BOOL) isLoggingStopped
+{
+    if(timer_fired)
+        return FALSE;
+    else
+        return TRUE;
+}
+
+
 
 
 -(void)readBinaryFile:(NSString *)filename
@@ -54,6 +118,7 @@ NSUInteger length;
      4. IMUStream.bin
      */
     
+    [self createLoggerFile];
     [self reset];
     
     // Read Data File
@@ -63,9 +128,22 @@ NSUInteger length;
     NSLog(@"Length = %lu", (unsigned long)length);
     
     deactivate_var = length/20;
-    float timeInterval = 0.04;
+    [self start];
+}
+
+-(NSData *) getPacketAt:(int) i
+{
+    Byte single_packet1[20];
+    [_mutable_packet_Data getBytes:single_packet1 range:NSMakeRange(i*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
+    return [NSData dataWithBytes:single_packet1 length:20];
+
+}
+
+-(long) getTotalPackets
+{
+ 
+    return [_mutable_packet_Data length]/20;
     
-    timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timerFireMethod) userInfo:nil repeats:YES];
 }
 
 -(void)reset
@@ -73,10 +151,51 @@ NSUInteger length;
     count = 0;
     length = 0;
     deactivate_var = 0;
-    [mutable_packet_Data setLength:0];
-    [timer invalidate];
+    [_mutable_packet_Data setLength:0];
+    [self pause];
+   
+}
+
+-(void)createLoggerFile
+{
+    // Delete/Remove already created file & write fresh data into it every time.
+    appFile_path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"DataLogger.bin"];
+    if(![[NSFileManager defaultManager] fileExistsAtPath:appFile_path])
+    {
+        [[NSFileManager defaultManager] createFileAtPath:appFile_path contents:[NSData data] attributes:nil];
+    }
+    
+
 }
 
 
+-(void) pause
+{
+    if(timer_fired)
+    {
+        timer_fired = FALSE;
+        [timer invalidate];
+    }
+    
+}
+
+-(void) start
+{
+    if(!timer_fired)
+    {
+        timer_fired = TRUE;
+        timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timerFireMethod) userInfo:nil repeats:YES];
+    }
+}
+
+-(void) sendLogFile
+{
+    
+}
+
+-(NSString*) getLogfilePath
+{
+    return appFile_path;
+}
 
 @end

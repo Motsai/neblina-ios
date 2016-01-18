@@ -11,6 +11,8 @@
 #import "DataSimulator.h"
 
 @interface _AxisViewController : UIViewController <DataSimulatorDelegate>
+- (IBAction)startstopLogging:(UIButton*)button;
+@property (weak, nonatomic) IBOutlet UIButton *logging_btn;
 
 @property(nonatomic, retain) IBOutlet SCNView *viewpoint1;
 @property(nonatomic, retain) IBOutlet SCNView *viewpoint2;

@@ -7,14 +7,29 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MessageUI/MessageUI.h>
 
 @protocol DataSimulatorDelegate <NSObject>
 -(void) handleDataAndParse:(NSData *)pktData;
 @end
 
-@interface DataSimulator : NSObject
-@property (nonatomic, strong)id<DataSimulatorDelegate> delegate;
+@interface DataSimulator : NSObject <MFMailComposeViewControllerDelegate>
+{
+
+}
+
+-(NSMutableData*) getReceivedPackets;
+@property (nonatomic,strong)id<DataSimulatorDelegate> delegate;
++ (DataSimulator*)sharedInstance;
 -(void)readBinaryFile:(NSString *)filename;
 -(void)reset;
+-(void) pause;
+-(void) start;
+-(BOOL) isLoggingStopped;
+-(long) getTotalPackets;
+-(NSData *) getPacketAt:(int) i;
+-(void) sendLogFile;
+-(NSString*) getLogfilePath;
+
 
 @end

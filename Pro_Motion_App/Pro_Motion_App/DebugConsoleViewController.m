@@ -11,19 +11,24 @@
 #import "neblina.h"
 #import "FusionEngineDataTypes.h"
 #import "Pro_Motion_App-Swift.h"
+#import "DataSimulator.h"
+#import "MBProgressHUD.h"
 
 @implementation DebugConsoleViewController
 
 @synthesize logging_btn, connect_btn;
 @synthesize switch_9axis, switch_euler, switch_external, switch_heading, switch_magnetometer, switch_motindata, switch_pedometer,switch_quaternion, switch_record, switch_traj_distance, switch_traj_record;
 @synthesize QuaternionA_lbl, QuaternionB_lbl, QuaternionC_lbl, QuaternionD_lbl;
-@synthesize timer;
+
+
+DataSimulator* dataSimulator;
 
 #pragma mark View's defaults methods
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     start_flag = false;
     
     self.logger_tbl.layer.borderWidth = 2;
@@ -33,18 +38,84 @@
     self.switch_view.layer.borderWidth = 2;
     self.switch_view.layer.borderColor = [[UIColor blackColor] CGColor];
     self.switch_view.layer.cornerRadius = 5;
-    mutable_packet_Data = [[NSMutableData alloc]init];
+    [_btnEmail setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
+    _btnEmail.enabled = false;
+    
+    dataSimulator = [DataSimulator sharedInstance];
+
+ }
+
+-(void) updateLoggingBtnStatus
+{
+    if([dataSimulator isLoggingStopped])
+    {
+        logging_btn.tag = 1;
+        [logging_btn setTitle:@"Start Logging" forState:UIControlStateNormal];
+        _btnEmail.enabled = false;
+    }
+    else
+    {
+        logging_btn.tag = 2;
+         [logging_btn setTitle:@"Stop Logging" forState:UIControlStateNormal];
+        _btnEmail.enabled = false;
+    }
+
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self updateLoggingBtnStatus];
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:YES];
-    [self readBinaryFile:@"wheel_test2fixed"];
+    // get the shared instance of the data simulator
+    
+    
+    // if logging stopped, lets plot the last 200 points on the graph
+    if([dataSimulator isLoggingStopped])
+    {
+        [self.logger_tbl reloadData];
+        NSIndexPath *lastIndexPath1 = [self lastIndexPath1];
+        
+        
+        
+        [self.logger_tbl scrollToRowAtIndexPath:lastIndexPath1 atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        
+        [self.logger_tbl selectRowAtIndexPath:lastIndexPath1 animated:true scrollPosition:UITableViewScrollPositionBottom];
+        
+    }
+    
+    
+    dataSimulator.delegate = self;
+    start_flag = TRUE;
+  
+    
+    
+}
+
+-(NSIndexPath *)lastIndexPath1
+{
+    NSInteger lastSectionIndex = MAX(0, [self.logger_tbl numberOfSections] - 1);
+    NSInteger lastRowIndex = MAX(0, [self.logger_tbl numberOfRowsInSection:lastSectionIndex] - 1);
+    return [NSIndexPath indexPathForRow:lastRowIndex inSection:lastSectionIndex];
+}
+
+-(void) viewDidDisappear:(BOOL)animated
+{
+    dataSimulator.delegate = nil;
+
+}
+
+-(void) viewWillDisappear:(BOOL)animated
+{
+   
+    start_flag = false;
+    dataSimulator.delegate = nil;
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -52,103 +123,25 @@
     [super didReceiveMemoryWarning];
 }
 
--(void)readBinaryFile:(NSString *)filename
-{
-    // Delete/Remove already created file & write a fresh data into it every time.
-    appFile_path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"DataLogger.bin"];
-    if(![[NSFileManager defaultManager] fileExistsAtPath:appFile_path])
-    {
-        [[NSFileManager defaultManager] createFileAtPath:appFile_path contents:[NSData data] attributes:nil];
-    }
-    
-    logging_btn.tag = 2;
-    [logging_btn setTitle:@"Stop Logging" forState:UIControlStateNormal];
-    
-    /* Test Files
-     1. QuaternionStream.bin
-     2. EulerAngleStream.bin
-     3. ForceStream.bin
-     4. IMUStream.bin
-     */
-    
-    count = 0;
-    length = 0;
-    deactivate_var = 0;
-    [mutable_packet_Data setLength:0];
-    [timer invalidate];
-    [self.logger_tbl reloadData];
-    
-    // Read Data File
-    NSString *path = [[NSBundle mainBundle] pathForResource:filename ofType:@"bin"];//put the path to your file here
-    fileData = [NSData dataWithContentsOfFile: path];
-    length = [fileData length];
-    NSLog(@"Length = %lu", (unsigned long)length);
-    
-    deactivate_var = length/20;
-    float timeInterval = 0.04;
-    
-    timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timerFireMethod) userInfo:nil repeats:YES];
-}
 
--(void)timerFireMethod
+-(void)handleDataAndParse:(NSData *)pktData
 {
-    NSLog(@"Count = %lu = %lu", (unsigned long)count, deactivate_var);
-    
-    if (count == deactivate_var)
-    {
-        [timer invalidate];
-        
-        logging_btn.tag = 1;
-        [logging_btn setTitle:@"Start Logging" forState:UIControlStateNormal];
-        return;
-    }
-    
-    Byte single_packet1[20];
-    [fileData getBytes:single_packet1 range:NSMakeRange(count*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
-    
-    // Appending new packets to mutable data
-    if (count>400)
-    {
-        NSRange range = NSMakeRange(0, 19);
-        [mutable_packet_Data replaceBytesInRange:range withBytes:NULL length:0];
-    }
-    [mutable_packet_Data appendData:[NSData dataWithBytes:single_packet1 length:20]];
 
-    
-    // Writing data to DataLogger File
-    uint8_t *fileBytes = (uint8_t *)[single_packet bytes];
-    NSData *data = [[NSData alloc] initWithBytes:fileBytes length:[single_packet length]];
-    
-    if(![[NSFileManager defaultManager] fileExistsAtPath:appFile_path])
-    {
-        [[NSFileManager defaultManager] createFileAtPath:appFile_path contents:nil attributes:nil];
-        [data writeToFile:appFile_path atomically:YES];
-    }
-    else
-    {
-        NSFileHandle *myHandle = [NSFileHandle fileHandleForWritingAtPath:appFile_path];
-        [myHandle seekToEndOfFile];
-        [myHandle writeData:data];
-    }
-    
-    start_flag = true;
     [self.logger_tbl reloadData];
-    
-    
-    count ++;
+
 }
 
 #pragma mark - action method
 
 -(IBAction)switchAction:(UISegmentedControl *)segment
 {
-        Neblina *neblina_obj = [[Neblina alloc]init];
-        NSLog(@"Selected Segment = %ld", segment.selectedSegmentIndex);
+    Neblina *neblina_obj = [[Neblina alloc]init];
+    NSLog(@"Selected Segment = %ld", segment.selectedSegmentIndex);
     if (segment.tag == 1)
     {
         if (segment.selectedSegmentIndex == 1)
         {
-            [self readBinaryFile:@"wheel_test2fixed"];
+            [dataSimulator readBinaryFile:@"wheel_test2fixed"];
         }
         [neblina_obj SixAxisIMU_Stream:switch_9axis.selectedSegmentIndex];
     }
@@ -156,7 +149,7 @@
     {
         if (segment.selectedSegmentIndex == 1)
         {
-            [self readBinaryFile:@"QuaternionStream"];
+            [dataSimulator readBinaryFile:@"QuaternionStream"];
         }
         [neblina_obj QuaternionStream:switch_quaternion.selectedSegmentIndex];
     }
@@ -164,7 +157,7 @@
     {
         if (segment.selectedSegmentIndex == 1)
         {
-            [self readBinaryFile:@"EulerAngleStream"];
+            [dataSimulator readBinaryFile:@"EulerAngleStream"];
         }
         [neblina_obj EulerAngleStream:switch_euler.selectedSegmentIndex];
     }
@@ -172,7 +165,7 @@
     {
         if (segment.selectedSegmentIndex == 1)
         {
-            [self readBinaryFile:@"ForceStream"];
+            [dataSimulator readBinaryFile:@"ForceStream"];
         }
         [neblina_obj ExternalForceStream:switch_external.selectedSegmentIndex];
     }
@@ -180,7 +173,7 @@
     {
         if (segment.selectedSegmentIndex == 1)
         {
-            [self readBinaryFile:@"PedometerStream"];
+            [dataSimulator readBinaryFile:@"PedometerStream"];
         }
         [neblina_obj PedometerStream:switch_pedometer.selectedSegmentIndex];
     }
@@ -188,7 +181,7 @@
     {
         if (segment.selectedSegmentIndex == 1)
         {
-            [self readBinaryFile:@"ForceStream"];
+            [dataSimulator readBinaryFile:@"ForceStream"];
         }
         [neblina_obj TrajectoryRecord:switch_traj_record.selectedSegmentIndex];
     }
@@ -196,7 +189,7 @@
     {
         if (segment.selectedSegmentIndex == 1)
         {
-            [self readBinaryFile:@"TrajectoryDistanceStream"];
+            [dataSimulator readBinaryFile:@"TrajectoryDistanceStream"];
         }
         [neblina_obj TrajectoryDistanceData:switch_traj_distance.selectedSegmentIndex];
     }
@@ -204,7 +197,7 @@
     {
         if (segment.selectedSegmentIndex == 1)
         {
-            [self readBinaryFile:@"MAGStream"];
+            [dataSimulator readBinaryFile:@"MAGStream"];
         }
         [neblina_obj MagStream:switch_magnetometer.selectedSegmentIndex];
     }
@@ -212,7 +205,7 @@
     {
         if (segment.selectedSegmentIndex == 1)
         {
-            [self readBinaryFile:@"MotionStateStream"];
+            [dataSimulator readBinaryFile:@"MotionStateStream"];
         }
         [neblina_obj MotionStream:switch_motindata.selectedSegmentIndex];
     }
@@ -220,7 +213,7 @@
     {
         if (segment.selectedSegmentIndex == 1)
         {
-            [self readBinaryFile:@"ForceStream"];
+            [dataSimulator readBinaryFile:@"ForceStream"];
         }
         [neblina_obj RecorderErase:switch_record.selectedSegmentIndex];
     }
@@ -228,7 +221,7 @@
     {
         if (segment.selectedSegmentIndex == 1)
         {
-            [self readBinaryFile:@"ForceStream"];
+            [dataSimulator readBinaryFile:@"ForceStream"];
         }
         [neblina_obj Recorder:switch_heading.selectedSegmentIndex];
     }
@@ -236,7 +229,7 @@
     {
         if (segment.selectedSegmentIndex == 1)
         {
-            [self readBinaryFile:@"ForceStream"];
+            [dataSimulator readBinaryFile:@"ForceStream"];
         }
         [neblina_obj SixAxisIMU_Stream:switch_record.selectedSegmentIndex];
     }
@@ -248,25 +241,28 @@
     
     if (button.tag == 1)
     {
+        
         button.tag = 2;
         [button setTitle:@"Stop Logging" forState:UIControlStateNormal];
         
-        deactivate_var = length/20;
+       [dataSimulator start];
+    
+        [self displaySpinner:@"Starting..." time:2];
         
-        if (count >= deactivate_var)
-        {
-            count = 0;
-        }
+        _btnEmail.enabled = false;
         
-        float timeInterval = 0.04;
-        timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timerFireMethod) userInfo:nil repeats:YES];
     }
     else if (button.tag == 2)
     {
+       
         button.tag = 1;
         [button setTitle:@"Start Logging" forState:UIControlStateNormal];
-        [timer invalidate];
+        [dataSimulator pause];
+        [self displaySpinner:@"Stopping..." time:2];
+        _btnEmail.enabled = false;
+
     }
+    
 }
 
 -(IBAction)ConnectDevices:(id)sender
@@ -280,6 +276,8 @@
     if ([[segue identifier] isEqualToString:@"IMUIdentifire"])
     {
         // Get reference to the destination view controller
+        //[dataSimulator pause];
+        dataSimulator.delegate = nil;
         IMUStreamViewController *IMU_object = [segue destinationViewController];
         // Pass any objects to the view controller here, like...
         IMU_object.string_value = @"Passed_Data";
@@ -294,11 +292,16 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [mutable_packet_Data length]/20;
+
+    int nCount = [dataSimulator getTotalPackets];
+    return nCount;
+    
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+
+    
     NSString *cellidentifire = [NSString stringWithFormat:@"cell_%ld", (long)indexPath.row];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellidentifire];
     
@@ -309,51 +312,84 @@
     
     if (start_flag == true)
     {
-//        if( [mutable_packet_Data length]/20 < count)
-//        {
-//            NSLog(@"Returning empty cell");
-//            return cell;
-//        }
+
         
         Byte single_packet2[20];
-        [mutable_packet_Data getBytes:single_packet2 range:NSMakeRange(indexPath.row*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
+
+        [[dataSimulator getReceivedPackets] getBytes:single_packet2 range:NSMakeRange(indexPath.row*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
         //NSLog(@"%@", [NSData dataWithBytes:single_packet2 length:20]);
         NSData* pktData = [NSData dataWithBytes:single_packet2 length:20];
         // parse data and diplay on labels
-        [self handleDataAndParse:pktData];
+        NSString* debugstr = [self showData:pktData];
         NSString *myString1 = [NSString stringWithFormat:@"%@",[NSData dataWithBytes:single_packet2 length:20]];
         cell.textLabel.text = myString1;
+        cell.detailTextLabel.text = debugstr;
         [cell.textLabel setFont:[UIFont systemFontOfSize:12]];
+        [cell.detailTextLabel setFont:[UIFont systemFontOfSize:10]];
         
-        [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:([mutable_packet_Data length]/20)-1 inSection:0] atScrollPosition:NULL animated:YES];
+        NSLog(@"Index path row is %d",indexPath.row);
+
+        
+        if(![dataSimulator isLoggingStopped])
+        {
+        
+        [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:([[dataSimulator getReceivedPackets] length]/20)-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        }
+
+        
     }
     
     return cell;
 }
 
+-(void)displaySpinner:(NSString*) msg time:(int) ts
+{
+    
+    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:hud];
+    NSString *info = msg;
+    [hud setLabelText:info];
+    //[hud setDetailsLabelText:@"Please wait..."];
+    [hud setDimBackground:YES];
+    [hud setOpacity:0.5f];
+    [hud show:YES];
+    hud.color = [UIColor colorWithRed:255.0/255.0 green:96.0/255.0 blue:25.0/255.0 alpha:1];
+    [hud hide:YES afterDelay:ts];
+    
+
+}
+
+
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
     Byte single_packet2[20];
-    [mutable_packet_Data getBytes:single_packet2 range:NSMakeRange(indexPath.row*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
+    [[dataSimulator getReceivedPackets] getBytes:single_packet2 range:NSMakeRange(indexPath.row*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
     
     NSData* pktData = [NSData dataWithBytes:single_packet2 length:20];
     // parse data and diplay on labels
-    [self handleDataAndParse:pktData];
+    [self showData:pktData];
     
 }
 
--(void) handleDataAndParse:(NSData *)pktData
+-(NSString*) showData:(NSData *)pktData
 {
     
     int nCmd=0;
     
     [pktData getBytes:&nCmd range:NSMakeRange(3,1)];
     
+    int32_t tmstamp;
+    [pktData getBytes:&tmstamp range:NSMakeRange(4,4)];
+    tmstamp = (int32_t)CFSwapInt32HostToLittle(tmstamp);
+    
     int16_t mag_orient_x,mag_orient_y,mag_orient_z,mag_accel_x,mag_accel_y,mag_accel_z;
     int16_t q0, q1,q2,q3;
     int16_t yaw,pitch,roll;
     int16_t fext_x,fext_y,fext_z;
+    NSString* retString;
+    
     switch(nCmd)
     {
         case 12: // MAG Data
@@ -372,8 +408,24 @@
             mag_accel_y = (int16_t)CFSwapInt16HostToLittle(mag_accel_y);
             mag_accel_z = (int16_t)CFSwapInt16HostToLittle(mag_accel_z);
             
-            NSLog(@"Accel is = %d, %d, %d", mag_accel_x,mag_accel_y,mag_accel_z);
-            NSLog(@"Mag is = %d, %d, %d", mag_orient_x,mag_orient_y,mag_orient_z);
+            NSLog(@"%d DCV Accel is = %d, %d, %d", tmstamp,mag_accel_x,mag_accel_y,mag_accel_z);
+            NSLog(@"%d DCV Mag is = %d, %d, %d", tmstamp,mag_orient_x,mag_orient_y,mag_orient_z);
+            retString = [NSString stringWithFormat:@"Timestamp: %d MAG Data : acc.x = %d,acc_y = %d,acc_z=%d,mag_x = %d,mag_y = %d, mag_z = %d",tmstamp,mag_accel_x,mag_accel_y,mag_accel_z,mag_orient_x,mag_orient_y,mag_orient_z];
+            
+            QuaternionA_lbl.text = [NSString stringWithFormat:@""];
+            QuaternionB_lbl.text = [NSString stringWithFormat:@""];
+            QuaternionC_lbl.text = [NSString stringWithFormat:@""];
+            QuaternionD_lbl.text = [NSString stringWithFormat:@""];
+            
+            _Pitch_lbl.text = [NSString stringWithFormat:@""];
+            _Yaw_lbl.text = [NSString stringWithFormat:@""];
+            _Roll_lbl.text = [NSString stringWithFormat:@""];
+            
+            _GravityX_lbl.text = [NSString stringWithFormat:@""];
+            _GravityY_lbl.text = [NSString stringWithFormat:@""];
+            _GravityZ_lbl.text = [NSString stringWithFormat:@""];
+            
+            
             break;
             
         case 4: // Quaternion data
@@ -385,12 +437,13 @@
             q1 = (int16_t)CFSwapInt16HostToLittle(q1);
             q2 = (int16_t)CFSwapInt16HostToLittle(q2);
             q3 = (int16_t)CFSwapInt16HostToLittle(q3);
-            NSLog(@"Quaternion data is = %d, %d, %d %d", q0,q1,q2,q3);
+            NSLog(@"%d Quaternion data is = %d, %d, %d %d", tmstamp,q0,q1,q2,q3);
             
-            QuaternionA_lbl.text = [NSString stringWithFormat:@"%d",q0];
-            QuaternionB_lbl.text = [NSString stringWithFormat:@"%d",q1];
-            QuaternionC_lbl.text = [NSString stringWithFormat:@"%d",q2];
-            QuaternionD_lbl.text = [NSString stringWithFormat:@"%d",q3];
+            QuaternionA_lbl.text = [NSString stringWithFormat:@"%f",(float)q0/32768.0];
+            QuaternionB_lbl.text = [NSString stringWithFormat:@"%f",(float)q1/32768.0];
+            QuaternionC_lbl.text = [NSString stringWithFormat:@"%f",(float)q2/32768.0];
+            QuaternionD_lbl.text = [NSString stringWithFormat:@"%f",(float)q3/32768.0];
+            retString = [NSString stringWithFormat:@"Timestamp: %d Quaternion Data is = %f, %f, %f %f", tmstamp,(float)q0/32768.0,(float)q1/32768.0,(float)q2/32768.0,(float)q3/32768.0];
             
             break;
             
@@ -403,11 +456,12 @@
             pitch = (int16_t)CFSwapInt16HostToLittle(pitch);
             roll = (int16_t)CFSwapInt16HostToLittle(roll);
             
-            NSLog(@"Euler data Yaw = %d, pitch = %d, Roll = %d", yaw,pitch,roll);
+            NSLog(@"%d Euler data Yaw = %d, pitch = %d, Roll = %d", tmstamp,yaw,pitch,roll);
             
-            _Pitch_lbl.text = [NSString stringWithFormat:@"%d",pitch];
-            _Yaw_lbl.text = [NSString stringWithFormat:@"%d",yaw];
-            _Roll_lbl.text = [NSString stringWithFormat:@"%d",roll];
+            _Pitch_lbl.text = [NSString stringWithFormat:@"%f",(float)pitch/10.0];
+            _Yaw_lbl.text = [NSString stringWithFormat:@"%f",(float)yaw/10.0];
+            _Roll_lbl.text = [NSString stringWithFormat:@"%f",(float)roll/10.0];
+            retString = [NSString stringWithFormat:@"Timestamp: %d Euler data Yaw = %f, pitch = %f, Roll = %f", tmstamp,(float)yaw/10.0,(float)pitch/10.0,(float)roll/10.0];
             break;
             
         case 6: // Ext Force
@@ -419,11 +473,12 @@
             fext_y = (int16_t)CFSwapInt16HostToLittle(fext_y);
             fext_z = (int16_t)CFSwapInt16HostToLittle(fext_z);
             
-            NSLog(@"External Force vector x = %d, y = %d, z = %d", fext_x,fext_y,fext_z);
+            NSLog(@"%d External Force vector x = %d, y = %d, z = %d", tmstamp,fext_x,fext_y,fext_z);
             
-            _GravityX_lbl.text = [NSString stringWithFormat:@"%d",fext_x];
-            _GravityY_lbl.text = [NSString stringWithFormat:@"%d",fext_y];
-            _GravityZ_lbl.text = [NSString stringWithFormat:@"%d",fext_z];
+            _GravityX_lbl.text = [NSString stringWithFormat:@"%d",fext_x/1600];
+            _GravityY_lbl.text = [NSString stringWithFormat:@"%d",fext_y/1600];
+            _GravityZ_lbl.text = [NSString stringWithFormat:@"%d",fext_z/1600];
+            retString = [NSString stringWithFormat:@"Timestamp: %d External Force vector x = %d, y = %d, z = %d", tmstamp,fext_x/1600,fext_y/1600,fext_z/1600];
             
             break;
             
@@ -431,7 +486,171 @@
             break;
             
     }
+    return retString;
+}
+
+-(void)updateBtn:(UIButton*)sender
+{
+    Neblina *neblina_obj = [[Neblina alloc]init];
+    if(sender.tag == 1)
+    {
+        sender.tag = 2;
+        [sender setBackgroundColor:[UIColor whiteColor]];
+        [sender setTitleColor:[UIColor grayColor] forState:normal];
+        
+        NSLog(@"%@",sender.titleLabel.text);
+        
+    }
+    else{
+        sender.tag = 1;
+        [sender setBackgroundColor:[UIColor colorWithRed:255.0/255.0 green:96.0/255.0 blue:25.0/255.0 alpha:1]];
+        [sender setTitleColor:[UIColor whiteColor] forState:normal];
+        
+    }
+    
+    if([sender.titleLabel.text isEqualToString:@"Quaternion"])
+    {
+        [neblina_obj QuaternionStream:(sender.tag ==1)?1:0];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"9 Axis IMU"])
+    {
+        [neblina_obj SixAxisIMU_Stream:(sender.tag ==1)?1:0];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Euler Angles"])
+    {
+        [neblina_obj EulerAngleStream:(sender.tag ==1)?1:0];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"External Force"])
+    {
+        [neblina_obj ExternalForceStream:(sender.tag ==1)?1:0];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Pedometer"])
+    {
+        [neblina_obj PedometerStream:(sender.tag ==1)?1:0];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Trajectory"])
+    {
+        [neblina_obj TrajectoryRecord:(sender.tag ==1)?1:0];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Trajectory Distance"])
+    {
+        [neblina_obj TrajectoryDistanceData:(sender.tag ==1)?1:0];
+    }
+    
+    else if ([sender.titleLabel.text isEqualToString:@"Magnetometer"])
+    {
+        [neblina_obj MagStream:(sender.tag ==1)?1:0];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Motion"])
+    {
+        [neblina_obj MotionStream:(sender.tag ==1)?1:0];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Record"])
+    {
+        [neblina_obj RecorderErase:(sender.tag ==1)?1:0];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Heading"])
+    {
+       
+        [neblina_obj Recorder:(sender.tag ==1)?1:0];
+        
+    }
+    
 }
 
 
+-(IBAction)OptionSwitched:(UIButton*)sender
+{
+    [self updateBtn:sender];
+    
+}
+
+- (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error{
+    switch (result){
+        case MFMailComposeResultCancelled:NSLog(@"Mail cancelled"); break;
+        case MFMailComposeResultSaved:    NSLog(@"Mail saved");     break;
+        case MFMailComposeResultSent:
+                NSLog(@"Mail sent");
+                [self displaySpinner:@"Sending Log file..." time:1];
+                
+                break;
+        case MFMailComposeResultFailed:
+                NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+                [self displaySpinner:@"Error sending log file..." time:2];
+                break;
+        default:                                                    break;
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:NULL];
+
+    
+//    // Close the Mail Interface
+//    if (!app) { app = (AppDelegate *)[[UIApplication sharedApplication] delegate]; }
+//    if (!currentSplitViewController) {
+//        currentSplitViewController  = (UISplitViewController *) app.window.rootViewController;
+//    }
+//    
+//    navController        = [currentSplitViewController.viewControllers lastObject];
+//    
+//    [[navController topViewController] dismissViewControllerAnimated:YES completion:NULL];
+//    
+}
+
+
+-(void)sendEmailInViewController:(UIViewController *)viewController {
+    
+    NSDateFormatter *formatter;
+    NSString        *dateString;
+    formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"dd-MM-yyyy HH:mm"];
+    dateString = [formatter stringFromDate:[NSDate date]];
+    
+    NSString *emailTitle = @"Log file attached -- ";
+    emailTitle = [emailTitle stringByAppendingString:dateString];
+    NSArray *toRecipents = [[NSArray alloc]initWithObjects:@"sanix22@gmail.com", nil];
+    NSMutableString *messageBody =[[NSMutableString alloc]init];
+    
+    [messageBody appendString:@"<p></p><p>Hi,&nbsp;</p><p>Please find attached the log file.</p><p><span style=\"font-size:14px;\"><span style=\"color: rgb(0, 0, 102);\"><span style=\"font-family: arial,helvetica,sans-serif;\"><strong>Thanks,</strong><br />Motsai Team&nbsp;&nbsp; <br /></span></span></span></p><p><span style=\"color:#000066;\"><span style=\"font-family: arial,helvetica,sans-serif;\"></span></span></p>"];
+    
+    
+    
+    Class mailClass = (NSClassFromString(@"MFMailComposeViewController"));
+    if (mailClass != nil) {
+        MFMailComposeViewController * mailView = [[MFMailComposeViewController alloc] init];
+        mailView.mailComposeDelegate = self;
+        
+        //Set the subject
+        [mailView setSubject:emailTitle];
+        
+        //Set the mail body
+        [mailView setMessageBody:messageBody isHTML:YES];
+        [mailView setToRecipients:toRecipents];
+        
+        NSString* logfile = [dataSimulator getLogfilePath];
+        NSLog(@"Log file is %@",logfile);
+        
+        NSDateFormatter *formatter;
+        NSString        *dateString;
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"dd-MM-yyyy HH:mm"];
+        dateString = [formatter stringFromDate:[NSDate date]];
+        
+        dateString = [dateString stringByAppendingString:@".bin"];
+        
+        NSString* attachmentName = [[NSString stringWithString:@"DataLogger"] stringByAppendingString:dateString];
+        
+        NSData *logData = [dataSimulator getReceivedPackets];//[NSData dataWithContentsOfFile:logfile];
+       [mailView addAttachmentData:logData mimeType:@"public.data" fileName:attachmentName];
+        
+        
+        //Display Email Composer
+        if([mailClass canSendMail]) {
+            [viewController presentViewController:mailView animated:YES completion:NULL];
+        }
+    }
+}
+
+- (IBAction)sendLogfile:(id)sender {
+    [self sendEmailInViewController:self];
+}
 @end

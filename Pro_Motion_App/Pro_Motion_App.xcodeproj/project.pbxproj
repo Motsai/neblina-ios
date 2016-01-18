@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A07D31D1C4C2BA900C31B94 /* Document-txt-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A07D31C1C4C2BA900C31B94 /* Document-txt-icon.png */; };
+		5A07D3221C4CB92D00C31B94 /* APLGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A07D3211C4CB92D00C31B94 /* APLGraphView.m */; };
 		5A126FBE1C3F16A700D689B0 /* DataSimulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A126FBD1C3F16A700D689B0 /* DataSimulator.m */; };
 		5A126FC01C3F1A5500D689B0 /* QuatRotationClockwiseX.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A126FBF1C3F1A5500D689B0 /* QuatRotationClockwiseX.bin */; };
 		5A126FC41C3F1A6900D689B0 /* QuatRotationClockwiseY.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A126FC11C3F1A6900D689B0 /* QuatRotationClockwiseY.bin */; };
@@ -14,8 +16,12 @@
 		5A126FC61C3F1A6900D689B0 /* QuatRotationRandom.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A126FC31C3F1A6900D689B0 /* QuatRotationRandom.bin */; };
 		5A7387621C42FDB40013145D /* ship.scn in Resources */ = {isa = PBXBuildFile; fileRef = 5A7387601C42FDB40013145D /* ship.scn */; };
 		5A7387631C42FDB40013145D /* texture.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A7387611C42FDB40013145D /* texture.png */; };
+		5A73877B1C444FD80013145D /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A7387701C444F720013145D /* Charts.framework */; };
+		5A73877C1C444FD80013145D /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5A7387701C444F720013145D /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5AD3FC8A1C4197A40080616E /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD3FC881C4197A40080616E /* Icon-76.png */; };
 		5AD3FC8B1C4197A40080616E /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD3FC891C4197A40080616E /* Icon-76@2x.png */; };
+		5AE899D51C4959E400DC7C55 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AE899D41C4959E400DC7C55 /* MBProgressHUD.m */; };
+		5AE899D71C496F9C00DC7C55 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE899D61C496F9B00DC7C55 /* MessageUI.framework */; };
 		A60C4D871C1D8411004E5FFE /* Feature_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A60C4D841C1D8411004E5FFE /* Feature_background.png */; };
 		A60C4D881C1D8411004E5FFE /* Feature_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A60C4D851C1D8411004E5FFE /* Feature_background@2x.png */; };
 		A60C4D891C1D8411004E5FFE /* Feature_background@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A60C4D861C1D8411004E5FFE /* Feature_background@3x.png */; };
@@ -77,7 +83,6 @@
 		A67623BA1C0DB7BF0014F5F3 /* ScannedPeripheral.m in Sources */ = {isa = PBXBuildFile; fileRef = A67623B61C0DB7BF0014F5F3 /* ScannedPeripheral.m */; };
 		A67623BB1C0DB7BF0014F5F3 /* ScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A67623B91C0DB7BF0014F5F3 /* ScannerViewController.m */; };
 		A67EC0EC1C0738FB00987270 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A67EC0EB1C0738FB00987270 /* CoreBluetooth.framework */; };
-		A68E7E2C1C195FB500EDD675 /* APLGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = A68E7E2B1C195FB500EDD675 /* APLGraphView.m */; };
 		A68E7E2E1C19635800EDD675 /* wheel_test2fixed.bin in Resources */ = {isa = PBXBuildFile; fileRef = A68E7E2D1C19635800EDD675 /* wheel_test2fixed.bin */; };
 		A69135BF1C047F0F00739E57 /* QuaternionStream.bin in Resources */ = {isa = PBXBuildFile; fileRef = A69135BE1C047F0F00739E57 /* QuaternionStream.bin */; };
 		A69135C21C047F8E00739E57 /* DebugConsoleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A69135C11C047F8E00739E57 /* DebugConsoleViewController.m */; };
@@ -98,6 +103,34 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		5A73876F1C444F720013145D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A7387691C444F710013145D /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5BA8EC401A9D14DC00CE82E1;
+			remoteInfo = "Charts-iOS";
+		};
+		5A7387711C444F720013145D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A7387691C444F710013145D /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A52C5C371BAC5CA400594CDD;
+			remoteInfo = "Charts-TV";
+		};
+		5A7387731C444F720013145D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A7387691C444F710013145D /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 06AEE7A21BDC3F8B009875AE;
+			remoteInfo = ChartsTests;
+		};
+		5A73877D1C444FD80013145D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A7387691C444F710013145D /* Charts.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5BA8EC3F1A9D14DC00CE82E1;
+			remoteInfo = "Charts-iOS";
+		};
 		A65B92051C02FF9E00DB6576 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A65B91E31C02FF9D00DB6576 /* Project object */;
@@ -114,7 +147,24 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		5A73877F1C444FD80013145D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5A73877C1C444FD80013145D /* Charts.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		5A07D31C1C4C2BA900C31B94 /* Document-txt-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Document-txt-icon.png"; sourceTree = "<group>"; };
+		5A07D3201C4CB92D00C31B94 /* APLGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APLGraphView.h; sourceTree = "<group>"; };
+		5A07D3211C4CB92D00C31B94 /* APLGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APLGraphView.m; sourceTree = "<group>"; };
 		5A126FBC1C3F16A700D689B0 /* DataSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSimulator.h; sourceTree = "<group>"; };
 		5A126FBD1C3F16A700D689B0 /* DataSimulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataSimulator.m; sourceTree = "<group>"; };
 		5A126FBF1C3F1A5500D689B0 /* QuatRotationClockwiseX.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = QuatRotationClockwiseX.bin; sourceTree = "<group>"; };
@@ -123,8 +173,12 @@
 		5A126FC31C3F1A6900D689B0 /* QuatRotationRandom.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = QuatRotationRandom.bin; sourceTree = "<group>"; };
 		5A7387601C42FDB40013145D /* ship.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = ship.scn; sourceTree = "<group>"; };
 		5A7387611C42FDB40013145D /* texture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = texture.png; sourceTree = "<group>"; };
+		5A7387691C444F710013145D /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = "../../../../Downloads/ios-charts-master/Charts/Charts.xcodeproj"; sourceTree = "<group>"; };
 		5AD3FC881C4197A40080616E /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76.png"; sourceTree = "<group>"; };
 		5AD3FC891C4197A40080616E /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76@2x.png"; sourceTree = "<group>"; };
+		5AE899D31C4959E400DC7C55 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		5AE899D41C4959E400DC7C55 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		5AE899D61C496F9B00DC7C55 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		A60C4D841C1D8411004E5FFE /* Feature_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Feature_background.png; sourceTree = "<group>"; };
 		A60C4D851C1D8411004E5FFE /* Feature_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Feature_background@2x.png"; sourceTree = "<group>"; };
 		A60C4D861C1D8411004E5FFE /* Feature_background@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Feature_background@3x.png"; sourceTree = "<group>"; };
@@ -206,8 +260,6 @@
 		A67623B81C0DB7BF0014F5F3 /* ScannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScannerViewController.h; path = ../ScannerViewController.h; sourceTree = "<group>"; };
 		A67623B91C0DB7BF0014F5F3 /* ScannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScannerViewController.m; path = ../ScannerViewController.m; sourceTree = "<group>"; };
 		A67EC0EB1C0738FB00987270 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
-		A68E7E2A1C195FB500EDD675 /* APLGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APLGraphView.h; sourceTree = "<group>"; };
-		A68E7E2B1C195FB500EDD675 /* APLGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APLGraphView.m; sourceTree = "<group>"; };
 		A68E7E2D1C19635800EDD675 /* wheel_test2fixed.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = wheel_test2fixed.bin; sourceTree = "<group>"; };
 		A69135BE1C047F0F00739E57 /* QuaternionStream.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = QuaternionStream.bin; sourceTree = "<group>"; };
 		A69135C01C047F8E00739E57 /* DebugConsoleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugConsoleViewController.h; sourceTree = "<group>"; };
@@ -234,6 +286,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AE899D71C496F9C00DC7C55 /* MessageUI.framework in Frameworks */,
+				5A73877B1C444FD80013145D /* Charts.framework in Frameworks */,
 				A6579A6D1C11D5EE0057C700 /* SceneKit.framework in Frameworks */,
 				A67EC0EC1C0738FB00987270 /* CoreBluetooth.framework in Frameworks */,
 			);
@@ -256,9 +310,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A73876A1C444F710013145D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5A7387701C444F720013145D /* Charts.framework */,
+				5A7387721C444F720013145D /* Charts.framework */,
+				5A7387741C444F720013145D /* ChartsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		A65B91E21C02FF9D00DB6576 = {
 			isa = PBXGroup;
 			children = (
+				5AE899D61C496F9B00DC7C55 /* MessageUI.framework */,
 				A6579A6C1C11D5EE0057C700 /* SceneKit.framework */,
 				A67EC0EB1C0738FB00987270 /* CoreBluetooth.framework */,
 				A67513811C08967D000F5654 /* Neblina CtrlPanel */,
@@ -269,6 +334,7 @@
 				A65B92071C02FF9E00DB6576 /* Pro_Motion_AppTests */,
 				A65B92121C02FF9E00DB6576 /* Pro_Motion_AppUITests */,
 				A65B91EC1C02FF9D00DB6576 /* Products */,
+				5A7387691C444F710013145D /* Charts.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -291,6 +357,10 @@
 				A65B91F51C02FF9D00DB6576 /* ViewController.m */,
 				A65B923B1C035E9E00DB6576 /* SliderViewController.h */,
 				A65B923C1C035E9E00DB6576 /* SliderViewController.m */,
+				5AE899D31C4959E400DC7C55 /* MBProgressHUD.h */,
+				5AE899D41C4959E400DC7C55 /* MBProgressHUD.m */,
+				5A07D3201C4CB92D00C31B94 /* APLGraphView.h */,
+				5A07D3211C4CB92D00C31B94 /* APLGraphView.m */,
 				A66B25571C2168300067F844 /* MCP */,
 				A66B25531C2166D80067F844 /* Debug Console */,
 				A66B25541C2166E30067F844 /* 9Axis Tracking */,
@@ -345,6 +415,7 @@
 				A6DA90B71C10B57900C36EFE /* more@3x.png */,
 				A6DA90A91C10B4DB00C36EFE /* less.png */,
 				A6DA90AA1C10B4DB00C36EFE /* less@2x.png */,
+				5A07D31C1C4C2BA900C31B94 /* Document-txt-icon.png */,
 				A6DA90AB1C10B4DB00C36EFE /* less@3x.png */,
 				A60C4D841C1D8411004E5FFE /* Feature_background.png */,
 				A60C4D851C1D8411004E5FFE /* Feature_background@2x.png */,
@@ -414,8 +485,6 @@
 				A69135C11C047F8E00739E57 /* DebugConsoleViewController.m */,
 				A6579A6E1C11DBF60057C700 /* IMUStreamViewController.h */,
 				A6579A6F1C11DBF60057C700 /* IMUStreamViewController.m */,
-				A68E7E2A1C195FB500EDD675 /* APLGraphView.h */,
-				A68E7E2B1C195FB500EDD675 /* APLGraphView.m */,
 			);
 			name = "Debug Console";
 			sourceTree = "<group>";
@@ -504,10 +573,12 @@
 				A65B91E71C02FF9D00DB6576 /* Sources */,
 				A65B91E81C02FF9D00DB6576 /* Frameworks */,
 				A65B91E91C02FF9D00DB6576 /* Resources */,
+				5A73877F1C444FD80013145D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				5A73877E1C444FD80013145D /* PBXTargetDependency */,
 			);
 			name = Pro_Motion_App;
 			productName = Pro_Motion_App;
@@ -584,6 +655,12 @@
 			mainGroup = A65B91E21C02FF9D00DB6576;
 			productRefGroup = A65B91EC1C02FF9D00DB6576 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 5A73876A1C444F710013145D /* Products */;
+					ProjectRef = 5A7387691C444F710013145D /* Charts.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				A65B91EA1C02FF9D00DB6576 /* Pro_Motion_App */,
@@ -592,6 +669,30 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		5A7387701C444F720013145D /* Charts.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Charts.framework;
+			remoteRef = 5A73876F1C444F720013145D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5A7387721C444F720013145D /* Charts.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Charts.framework;
+			remoteRef = 5A7387711C444F720013145D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5A7387741C444F720013145D /* ChartsTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ChartsTests.xctest;
+			remoteRef = 5A7387731C444F720013145D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		A65B91E91C02FF9D00DB6576 /* Resources */ = {
@@ -636,6 +737,7 @@
 				A6F2EF2F1C048D6200A417CE /* EulerAngleStream.bin in Resources */,
 				A675137A1C084536000F5654 /* Feature_hrs.png in Resources */,
 				A66B25481C214C5B0067F844 /* Icon-Small@3x.png in Resources */,
+				5A07D31D1C4C2BA900C31B94 /* Document-txt-icon.png in Resources */,
 				A6F2EF311C048D6200A417CE /* IMUStream.bin in Resources */,
 				A66B25471C214C5B0067F844 /* Icon-Small@2x.png in Resources */,
 				A6F2EF331C048D6200A417CE /* MotionStateStream.bin in Resources */,
@@ -701,11 +803,12 @@
 				A6579A701C11DBF60057C700 /* IMUStreamViewController.m in Sources */,
 				5A126FBE1C3F16A700D689B0 /* DataSimulator.m in Sources */,
 				A66B255D1C2169680067F844 /* LocationViewController.m in Sources */,
+				5A07D3221C4CB92D00C31B94 /* APLGraphView.m in Sources */,
 				A67623BA1C0DB7BF0014F5F3 /* ScannedPeripheral.m in Sources */,
+				5AE899D51C4959E400DC7C55 /* MBProgressHUD.m in Sources */,
 				A66B25601C21697F0067F844 /* 9AxisViewController.m in Sources */,
 				A67623BB1C0DB7BF0014F5F3 /* ScannerViewController.m in Sources */,
 				A65B923A1C0354D400DB6576 /* SWRevealViewController.m in Sources */,
-				A68E7E2C1C195FB500EDD675 /* APLGraphView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -728,6 +831,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		5A73877E1C444FD80013145D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Charts-iOS";
+			targetProxy = 5A73877D1C444FD80013145D /* PBXContainerItemProxy */;
+		};
 		A65B92061C02FF9E00DB6576 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A65B91EA1C02FF9D00DB6576 /* Pro_Motion_App */;
@@ -857,6 +965,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Pro_Motion_App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -876,6 +985,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Pro_Motion_App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
