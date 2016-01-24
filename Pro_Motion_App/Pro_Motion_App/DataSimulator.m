@@ -53,7 +53,7 @@ NSFileHandle *myHandle;
 
 -(void)timerFireMethod
 {
-    NSLog(@"Count = %lu = %lu", (unsigned long)count, deactivate_var);
+ //   NSLog(@"Count = %lu = %lu", (unsigned long)count, deactivate_var);
     
     if (count == deactivate_var)
     {
@@ -87,6 +87,7 @@ NSFileHandle *myHandle;
          myHandle = [NSFileHandle fileHandleForWritingAtPath:appFile_path];
         [myHandle seekToEndOfFile];
         [myHandle writeData:data];
+        //[myHandle closeFile];
     }
 
     

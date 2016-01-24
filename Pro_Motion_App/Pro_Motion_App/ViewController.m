@@ -11,7 +11,7 @@
 #import "DataSimulator.h"
 
 @implementation ViewController
-BOOL bFileQuat;
+int8_t nFileQuat;
 DataSimulator* dataSim;
 
 
@@ -20,10 +20,11 @@ DataSimulator* dataSim;
     [super viewDidLoad];
     
     // Setup the simulator
-    bFileQuat = true;
-    
     dataSim = [DataSimulator sharedInstance];
-    [dataSim readBinaryFile:@"QuatRotationRandom"];
+    nFileQuat = 3;
+    [self changeSimulatorFile:nil];
+    //[dataSim readBinaryFile:@"PedometerPackets"];
+    //[dataSim readBinaryFile:@"QuatRotationRandom"];
     //[dataSim readBinaryFile:@"wheel_test2fixed"];
     //[dataSim readBinaryFile:@"DataLogger"];
     //[dataSim readBinaryFile:@"EulerAngleStream"];
@@ -49,17 +50,26 @@ DataSimulator* dataSim;
 }
 
 - (IBAction)changeSimulatorFile:(id)sender {
-    if(bFileQuat == true)
+    if(nFileQuat == 1)
     {
-        bFileQuat = false;
+        nFileQuat++;
         _lbl_SimFile.text = @"wheel_test2fixed.bin";
         [dataSim readBinaryFile:@"wheel_test2fixed"];
     }
-    else
+    else if(nFileQuat == 2)
     {
-        bFileQuat = true;
+        nFileQuat++;
         _lbl_SimFile.text = @"QuatRotationRandom.bin";
         [dataSim readBinaryFile:@"QuatRotationRandom"];
     }
+    
+    else
+    {
+        nFileQuat = 1;
+        _lbl_SimFile.text = @"PedometerPackets.bin";
+        [dataSim readBinaryFile:@"PedometerPackets"];
+    }
+    
+    
 }
 @end

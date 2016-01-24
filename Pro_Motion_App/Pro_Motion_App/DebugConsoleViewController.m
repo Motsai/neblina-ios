@@ -22,6 +22,7 @@
 
 
 DataSimulator* dataSimulator;
+BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_showmagnetometer,b_showpedometer,b_showtrajectory,b_showtrajdistance,b_showmotion,b_showrecord;
 
 #pragma mark View's defaults methods
 
@@ -39,11 +40,28 @@ DataSimulator* dataSimulator;
     self.switch_view.layer.borderColor = [[UIColor blackColor] CGColor];
     self.switch_view.layer.cornerRadius = 5;
     [_btnEmail setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
-    _btnEmail.enabled = false;
+    _btnEmail.enabled = true;
     
     dataSimulator = [DataSimulator sharedInstance];
+    [self initDebugflags];
 
  }
+
+-(void) initDebugflags
+{
+    b_show9axis = true;
+    b_showexternal = true;
+    b_showheading = true;
+    b_showmagnetometer = true;
+    b_showmotion = true;
+    b_showpedometer = true;
+    b_showquaternion = true;
+    b_showeuler = true;
+    b_showtrajectory = true;
+    b_showtrajdistance = true;
+    b_showrecord = true;
+    b_showheading = true;
+}
 
 -(void) updateLoggingBtnStatus
 {
@@ -51,7 +69,7 @@ DataSimulator* dataSimulator;
     {
         logging_btn.tag = 1;
         [logging_btn setTitle:@"Start Logging" forState:UIControlStateNormal];
-        _btnEmail.enabled = false;
+        _btnEmail.enabled = true;
     }
     else
     {
@@ -131,109 +149,6 @@ DataSimulator* dataSimulator;
 
 }
 
-#pragma mark - action method
-
--(IBAction)switchAction:(UISegmentedControl *)segment
-{
-    Neblina *neblina_obj = [[Neblina alloc]init];
-    NSLog(@"Selected Segment = %ld", segment.selectedSegmentIndex);
-    if (segment.tag == 1)
-    {
-        if (segment.selectedSegmentIndex == 1)
-        {
-            [dataSimulator readBinaryFile:@"wheel_test2fixed"];
-        }
-        [neblina_obj SixAxisIMU_Stream:switch_9axis.selectedSegmentIndex];
-    }
-    else if (segment.tag == 2)
-    {
-        if (segment.selectedSegmentIndex == 1)
-        {
-            [dataSimulator readBinaryFile:@"QuaternionStream"];
-        }
-        [neblina_obj QuaternionStream:switch_quaternion.selectedSegmentIndex];
-    }
-    else if (segment.tag == 3)
-    {
-        if (segment.selectedSegmentIndex == 1)
-        {
-            [dataSimulator readBinaryFile:@"EulerAngleStream"];
-        }
-        [neblina_obj EulerAngleStream:switch_euler.selectedSegmentIndex];
-    }
-    else if (segment.tag == 4)
-    {
-        if (segment.selectedSegmentIndex == 1)
-        {
-            [dataSimulator readBinaryFile:@"ForceStream"];
-        }
-        [neblina_obj ExternalForceStream:switch_external.selectedSegmentIndex];
-    }
-    else if (segment.tag == 5)
-    {
-        if (segment.selectedSegmentIndex == 1)
-        {
-            [dataSimulator readBinaryFile:@"PedometerStream"];
-        }
-        [neblina_obj PedometerStream:switch_pedometer.selectedSegmentIndex];
-    }
-    else if (segment.tag == 6)
-    {
-        if (segment.selectedSegmentIndex == 1)
-        {
-            [dataSimulator readBinaryFile:@"ForceStream"];
-        }
-        [neblina_obj TrajectoryRecord:switch_traj_record.selectedSegmentIndex];
-    }
-    else if (segment.tag == 7)
-    {
-        if (segment.selectedSegmentIndex == 1)
-        {
-            [dataSimulator readBinaryFile:@"TrajectoryDistanceStream"];
-        }
-        [neblina_obj TrajectoryDistanceData:switch_traj_distance.selectedSegmentIndex];
-    }
-    else if (segment.tag == 8)
-    {
-        if (segment.selectedSegmentIndex == 1)
-        {
-            [dataSimulator readBinaryFile:@"MAGStream"];
-        }
-        [neblina_obj MagStream:switch_magnetometer.selectedSegmentIndex];
-    }
-    else if (segment.tag == 9)
-    {
-        if (segment.selectedSegmentIndex == 1)
-        {
-            [dataSimulator readBinaryFile:@"MotionStateStream"];
-        }
-        [neblina_obj MotionStream:switch_motindata.selectedSegmentIndex];
-    }
-    else if (segment.tag == 10)
-    {
-        if (segment.selectedSegmentIndex == 1)
-        {
-            [dataSimulator readBinaryFile:@"ForceStream"];
-        }
-        [neblina_obj RecorderErase:switch_record.selectedSegmentIndex];
-    }
-    else if (segment.tag == 11)
-    {
-        if (segment.selectedSegmentIndex == 1)
-        {
-            [dataSimulator readBinaryFile:@"ForceStream"];
-        }
-        [neblina_obj Recorder:switch_heading.selectedSegmentIndex];
-    }
-    else if (segment.tag == 12)
-    {
-        if (segment.selectedSegmentIndex == 1)
-        {
-            [dataSimulator readBinaryFile:@"ForceStream"];
-        }
-        [neblina_obj SixAxisIMU_Stream:switch_record.selectedSegmentIndex];
-    }
-}
 
 -(IBAction)Start_Stop_Logging:(UIButton *)button
 {
@@ -259,7 +174,7 @@ DataSimulator* dataSimulator;
         [button setTitle:@"Start Logging" forState:UIControlStateNormal];
         [dataSimulator pause];
         [self displaySpinner:@"Stopping..." time:2];
-        _btnEmail.enabled = false;
+        _btnEmail.enabled = true;
 
     }
     
@@ -300,7 +215,6 @@ DataSimulator* dataSimulator;
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
     
     NSString *cellidentifire = [NSString stringWithFormat:@"cell_%ld", (long)indexPath.row];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellidentifire];
@@ -389,6 +303,10 @@ DataSimulator* dataSimulator;
     int16_t yaw,pitch,roll;
     int16_t fext_x,fext_y,fext_z;
     NSString* retString;
+    
+    int16_t nStepCount, nDirAngle;
+    int8_t nCadence;
+    float f_DirAngle;
     
     switch(nCmd)
     {
@@ -482,6 +400,22 @@ DataSimulator* dataSimulator;
             
             break;
             
+        case 11: // Pedometer packets
+            [pktData getBytes:&nStepCount range:NSMakeRange(8,2)];
+            [pktData getBytes:&nCadence range:NSMakeRange(10,1)];
+            [pktData getBytes:&nDirAngle range:NSMakeRange(11,2)];
+            
+            
+            
+            nStepCount = (int16_t)CFSwapInt16HostToLittle(nStepCount);
+            
+            nDirAngle = (int16_t)CFSwapInt16HostToLittle(nDirAngle);
+            f_DirAngle = nDirAngle/10.0;
+            
+            // NSLog(@"Timestamp: %d StepCount: %d, Cadence: %d, DirectionAngle: %f", tmstamp,nStepCount,nCadence,f_DirAngle);
+            retString = [NSString stringWithFormat:@"Timestamp: %d StepCount = %d, Cadence = %d, DirectionAngle = %f", tmstamp,nStepCount,nCadence,f_DirAngle];
+
+            
         default:
             break;
             
@@ -510,49 +444,60 @@ DataSimulator* dataSimulator;
     
     if([sender.titleLabel.text isEqualToString:@"Quaternion"])
     {
-        [neblina_obj QuaternionStream:(sender.tag ==1)?1:0];
+        (sender.tag ==1) ? (b_showquaternion = true):(b_showquaternion = false);
+        //[neblina_obj QuaternionStream:(sender.tag ==1)?1:0];
     }
     else if ([sender.titleLabel.text isEqualToString:@"9 Axis IMU"])
     {
-        [neblina_obj SixAxisIMU_Stream:(sender.tag ==1)?1:0];
+        (sender.tag ==1) ? (b_show9axis = true):(b_show9axis = false);
+        //[neblina_obj SixAxisIMU_Stream:(sender.tag ==1)?1:0];
     }
     else if ([sender.titleLabel.text isEqualToString:@"Euler Angles"])
     {
-        [neblina_obj EulerAngleStream:(sender.tag ==1)?1:0];
+        (sender.tag ==1) ? (b_showeuler = true):(b_showeuler = false);
+        //[neblina_obj EulerAngleStream:(sender.tag ==1)?1:0];
     }
     else if ([sender.titleLabel.text isEqualToString:@"External Force"])
     {
-        [neblina_obj ExternalForceStream:(sender.tag ==1)?1:0];
+        (sender.tag ==1) ? (b_showexternal = true):(b_showexternal = false);
+        //[neblina_obj ExternalForceStream:(sender.tag ==1)?1:0];
     }
     else if ([sender.titleLabel.text isEqualToString:@"Pedometer"])
     {
-        [neblina_obj PedometerStream:(sender.tag ==1)?1:0];
+        (sender.tag ==1) ? (b_showpedometer = true):(b_showpedometer = false);
+        //[neblina_obj PedometerStream:(sender.tag ==1)?1:0];
     }
     else if ([sender.titleLabel.text isEqualToString:@"Trajectory"])
     {
-        [neblina_obj TrajectoryRecord:(sender.tag ==1)?1:0];
+        (sender.tag ==1) ? (b_showtrajectory = true):(b_showtrajectory = false);
+        //[neblina_obj TrajectoryRecord:(sender.tag ==1)?1:0];
     }
     else if ([sender.titleLabel.text isEqualToString:@"Trajectory Distance"])
     {
-        [neblina_obj TrajectoryDistanceData:(sender.tag ==1)?1:0];
+        (sender.tag ==1) ? (b_showtrajdistance = true):(b_showtrajdistance = false);
+        //[neblina_obj TrajectoryDistanceData:(sender.tag ==1)?1:0];
     }
     
     else if ([sender.titleLabel.text isEqualToString:@"Magnetometer"])
     {
-        [neblina_obj MagStream:(sender.tag ==1)?1:0];
+        (sender.tag ==1) ? (b_showmagnetometer = true):(b_showmagnetometer = false);
+        //[neblina_obj MagStream:(sender.tag ==1)?1:0];
     }
     else if ([sender.titleLabel.text isEqualToString:@"Motion"])
     {
-        [neblina_obj MotionStream:(sender.tag ==1)?1:0];
+        (sender.tag ==1) ? (b_showmotion = true):(b_showmotion = false);
+        //[neblina_obj MotionStream:(sender.tag ==1)?1:0];
     }
     else if ([sender.titleLabel.text isEqualToString:@"Record"])
     {
-        [neblina_obj RecorderErase:(sender.tag ==1)?1:0];
+        (sender.tag ==1) ? (b_showrecord = true):(b_showrecord = false);
+        //[neblina_obj RecorderErase:(sender.tag ==1)?1:0];
     }
     else if ([sender.titleLabel.text isEqualToString:@"Heading"])
     {
+        (sender.tag ==1) ? (b_showheading = true):(b_showheading = false);
        
-        [neblina_obj Recorder:(sender.tag ==1)?1:0];
+        //[neblina_obj Recorder:(sender.tag ==1)?1:0];
         
     }
     
@@ -651,6 +596,56 @@ DataSimulator* dataSimulator;
 }
 
 - (IBAction)sendLogfile:(id)sender {
-    [self sendEmailInViewController:self];
+    //[self sendEmailInViewController:self];
+    
+    NSURL *url = [NSURL fileURLWithPath:[dataSimulator getLogfilePath]];//[self fileToURL:[dataSimulator getLogfilePath]];
+    
+    NSDateFormatter *formatter;
+    NSString        *dateString;
+    formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"dd-MM-yyyy HH:mm"];
+    dateString = [formatter stringFromDate:[NSDate date]];
+    
+    dateString = [dateString stringByAppendingString:@".bin"];
+    
+    NSString* attachmentName = [[NSString stringWithString:@"DataLogger"] stringByAppendingString:dateString];
+
+    
+    
+    NSURL *url1 = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingString:attachmentName]];
+    
+    [[dataSimulator getReceivedPackets] writeToURL:url1 atomically:NO];
+    
+    //url = [NSURL URLWithDataRepresentation:[dataSimulator getReceivedPackets] relativeToURL:nil ];
+  
+    NSArray *objectsToShare = @[url1];
+    
+    UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
+    
+    // Exclude all activities except AirDrop.
+    NSArray *excludedActivities = @[UIActivityTypePostToTwitter, UIActivityTypePostToFacebook,
+                                    UIActivityTypePostToWeibo,
+                                    UIActivityTypeMessage, UIActivityTypeMail,
+                                    UIActivityTypePrint, UIActivityTypeCopyToPasteboard,
+                                    UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll,
+                                    UIActivityTypeAddToReadingList, UIActivityTypePostToFlickr,
+                                    UIActivityTypePostToVimeo, UIActivityTypePostToTencentWeibo];
+    controller.excludedActivityTypes = excludedActivities;
+    
+    // Present the controller
+    //[self.navigationController presentViewController:controller animated:YES completion:nil];
+    // Change Rect to position Popover
+    UIPopoverController *popup = [[UIPopoverController alloc] initWithContentViewController:controller];
+    [popup presentPopoverFromRect:CGRectMake(self.view.frame.size.width/2, self.view.frame.size.height/4, 0, 0)inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    
 }
+
+- (NSURL *) fileToURL:(NSString*)filename
+{
+    NSArray *fileComponents = [filename componentsSeparatedByString:@"."];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:[fileComponents objectAtIndex:0] ofType:[fileComponents objectAtIndex:1]];
+    
+    return [NSURL fileURLWithPath:filePath];
+}
+
 @end

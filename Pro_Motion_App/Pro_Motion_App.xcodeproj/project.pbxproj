@@ -9,11 +9,25 @@
 /* Begin PBXBuildFile section */
 		5A07D31D1C4C2BA900C31B94 /* Document-txt-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A07D31C1C4C2BA900C31B94 /* Document-txt-icon.png */; };
 		5A07D3221C4CB92D00C31B94 /* APLGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A07D3211C4CB92D00C31B94 /* APLGraphView.m */; };
+		5A07D3281C4D6F7D00C31B94 /* GeoPointCompass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A07D3271C4D6F7D00C31B94 /* GeoPointCompass.m */; };
+		5A07D3431C4E913600C31B94 /* man_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A07D33B1C4E913600C31B94 /* man_1.png */; };
+		5A07D3441C4E913600C31B94 /* man_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A07D33C1C4E913600C31B94 /* man_2.png */; };
+		5A07D3451C4E913600C31B94 /* man_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A07D33D1C4E913600C31B94 /* man_3.png */; };
+		5A07D3461C4E913600C31B94 /* man_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A07D33E1C4E913600C31B94 /* man_4.png */; };
+		5A07D3471C4E913600C31B94 /* man_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A07D33F1C4E913600C31B94 /* man_5.png */; };
+		5A07D3481C4E913600C31B94 /* man_6.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A07D3401C4E913600C31B94 /* man_6.png */; };
+		5A07D3491C4E913600C31B94 /* man_7.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A07D3411C4E913600C31B94 /* man_7.png */; };
+		5A07D34A1C4E913600C31B94 /* man_8.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A07D3421C4E913600C31B94 /* man_8.png */; };
 		5A126FBE1C3F16A700D689B0 /* DataSimulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A126FBD1C3F16A700D689B0 /* DataSimulator.m */; };
 		5A126FC01C3F1A5500D689B0 /* QuatRotationClockwiseX.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A126FBF1C3F1A5500D689B0 /* QuatRotationClockwiseX.bin */; };
 		5A126FC41C3F1A6900D689B0 /* QuatRotationClockwiseY.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A126FC11C3F1A6900D689B0 /* QuatRotationClockwiseY.bin */; };
 		5A126FC51C3F1A6900D689B0 /* QuatRotationClockwiseZ.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A126FC21C3F1A6900D689B0 /* QuatRotationClockwiseZ.bin */; };
 		5A126FC61C3F1A6900D689B0 /* QuatRotationRandom.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A126FC31C3F1A6900D689B0 /* QuatRotationRandom.bin */; };
+		5A474BDE1C4F158500037F50 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A474BDD1C4F158500037F50 /* QuartzCore.framework */; };
+		5A474BE01C4F158E00037F50 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A474BDF1C4F158E00037F50 /* Accelerate.framework */; };
+		5A474BF01C4F351900037F50 /* libCorePlot-CocoaTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A474BD81C4F0E4D00037F50 /* libCorePlot-CocoaTouch.a */; };
+		5A474C031C50C6D300037F50 /* compass_6.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A474C011C50C6D300037F50 /* compass_6.png */; };
+		5A474C051C515E2B00037F50 /* PedometerPackets.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A474C041C515E2B00037F50 /* PedometerPackets.bin */; };
 		5A7387621C42FDB40013145D /* ship.scn in Resources */ = {isa = PBXBuildFile; fileRef = 5A7387601C42FDB40013145D /* ship.scn */; };
 		5A7387631C42FDB40013145D /* texture.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A7387611C42FDB40013145D /* texture.png */; };
 		5A73877B1C444FD80013145D /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A7387701C444F720013145D /* Charts.framework */; };
@@ -98,11 +112,24 @@
 		A6F2EF311C048D6200A417CE /* IMUStream.bin in Resources */ = {isa = PBXBuildFile; fileRef = A6F2EF2A1C048D6200A417CE /* IMUStream.bin */; };
 		A6F2EF321C048D6200A417CE /* MAGStream.bin in Resources */ = {isa = PBXBuildFile; fileRef = A6F2EF2B1C048D6200A417CE /* MAGStream.bin */; };
 		A6F2EF331C048D6200A417CE /* MotionStateStream.bin in Resources */ = {isa = PBXBuildFile; fileRef = A6F2EF2C1C048D6200A417CE /* MotionStateStream.bin */; };
-		A6F2EF341C048D6200A417CE /* PedometerStream.bin in Resources */ = {isa = PBXBuildFile; fileRef = A6F2EF2D1C048D6200A417CE /* PedometerStream.bin */; };
 		A6F2EF351C048D6200A417CE /* TrajectoryDistanceStream.bin in Resources */ = {isa = PBXBuildFile; fileRef = A6F2EF2E1C048D6200A417CE /* TrajectoryDistanceStream.bin */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		5A474BD71C4F0E4D00037F50 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A474BD11C4F0E4D00037F50 /* CorePlot-CocoaTouch.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BC9B83470FB8A0A40035D8DA;
+			remoteInfo = "CorePlot-CocoaTouch";
+		};
+		5A474BED1C4F33EC00037F50 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A474BD11C4F0E4D00037F50 /* CorePlot-CocoaTouch.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BC9B83460FB8A0A40035D8DA;
+			remoteInfo = "CorePlot-CocoaTouch";
+		};
 		5A73876F1C444F720013145D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5A7387691C444F710013145D /* Charts.xcodeproj */;
@@ -165,12 +192,27 @@
 		5A07D31C1C4C2BA900C31B94 /* Document-txt-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Document-txt-icon.png"; sourceTree = "<group>"; };
 		5A07D3201C4CB92D00C31B94 /* APLGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APLGraphView.h; sourceTree = "<group>"; };
 		5A07D3211C4CB92D00C31B94 /* APLGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APLGraphView.m; sourceTree = "<group>"; };
+		5A07D3261C4D6F7D00C31B94 /* GeoPointCompass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoPointCompass.h; sourceTree = "<group>"; };
+		5A07D3271C4D6F7D00C31B94 /* GeoPointCompass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoPointCompass.m; sourceTree = "<group>"; };
+		5A07D33B1C4E913600C31B94 /* man_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = man_1.png; sourceTree = "<group>"; };
+		5A07D33C1C4E913600C31B94 /* man_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = man_2.png; sourceTree = "<group>"; };
+		5A07D33D1C4E913600C31B94 /* man_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = man_3.png; sourceTree = "<group>"; };
+		5A07D33E1C4E913600C31B94 /* man_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = man_4.png; sourceTree = "<group>"; };
+		5A07D33F1C4E913600C31B94 /* man_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = man_5.png; sourceTree = "<group>"; };
+		5A07D3401C4E913600C31B94 /* man_6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = man_6.png; sourceTree = "<group>"; };
+		5A07D3411C4E913600C31B94 /* man_7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = man_7.png; sourceTree = "<group>"; };
+		5A07D3421C4E913600C31B94 /* man_8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = man_8.png; sourceTree = "<group>"; };
 		5A126FBC1C3F16A700D689B0 /* DataSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSimulator.h; sourceTree = "<group>"; };
 		5A126FBD1C3F16A700D689B0 /* DataSimulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataSimulator.m; sourceTree = "<group>"; };
 		5A126FBF1C3F1A5500D689B0 /* QuatRotationClockwiseX.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = QuatRotationClockwiseX.bin; sourceTree = "<group>"; };
 		5A126FC11C3F1A6900D689B0 /* QuatRotationClockwiseY.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = QuatRotationClockwiseY.bin; sourceTree = "<group>"; };
 		5A126FC21C3F1A6900D689B0 /* QuatRotationClockwiseZ.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = QuatRotationClockwiseZ.bin; sourceTree = "<group>"; };
 		5A126FC31C3F1A6900D689B0 /* QuatRotationRandom.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = QuatRotationRandom.bin; sourceTree = "<group>"; };
+		5A474BD11C4F0E4D00037F50 /* CorePlot-CocoaTouch.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "CorePlot-CocoaTouch.xcodeproj"; path = "framework/CorePlot-CocoaTouch.xcodeproj"; sourceTree = "<group>"; };
+		5A474BDD1C4F158500037F50 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		5A474BDF1C4F158E00037F50 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		5A474C011C50C6D300037F50 /* compass_6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compass_6.png; sourceTree = "<group>"; };
+		5A474C041C515E2B00037F50 /* PedometerPackets.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = PedometerPackets.bin; sourceTree = "<group>"; };
 		5A7387601C42FDB40013145D /* ship.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = ship.scn; sourceTree = "<group>"; };
 		5A7387611C42FDB40013145D /* texture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = texture.png; sourceTree = "<group>"; };
 		5A7387691C444F710013145D /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = "../../../../Downloads/ios-charts-master/Charts/Charts.xcodeproj"; sourceTree = "<group>"; };
@@ -277,7 +319,6 @@
 		A6F2EF2A1C048D6200A417CE /* IMUStream.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = IMUStream.bin; sourceTree = "<group>"; };
 		A6F2EF2B1C048D6200A417CE /* MAGStream.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = MAGStream.bin; sourceTree = "<group>"; };
 		A6F2EF2C1C048D6200A417CE /* MotionStateStream.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = MotionStateStream.bin; sourceTree = "<group>"; };
-		A6F2EF2D1C048D6200A417CE /* PedometerStream.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = PedometerStream.bin; sourceTree = "<group>"; };
 		A6F2EF2E1C048D6200A417CE /* TrajectoryDistanceStream.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = TrajectoryDistanceStream.bin; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -286,10 +327,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A474BE01C4F158E00037F50 /* Accelerate.framework in Frameworks */,
+				5A474BDE1C4F158500037F50 /* QuartzCore.framework in Frameworks */,
 				5AE899D71C496F9C00DC7C55 /* MessageUI.framework in Frameworks */,
 				5A73877B1C444FD80013145D /* Charts.framework in Frameworks */,
 				A6579A6D1C11D5EE0057C700 /* SceneKit.framework in Frameworks */,
 				A67EC0EC1C0738FB00987270 /* CoreBluetooth.framework in Frameworks */,
+				5A474BF01C4F351900037F50 /* libCorePlot-CocoaTouch.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +354,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A07D3231C4D6F4600C31B94 /* Pedometer */ = {
+			isa = PBXGroup;
+			children = (
+				5A07D33B1C4E913600C31B94 /* man_1.png */,
+				5A07D33C1C4E913600C31B94 /* man_2.png */,
+				5A07D33D1C4E913600C31B94 /* man_3.png */,
+				5A07D33E1C4E913600C31B94 /* man_4.png */,
+				5A07D33F1C4E913600C31B94 /* man_5.png */,
+				5A07D3401C4E913600C31B94 /* man_6.png */,
+				5A07D3411C4E913600C31B94 /* man_7.png */,
+				5A07D3421C4E913600C31B94 /* man_8.png */,
+				5A474C011C50C6D300037F50 /* compass_6.png */,
+			);
+			name = Pedometer;
+			sourceTree = "<group>";
+		};
+		5A474BD21C4F0E4D00037F50 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5A474BD81C4F0E4D00037F50 /* libCorePlot-CocoaTouch.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		5A73876A1C444F710013145D /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -323,6 +391,8 @@
 		A65B91E21C02FF9D00DB6576 = {
 			isa = PBXGroup;
 			children = (
+				5A474BDF1C4F158E00037F50 /* Accelerate.framework */,
+				5A474BDD1C4F158500037F50 /* QuartzCore.framework */,
 				5AE899D61C496F9B00DC7C55 /* MessageUI.framework */,
 				A6579A6C1C11D5EE0057C700 /* SceneKit.framework */,
 				A67EC0EB1C0738FB00987270 /* CoreBluetooth.framework */,
@@ -334,6 +404,7 @@
 				A65B92071C02FF9E00DB6576 /* Pro_Motion_AppTests */,
 				A65B92121C02FF9E00DB6576 /* Pro_Motion_AppUITests */,
 				A65B91EC1C02FF9D00DB6576 /* Products */,
+				5A474BD11C4F0E4D00037F50 /* CorePlot-CocoaTouch.xcodeproj */,
 				5A7387691C444F710013145D /* Charts.xcodeproj */,
 			);
 			sourceTree = "<group>";
@@ -407,6 +478,7 @@
 		A65B922D1C03531800DB6576 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				5A07D3231C4D6F4600C31B94 /* Pedometer */,
 				A66B25201C214C2C0067F844 /* App iCons */,
 				A6DA90B51C10B57900C36EFE /* more.png */,
 				A66B25491C2151320067F844 /* launch-logo.png */,
@@ -510,6 +582,8 @@
 		A66B25561C2167120067F844 /* Location Tracking */ = {
 			isa = PBXGroup;
 			children = (
+				5A07D3261C4D6F7D00C31B94 /* GeoPointCompass.h */,
+				5A07D3271C4D6F7D00C31B94 /* GeoPointCompass.m */,
 				A66B255B1C2169680067F844 /* LocationViewController.h */,
 				A66B255C1C2169680067F844 /* LocationViewController.m */,
 			);
@@ -540,12 +614,12 @@
 				5A126FC31C3F1A6900D689B0 /* QuatRotationRandom.bin */,
 				5A126FBF1C3F1A5500D689B0 /* QuatRotationClockwiseX.bin */,
 				A68E7E2D1C19635800EDD675 /* wheel_test2fixed.bin */,
+				5A474C041C515E2B00037F50 /* PedometerPackets.bin */,
 				A6F2EF281C048D6200A417CE /* EulerAngleStream.bin */,
 				A6F2EF291C048D6200A417CE /* ForceStream.bin */,
 				A6F2EF2A1C048D6200A417CE /* IMUStream.bin */,
 				A6F2EF2B1C048D6200A417CE /* MAGStream.bin */,
 				A6F2EF2C1C048D6200A417CE /* MotionStateStream.bin */,
-				A6F2EF2D1C048D6200A417CE /* PedometerStream.bin */,
 				A6F2EF2E1C048D6200A417CE /* TrajectoryDistanceStream.bin */,
 				A69135BE1C047F0F00739E57 /* QuaternionStream.bin */,
 			);
@@ -578,6 +652,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				5A474BEE1C4F33EC00037F50 /* PBXTargetDependency */,
 				5A73877E1C444FD80013145D /* PBXTargetDependency */,
 			);
 			name = Pro_Motion_App;
@@ -660,6 +735,10 @@
 					ProductGroup = 5A73876A1C444F710013145D /* Products */;
 					ProjectRef = 5A7387691C444F710013145D /* Charts.xcodeproj */;
 				},
+				{
+					ProductGroup = 5A474BD21C4F0E4D00037F50 /* Products */;
+					ProjectRef = 5A474BD11C4F0E4D00037F50 /* CorePlot-CocoaTouch.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -671,6 +750,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		5A474BD81C4F0E4D00037F50 /* libCorePlot-CocoaTouch.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libCorePlot-CocoaTouch.a";
+			remoteRef = 5A474BD71C4F0E4D00037F50 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		5A7387701C444F720013145D /* Charts.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -700,6 +786,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A60C4D881C1D8411004E5FFE /* Feature_background@2x.png in Resources */,
+				5A07D3481C4E913600C31B94 /* man_6.png in Resources */,
 				A66B25301C214C4D0067F844 /* Icon@2x.png in Resources */,
 				A66B254C1C2151320067F844 /* launch-sublogo.png in Resources */,
 				A675136D1C084460000F5654 /* Feature_proximity@3x.png in Resources */,
@@ -708,6 +795,7 @@
 				A65B92251C03158100DB6576 /* settings@2x.png in Resources */,
 				5A126FC51C3F1A6900D689B0 /* QuatRotationClockwiseZ.bin in Resources */,
 				A675137E1C084536000F5654 /* Feature_rsac@2x.png in Resources */,
+				5A07D3441C4E913600C31B94 /* man_2.png in Resources */,
 				A65B92241C03158100DB6576 /* settings.png in Resources */,
 				A675136B1C084460000F5654 /* Feature_proximity.png in Resources */,
 				A66B253F1C214C5B0067F844 /* Icon-40@2x.png in Resources */,
@@ -717,6 +805,7 @@
 				A66B25521C2165EF0067F844 /* Icon.png in Resources */,
 				A65B91FE1C02FF9E00DB6576 /* LaunchScreen.storyboard in Resources */,
 				5AD3FC8A1C4197A40080616E /* Icon-76.png in Resources */,
+				5A07D3491C4E913600C31B94 /* man_7.png in Resources */,
 				A66B252C1C214C4D0067F844 /* Icon-72@2x.png in Resources */,
 				A6DA90BA1C10B57900C36EFE /* more@3x.png in Resources */,
 				A66B252D1C214C4D0067F844 /* Icon-Small-50.png in Resources */,
@@ -725,13 +814,17 @@
 				A60C4D871C1D8411004E5FFE /* Feature_background.png in Resources */,
 				A6DA90B81C10B57900C36EFE /* more.png in Resources */,
 				A66B25421C214C5B0067F844 /* Icon-60@3x.png in Resources */,
+				5A474C051C515E2B00037F50 /* PedometerPackets.bin in Resources */,
 				A67513771C084536000F5654 /* Feature_dfu.png in Resources */,
+				5A07D3451C4E913600C31B94 /* man_3.png in Resources */,
 				A69135BF1C047F0F00739E57 /* QuaternionStream.bin in Resources */,
 				A65B91FB1C02FF9E00DB6576 /* Assets.xcassets in Resources */,
 				5A126FC01C3F1A5500D689B0 /* QuatRotationClockwiseX.bin in Resources */,
 				A67513781C084536000F5654 /* Feature_dfu@2x.png in Resources */,
 				A6DA90AF1C10B4DB00C36EFE /* less.png in Resources */,
 				A65B922A1C0315B200DB6576 /* menu.png in Resources */,
+				5A07D3461C4E913600C31B94 /* man_4.png in Resources */,
+				5A474C031C50C6D300037F50 /* compass_6.png in Resources */,
 				A66B254E1C21637C0067F844 /* Icon-60@2x.png in Resources */,
 				A66B252B1C214C4D0067F844 /* Icon-72.png in Resources */,
 				A6F2EF2F1C048D6200A417CE /* EulerAngleStream.bin in Resources */,
@@ -758,14 +851,16 @@
 				A66B25461C214C5B0067F844 /* Icon-Small.png in Resources */,
 				A6DA90B01C10B4DB00C36EFE /* less@2x.png in Resources */,
 				A6DA90B11C10B4DB00C36EFE /* less@3x.png in Resources */,
-				A6F2EF341C048D6200A417CE /* PedometerStream.bin in Resources */,
+				5A07D3471C4E913600C31B94 /* man_5.png in Resources */,
 				A65B92261C03158100DB6576 /* settings@3x.png in Resources */,
 				A68E7E2E1C19635800EDD675 /* wheel_test2fixed.bin in Resources */,
 				A6F2EF301C048D6200A417CE /* ForceStream.bin in Resources */,
 				A65B922C1C0315B200DB6576 /* menu@3x.png in Resources */,
 				A66B25451C214C5B0067F844 /* Icon-83.5@2x.png in Resources */,
+				5A07D3431C4E913600C31B94 /* man_1.png in Resources */,
 				A67513791C084536000F5654 /* Feature_dfu@3x.png in Resources */,
 				A65B91F91C02FF9D00DB6576 /* Main.storyboard in Resources */,
+				5A07D34A1C4E913600C31B94 /* man_8.png in Resources */,
 				A675137F1C084536000F5654 /* Feature_rsac@3x.png in Resources */,
 				A6579A6B1C1172F00057C700 /* data.plist in Resources */,
 			);
@@ -793,6 +888,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A65B923D1C035E9E00DB6576 /* SliderViewController.m in Sources */,
+				5A07D3281C4D6F7D00C31B94 /* GeoPointCompass.m in Sources */,
 				A67623B01C0C30820014F5F3 /* Neblina.swift in Sources */,
 				A66B255A1C2169430067F844 /* TrajectoryViewController.m in Sources */,
 				A65B91F61C02FF9D00DB6576 /* ViewController.m in Sources */,
@@ -831,6 +927,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		5A474BEE1C4F33EC00037F50 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "CorePlot-CocoaTouch";
+			targetProxy = 5A474BED1C4F33EC00037F50 /* PBXContainerItemProxy */;
+		};
 		5A73877E1C444FD80013145D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Charts-iOS";
@@ -966,9 +1067,16 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = "./framework/**";
+				HEADER_SEARCH_PATHS = "./framework/**";
 				INFOPLIST_FILE = Pro_Motion_App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/framework/build/Debug-iphonesimulator",
+				);
+				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.motsai.promotionapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -986,9 +1094,16 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = "./framework/**";
+				HEADER_SEARCH_PATHS = "./framework/**";
 				INFOPLIST_FILE = Pro_Motion_App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/framework/build/Debug-iphonesimulator",
+				);
+				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.motsai.promotionapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
