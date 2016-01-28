@@ -28,6 +28,9 @@ float timeInterval = 0.04;
 static NSMutableData *_mutable_packet_Data;
 BOOL timer_fired;
 NSFileHandle *myHandle;
+NSMutableData* tempFilterData;
+int nPktSize = sizeof(Fusion_DataPacket_t)+sizeof(NEB_PKTHDR);
+
 
 
 + (DataSimulator*)sharedInstance
@@ -42,6 +45,8 @@ NSFileHandle *myHandle;
     dispatch_once(&oncePredicate, ^{
         _sharedInstance = [[DataSimulator alloc] init];
         _mutable_packet_Data = [[NSMutableData alloc] init];
+        tempFilterData = [[NSMutableData alloc] init];
+        
     });
     return _sharedInstance;
 }
@@ -49,6 +54,7 @@ NSFileHandle *myHandle;
 -(NSMutableData*) getReceivedPackets
 {
     return _mutable_packet_Data;
+    //return filtered_packet_Data;
 }
 
 -(void)timerFireMethod
@@ -61,8 +67,10 @@ NSFileHandle *myHandle;
         return;
     }
     
-    Byte single_packet1[20];
-    [fileData getBytes:single_packet1 range:NSMakeRange(count*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
+   
+    
+    Byte single_packet1[nPktSize];
+    [fileData getBytes:single_packet1 range:NSMakeRange(count*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),nPktSize)];
     
     // mutable_packet_data should only contain 400 packets. If more than 400, remove 1st packet and append at the end.
 //    if (count>1500)
@@ -71,7 +79,7 @@ NSFileHandle *myHandle;
 //        [_mutable_packet_Data replaceBytesInRange:range withBytes:NULL length:0];
 //        [self pause];
 //    }
-    [_mutable_packet_Data appendData:[NSData dataWithBytes:single_packet1 length:20]];
+    [_mutable_packet_Data appendData:[NSData dataWithBytes:single_packet1 length:nPktSize]];
     
     // Writing data to DataLogger File
     uint8_t *fileBytes = (uint8_t *)[single_packet bytes];
@@ -91,7 +99,7 @@ NSFileHandle *myHandle;
     }
 
     
-    [_delegate handleDataAndParse:[NSData dataWithBytes:single_packet1 length:20]];
+    [_delegate handleDataAndParse:[NSData dataWithBytes:single_packet1 length:nPktSize]];
     count ++;
     
 }
@@ -128,22 +136,22 @@ NSFileHandle *myHandle;
     length = [fileData length];
     NSLog(@"Length = %lu", (unsigned long)length);
     
-    deactivate_var = length/20;
+    deactivate_var = length/nPktSize;
     [self start];
 }
 
 -(NSData *) getPacketAt:(int) i
 {
-    Byte single_packet1[20];
-    [_mutable_packet_Data getBytes:single_packet1 range:NSMakeRange(i*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
-    return [NSData dataWithBytes:single_packet1 length:20];
+    Byte single_packet1[nPktSize];
+    [_mutable_packet_Data getBytes:single_packet1 range:NSMakeRange(i*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),nPktSize)];
+    return [NSData dataWithBytes:single_packet1 length:nPktSize];
 
 }
 
 -(long) getTotalPackets
 {
  
-    return [_mutable_packet_Data length]/20;
+    return [_mutable_packet_Data length]/nPktSize;
     
 }
 
@@ -197,6 +205,28 @@ NSFileHandle *myHandle;
 -(NSString*) getLogfilePath
 {
     return appFile_path;
+}
+
+// used while switching of DebugConsole
+// Lets only save the last 25 packets
+-(void)saveFilterdData:(NSMutableData*) filteredData
+{
+    int nSavePkts = 25;
+    if([filteredData length] > (nSavePkts*(sizeof(Fusion_DataPacket_t)+sizeof(NEB_PKTHDR))))
+    {
+        NSRange range = NSMakeRange([filteredData length]-(nSavePkts*(sizeof(Fusion_DataPacket_t)+sizeof(NEB_PKTHDR))), (nSavePkts*(sizeof(Fusion_DataPacket_t)+sizeof(NEB_PKTHDR))));
+
+        tempFilterData = [NSMutableData dataWithData:[filteredData subdataWithRange:range]];
+    }
+    else
+    {
+        tempFilterData = filteredData;
+    }
+    
+}
+-(NSMutableData *) getFilterdData
+{
+    return tempFilterData;
 }
 
 @end

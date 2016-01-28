@@ -30,6 +30,9 @@
 -(NSData *) getPacketAt:(int) i;
 -(void) sendLogFile;
 -(NSString*) getLogfilePath;
+-(void)saveFilterdData:(NSMutableData*) filteredData;
+-(NSMutableData *) getFilterdData;
+
 
 
 @end

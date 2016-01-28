@@ -23,9 +23,9 @@
 		5A126FC41C3F1A6900D689B0 /* QuatRotationClockwiseY.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A126FC11C3F1A6900D689B0 /* QuatRotationClockwiseY.bin */; };
 		5A126FC51C3F1A6900D689B0 /* QuatRotationClockwiseZ.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A126FC21C3F1A6900D689B0 /* QuatRotationClockwiseZ.bin */; };
 		5A126FC61C3F1A6900D689B0 /* QuatRotationRandom.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A126FC31C3F1A6900D689B0 /* QuatRotationRandom.bin */; };
+		5A1772E71C55D89600511CDF /* libCorePlot-CocoaTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1772E41C55D83D00511CDF /* libCorePlot-CocoaTouch.a */; };
 		5A474BDE1C4F158500037F50 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A474BDD1C4F158500037F50 /* QuartzCore.framework */; };
 		5A474BE01C4F158E00037F50 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A474BDF1C4F158E00037F50 /* Accelerate.framework */; };
-		5A474BF01C4F351900037F50 /* libCorePlot-CocoaTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A474BD81C4F0E4D00037F50 /* libCorePlot-CocoaTouch.a */; };
 		5A474C031C50C6D300037F50 /* compass_6.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A474C011C50C6D300037F50 /* compass_6.png */; };
 		5A474C051C515E2B00037F50 /* PedometerPackets.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A474C041C515E2B00037F50 /* PedometerPackets.bin */; };
 		5A7387621C42FDB40013145D /* ship.scn in Resources */ = {isa = PBXBuildFile; fileRef = 5A7387601C42FDB40013145D /* ship.scn */; };
@@ -116,16 +116,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		5A474BD71C4F0E4D00037F50 /* PBXContainerItemProxy */ = {
+		5A1772E31C55D83D00511CDF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 5A474BD11C4F0E4D00037F50 /* CorePlot-CocoaTouch.xcodeproj */;
+			containerPortal = 5A1772DD1C55D83D00511CDF /* CorePlot-CocoaTouch.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = BC9B83470FB8A0A40035D8DA;
 			remoteInfo = "CorePlot-CocoaTouch";
 		};
-		5A474BED1C4F33EC00037F50 /* PBXContainerItemProxy */ = {
+		5A1772E51C55D88400511CDF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 5A474BD11C4F0E4D00037F50 /* CorePlot-CocoaTouch.xcodeproj */;
+			containerPortal = 5A1772DD1C55D83D00511CDF /* CorePlot-CocoaTouch.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = BC9B83460FB8A0A40035D8DA;
 			remoteInfo = "CorePlot-CocoaTouch";
@@ -208,7 +208,7 @@
 		5A126FC11C3F1A6900D689B0 /* QuatRotationClockwiseY.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = QuatRotationClockwiseY.bin; sourceTree = "<group>"; };
 		5A126FC21C3F1A6900D689B0 /* QuatRotationClockwiseZ.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = QuatRotationClockwiseZ.bin; sourceTree = "<group>"; };
 		5A126FC31C3F1A6900D689B0 /* QuatRotationRandom.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = QuatRotationRandom.bin; sourceTree = "<group>"; };
-		5A474BD11C4F0E4D00037F50 /* CorePlot-CocoaTouch.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "CorePlot-CocoaTouch.xcodeproj"; path = "framework/CorePlot-CocoaTouch.xcodeproj"; sourceTree = "<group>"; };
+		5A1772DD1C55D83D00511CDF /* CorePlot-CocoaTouch.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "CorePlot-CocoaTouch.xcodeproj"; path = "framework/CorePlot-CocoaTouch.xcodeproj"; sourceTree = "<group>"; };
 		5A474BDD1C4F158500037F50 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5A474BDF1C4F158E00037F50 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		5A474C011C50C6D300037F50 /* compass_6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compass_6.png; sourceTree = "<group>"; };
@@ -327,13 +327,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A1772E71C55D89600511CDF /* libCorePlot-CocoaTouch.a in Frameworks */,
 				5A474BE01C4F158E00037F50 /* Accelerate.framework in Frameworks */,
 				5A474BDE1C4F158500037F50 /* QuartzCore.framework in Frameworks */,
 				5AE899D71C496F9C00DC7C55 /* MessageUI.framework in Frameworks */,
 				5A73877B1C444FD80013145D /* Charts.framework in Frameworks */,
 				A6579A6D1C11D5EE0057C700 /* SceneKit.framework in Frameworks */,
 				A67EC0EC1C0738FB00987270 /* CoreBluetooth.framework in Frameworks */,
-				5A474BF01C4F351900037F50 /* libCorePlot-CocoaTouch.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -370,12 +370,20 @@
 			name = Pedometer;
 			sourceTree = "<group>";
 		};
-		5A474BD21C4F0E4D00037F50 /* Products */ = {
+		5A1772DE1C55D83D00511CDF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5A474BD81C4F0E4D00037F50 /* libCorePlot-CocoaTouch.a */,
+				5A1772E41C55D83D00511CDF /* libCorePlot-CocoaTouch.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		5A1772E81C56C23900511CDF /* ZC */ = {
+			isa = PBXGroup;
+			children = (
+				A6579A6A1C1172F00057C700 /* data.plist */,
+			);
+			name = ZC;
 			sourceTree = "<group>";
 		};
 		5A73876A1C444F710013145D /* Products */ = {
@@ -404,7 +412,7 @@
 				A65B92071C02FF9E00DB6576 /* Pro_Motion_AppTests */,
 				A65B92121C02FF9E00DB6576 /* Pro_Motion_AppUITests */,
 				A65B91EC1C02FF9D00DB6576 /* Products */,
-				5A474BD11C4F0E4D00037F50 /* CorePlot-CocoaTouch.xcodeproj */,
+				5A1772DD1C55D83D00511CDF /* CorePlot-CocoaTouch.xcodeproj */,
 				5A7387691C444F710013145D /* Charts.xcodeproj */,
 			);
 			sourceTree = "<group>";
@@ -438,7 +446,7 @@
 				A66B25551C2166F20067F844 /* Trajectory Tracking */,
 				A66B25561C2167120067F844 /* Location Tracking */,
 				A65B91F71C02FF9D00DB6576 /* Main.storyboard */,
-				A6579A6A1C1172F00057C700 /* data.plist */,
+				5A1772E81C56C23900511CDF /* ZC */,
 				A65B91FA1C02FF9E00DB6576 /* Assets.xcassets */,
 				A65B91FC1C02FF9E00DB6576 /* LaunchScreen.storyboard */,
 				A65B91FF1C02FF9E00DB6576 /* Info.plist */,
@@ -652,7 +660,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				5A474BEE1C4F33EC00037F50 /* PBXTargetDependency */,
+				5A1772E61C55D88400511CDF /* PBXTargetDependency */,
 				5A73877E1C444FD80013145D /* PBXTargetDependency */,
 			);
 			name = Pro_Motion_App;
@@ -736,8 +744,8 @@
 					ProjectRef = 5A7387691C444F710013145D /* Charts.xcodeproj */;
 				},
 				{
-					ProductGroup = 5A474BD21C4F0E4D00037F50 /* Products */;
-					ProjectRef = 5A474BD11C4F0E4D00037F50 /* CorePlot-CocoaTouch.xcodeproj */;
+					ProductGroup = 5A1772DE1C55D83D00511CDF /* Products */;
+					ProjectRef = 5A1772DD1C55D83D00511CDF /* CorePlot-CocoaTouch.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -750,11 +758,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		5A474BD81C4F0E4D00037F50 /* libCorePlot-CocoaTouch.a */ = {
+		5A1772E41C55D83D00511CDF /* libCorePlot-CocoaTouch.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = "libCorePlot-CocoaTouch.a";
-			remoteRef = 5A474BD71C4F0E4D00037F50 /* PBXContainerItemProxy */;
+			remoteRef = 5A1772E31C55D83D00511CDF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		5A7387701C444F720013145D /* Charts.framework */ = {
@@ -927,10 +935,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		5A474BEE1C4F33EC00037F50 /* PBXTargetDependency */ = {
+		5A1772E61C55D88400511CDF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "CorePlot-CocoaTouch";
-			targetProxy = 5A474BED1C4F33EC00037F50 /* PBXContainerItemProxy */;
+			targetProxy = 5A1772E51C55D88400511CDF /* PBXContainerItemProxy */;
 		};
 		5A73877E1C444FD80013145D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1091,8 +1099,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = "./framework/**";
 				HEADER_SEARCH_PATHS = "./framework/**";

@@ -38,4 +38,21 @@
 - (void)timerFireMethod:(NSTimer *)timer;
 - (IBAction)didCancelClicked:(id)sender; /* Cancel button has been clicked */
 
+@property (weak, nonatomic) IBOutlet UIButton *btn_9_Axis;
+@property (weak, nonatomic) IBOutlet UIButton *btn_Pedometer;
+@property (weak, nonatomic) IBOutlet UIButton *btn_Traj_distance;
+@property (weak, nonatomic) IBOutlet UIButton *btn_Magnetometer;
+@property (weak, nonatomic) IBOutlet UIButton *btn_Motion;
+@property (weak, nonatomic) IBOutlet UIButton *btn_Record;
+@property (weak, nonatomic) IBOutlet UIButton *btn_Heading;
+
+@property (weak, nonatomic) IBOutlet UIButton *btn_Quaternion;
+@property (weak, nonatomic) IBOutlet UIButton *btn_Trajectory;
+
+@property (weak, nonatomic) IBOutlet UIButton *btn_EulerAngles;
+
+@property (weak, nonatomic) IBOutlet UIButton *btn_external_force;
+
+
+
 @end

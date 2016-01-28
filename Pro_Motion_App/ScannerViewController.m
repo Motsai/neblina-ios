@@ -14,13 +14,20 @@
 #import "Pro_Motion_App-Bridging-Header.h"
 #import "pro_motion_App-Swift.h"
 #import "PeripheralTableViewCell.h"
+#import "MBProgressHUD.h"
 
 @implementation ScannerViewController
+{
+    BOOL b_filter9axis,b_filterquaternion,b_filtereuler,b_filterexternal,b_filterheading,b_filtermagnetometer,b_filterpedometer,b_filtertrajectory,b_filtertrajdistance,b_filtermotion,b_filterrecord;
+   
+}
 @synthesize bluetoothManager;
 @synthesize devicesTable;
 @synthesize filterUUID;
 @synthesize peripherals;
 @synthesize timer;
+
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -54,12 +61,15 @@
     //peripherals = [NSMutableArray arrayWithArray:@[@"BLE Device 1", @"BLE Device 2", @"BLE Device 3",]];
     
     [self didloadedview];
+    
+    [self readFilterSettings];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [self scanForPeripherals:NO];
+    [self saveFilterSettings];
 }
 
 -(void)backaction:(id)sender
@@ -362,5 +372,226 @@
         }
     }
 }
+
+
+-(void)updateBtn:(UIButton*)sender withSpinner:(BOOL) bWithSpinner
+{
+    Neblina *neblina_obj = [[Neblina alloc]init];
+    NSLog(@"Sender tag is %d",sender.tag);
+    
+    if([sender.titleLabel.text isEqualToString:@"Quaternion"])
+    {
+        (sender.tag ==1) ? (b_filterquaternion = true):(b_filterquaternion = false);
+        [neblina_obj QuaternionStream:(sender.tag ==1)?1:0];
+
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"9 Axis IMU"])
+    {
+        (sender.tag ==1) ? (b_filter9axis = true):(b_filter9axis = false);
+        
+        [neblina_obj SixAxisIMU_Stream:(sender.tag ==1)?1:0];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Euler Angles"])
+    {
+        (sender.tag ==1) ? (b_filtereuler = true):(b_filtereuler = false);
+       
+        [neblina_obj EulerAngleStream:(sender.tag ==1)?1:0];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"External Force"])
+    {
+        (sender.tag ==1) ? (b_filterexternal = true):(b_filterexternal = false);
+       
+        [neblina_obj ExternalForceStream:(sender.tag ==1)?1:0];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Pedometer"])
+    {
+        (sender.tag ==1) ? (b_filterpedometer = true):(b_filterpedometer = false);
+        [neblina_obj PedometerStream:(sender.tag ==1)?1:0];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Trajectory"])
+    {
+        (sender.tag ==1) ? (b_filtertrajectory = true):(b_filtertrajectory = false);
+       
+        [neblina_obj TrajectoryRecord:(sender.tag ==1)?1:0];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Trajectory Distance"])
+    {
+        (sender.tag ==1) ? (b_filtertrajdistance = true):(b_filtertrajdistance = false);
+        [neblina_obj TrajectoryDistanceData:(sender.tag ==1)?1:0];
+       
+    }
+    
+    else if ([sender.titleLabel.text isEqualToString:@"Magnetometer"])
+    {
+        (sender.tag ==1) ? (b_filtermagnetometer = true):(b_filtermagnetometer = false);
+        [neblina_obj MagStream:(sender.tag ==1)?1:0];
+       
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Motion"])
+    {
+        (sender.tag ==1) ? (b_filtermotion = true):(b_filtermotion = false);
+        [neblina_obj MotionStream:(sender.tag ==1)?1:0];
+        
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Record"])
+    {
+        (sender.tag ==1) ? (b_filterrecord = true):(b_filterrecord = false);
+       
+        [neblina_obj RecorderErase:(sender.tag ==1)?1:0];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Heading"])
+    {
+        (sender.tag ==1) ? (b_filterheading = true):(b_filterheading = false);
+        
+        [neblina_obj Recorder:(sender.tag ==1)?1:0];
+        
+    }
+    
+    if(sender.tag == 1)
+    {
+        sender.tag = 2;
+        [sender setBackgroundColor:[UIColor whiteColor]];
+        [sender setTitleColor:[UIColor grayColor] forState:normal];
+        
+        NSLog(@"%@",sender.titleLabel.text);
+        
+    }
+    else{
+        sender.tag = 1;
+        //[sender setBackgroundColor:[UIColor colorWithRed:255.0/255.0 green:96.0/255.0 blue:25.0/255.0 alpha:1]];
+        
+        [sender setBackgroundColor:[UIColor colorWithRed:0.0/255.0 green:85.0/255.0 blue:141.0/255.0 alpha:1]];
+        [sender setTitleColor:[UIColor whiteColor] forState:normal];
+        
+    }
+    if(bWithSpinner)
+        [self displaySpinner:@"Sending packet to Neblina device..." time:1.0];
+    
+    
+    
+}
+
+-(void)displaySpinner:(NSString*) msg time:(int) ts
+{
+    
+    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:hud];
+    NSString *info = msg;
+    [hud setLabelText:info];
+    //[hud setDetailsLabelText:@"Please wait..."];
+    [hud setDimBackground:YES];
+    [hud setOpacity:0.5f];
+    [hud show:YES];
+    hud.color = [UIColor colorWithRed:0.0/255.0 green:85.0/255.0 blue:141.0/255.0 alpha:1];
+    [hud hide:YES afterDelay:ts];
+    
+    
+}
+
+-(IBAction)OptionSwitched:(UIButton*)sender
+{
+    [self updateBtn:sender withSpinner:true];
+    
+}
+
+
+
+-(void) saveFilterSettings
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:b_filter9axis forKey:@"g_filter9axis"];
+    [defaults setBool:b_filtereuler forKey:@"g_filtereuler"];
+    [defaults setBool:b_filterexternal forKey:@"g_filterexternal"];
+    [defaults setBool:b_filtermagnetometer forKey:@"g_filtermagnetometer"];
+    [defaults setBool:b_filtermotion forKey:@"g_filtermotion"];
+    [defaults setBool:b_filterpedometer forKey:@"g_filterpedometer"];
+    [defaults setBool:b_filterquaternion forKey:@"g_filterquaternion"];
+    [defaults setBool:b_filterrecord forKey:@"g_filterrecord"];
+    [defaults setBool:b_filtertrajdistance forKey:@"g_filtertrajdistance"];
+    [defaults setBool:b_filtertrajectory forKey:@"g_filtertrajectory"];
+    
+    
+    [defaults synchronize];
+    
+}
+
+-(void) readFilterSettings
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL bWithSpinner = false;
+    b_filter9axis = [defaults boolForKey:@"g_filter9axis"];
+    if(b_filter9axis)
+    {
+        _btn_9_Axis.tag = 1;
+        [self updateBtn:_btn_9_Axis withSpinner:bWithSpinner];
+    }
+    
+    b_filtereuler = [defaults boolForKey:@"g_filtereuler"];
+    if(b_filtereuler)
+    {
+        _btn_EulerAngles.tag = 1;
+        [self updateBtn:_btn_EulerAngles withSpinner:bWithSpinner];
+    }
+    
+    b_filterexternal = [defaults boolForKey:@"g_filterexternal"];
+    if(b_filterexternal)
+    {
+        _btn_external_force.tag = 1;
+        [self updateBtn:_btn_external_force withSpinner:bWithSpinner];
+    }
+    
+    b_filtermagnetometer = [defaults boolForKey:@"g_filtermagnetometer"];
+    if(b_filtermagnetometer)
+    {
+        _btn_Magnetometer.tag = 1;
+        [self updateBtn:_btn_Magnetometer withSpinner:bWithSpinner];
+    }
+    
+    b_filtermotion = [defaults boolForKey:@"g_filtermotion"];
+    if(b_filtermotion)
+    {
+        _btn_Motion.tag = 1;
+        [self updateBtn:_btn_Motion withSpinner:bWithSpinner];
+    }
+    
+    b_filterpedometer = [defaults boolForKey:@"g_filterpedometer"];
+    if(b_filterpedometer)
+    {
+        _btn_Pedometer.tag = 1;
+        [self updateBtn:_btn_Pedometer withSpinner:bWithSpinner];
+    }
+    
+    b_filterquaternion = [defaults boolForKey:@"g_filterquaternion"];
+    if(b_filterquaternion)
+    {
+        _btn_Quaternion.tag = 1;
+        [self updateBtn:_btn_Quaternion withSpinner:bWithSpinner];
+    }
+    
+    b_filterrecord = [defaults boolForKey:@"g_filterrecord"];
+    if(b_filterrecord)
+    {
+        _btn_Record.tag = 1;
+        [self updateBtn:_btn_Record withSpinner:bWithSpinner];
+    }
+    
+    b_filtertrajdistance = [defaults boolForKey:@"g_filtertrajdistance"];
+    if(b_filtertrajdistance)
+    {
+        _btn_Traj_distance.tag = 1;
+        [self updateBtn:_btn_Traj_distance withSpinner:bWithSpinner];
+    }
+    
+    b_filtertrajectory = [defaults boolForKey:@"g_filtertrajectory"];
+    if(b_filtertrajectory)
+    {
+        _btn_Trajectory.tag = 1;
+        [self updateBtn:_btn_Trajectory withSpinner:bWithSpinner];
+    }
+    
+    
+}
+
+
 
 @end

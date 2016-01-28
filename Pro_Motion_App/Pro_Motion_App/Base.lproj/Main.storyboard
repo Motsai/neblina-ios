@@ -125,7 +125,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Kpj-Yx-XZ6">
-                                <rect key="frame" x="162" y="66" width="182" height="30"/>
+                                <rect key="frame" x="71" y="66" width="182" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="21"/>
                                 <state key="normal" title="Start Scanning">
@@ -136,7 +136,7 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="49" sectionHeaderHeight="28" sectionFooterHeight="28" id="XKC-66-pGD">
-                                <rect key="frame" x="162" y="104" width="444" height="544"/>
+                                <rect key="frame" x="71" y="104" width="444" height="544"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -187,11 +187,168 @@
                                     <outlet property="delegate" destination="uCi-tR-bVe" id="L0r-VD-feK"/>
                                 </connections>
                             </tableView>
+                            <view opaque="NO" contentMode="scaleToFill" id="NUx-qt-nHu">
+                                <rect key="frame" x="12" y="841" width="736" height="87"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="yDu-N2-zTW">
+                                        <rect key="frame" x="495" y="4" width="115" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="Pedometer">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="OptionSwitched:" destination="uCi-tR-bVe" eventType="touchUpInside" id="FTN-wL-HPx"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="4PU-XN-Qhg">
+                                        <rect key="frame" x="615" y="4" width="115" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="Trajectory">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="OptionSwitched:" destination="uCi-tR-bVe" eventType="touchUpInside" id="uSY-UD-JHR"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="a1t-JN-CQV">
+                                        <rect key="frame" x="495" y="44" width="115" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="Heading">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="OptionSwitched:" destination="uCi-tR-bVe" eventType="touchUpInside" id="8bx-kj-Gsk"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="iPh-iO-6oJ">
+                                        <rect key="frame" x="8" y="4" width="115" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="9 Axis IMU">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="OptionSwitched:" destination="uCi-tR-bVe" eventType="touchUpInside" id="lU6-ty-Tes"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6ec-36-Y1E">
+                                        <rect key="frame" x="130" y="4" width="115" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="Quaternion">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="OptionSwitched:" destination="uCi-tR-bVe" eventType="touchUpInside" id="sLu-Vu-zVT"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gg8-ue-iJ6">
+                                        <rect key="frame" x="252" y="4" width="115" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="Euler Angles">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="OptionSwitched:" destination="uCi-tR-bVe" eventType="touchUpInside" id="8Wa-cq-nfh"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="iGP-wo-VoE">
+                                        <rect key="frame" x="374" y="4" width="115" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="External Force">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="OptionSwitched:" destination="uCi-tR-bVe" eventType="touchUpInside" id="Ayh-Cu-zZM"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="nHt-sP-eSl">
+                                        <rect key="frame" x="8" y="44" width="115" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="Trajectory Distance">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="OptionSwitched:" destination="uCi-tR-bVe" eventType="touchUpInside" id="LBy-tE-qWQ"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="CBh-TS-rJp">
+                                        <rect key="frame" x="130" y="44" width="115" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="Magnetometer">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="OptionSwitched:" destination="uCi-tR-bVe" eventType="touchUpInside" id="FCn-Dx-MB7"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="9jj-EO-DHl">
+                                        <rect key="frame" x="252" y="44" width="115" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="Motion">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="OptionSwitched:" destination="uCi-tR-bVe" eventType="touchUpInside" id="cuC-wy-wUd"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ibs-MM-bzT">
+                                        <rect key="frame" x="374" y="44" width="115" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="Record">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="OptionSwitched:" destination="uCi-tR-bVe" eventType="touchUpInside" id="Rge-Kr-W4Q"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.20392156859999999" green="0.20392156859999999" blue="0.20392156859999999" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Global Neblina Settings" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="aYp-Nj-kb5">
+                                <rect key="frame" x="20" y="801" width="179" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="Z2Q-68-ilp"/>
                     <connections>
+                        <outlet property="btn_9_Axis" destination="iPh-iO-6oJ" id="TFu-OU-zOf"/>
+                        <outlet property="btn_EulerAngles" destination="gg8-ue-iJ6" id="UAB-Uu-BmM"/>
+                        <outlet property="btn_Heading" destination="a1t-JN-CQV" id="555-UC-IN0"/>
+                        <outlet property="btn_Magnetometer" destination="CBh-TS-rJp" id="6v1-sE-7oq"/>
+                        <outlet property="btn_Motion" destination="9jj-EO-DHl" id="POI-Up-VFe"/>
+                        <outlet property="btn_Pedometer" destination="yDu-N2-zTW" id="m68-ul-J6l"/>
+                        <outlet property="btn_Quaternion" destination="6ec-36-Y1E" id="OjS-Zc-TrT"/>
+                        <outlet property="btn_Record" destination="ibs-MM-bzT" id="tsF-UV-DUx"/>
+                        <outlet property="btn_Traj_distance" destination="nHt-sP-eSl" id="ca4-O2-8rE"/>
+                        <outlet property="btn_Trajectory" destination="4PU-XN-Qhg" id="SLm-0X-mDC"/>
+                        <outlet property="btn_external_force" destination="iGP-wo-VoE" id="hC5-oc-NFz"/>
                         <outlet property="devicesTable" destination="XKC-66-pGD" id="5P7-Zt-vKA"/>
                         <outlet property="start_stop_scanning_lbl" destination="Kpj-Yx-XZ6" id="Z4q-Ir-PuW"/>
                     </connections>
@@ -1018,7 +1175,7 @@
                         <outlet property="btn_Pedometer" destination="Y19-5D-6F6" id="rBm-Mx-uCe"/>
                         <outlet property="btn_Quaternion" destination="sxd-oB-YmR" id="yg6-H8-K3O"/>
                         <outlet property="btn_Record" destination="Bav-Ce-JN6" id="enB-zg-T5x"/>
-                        <outlet property="btn_Traj_distance" destination="mDG-w6-i3v" id="dHR-OR-hmb"/>
+                        <outlet property="btn_Traj_distance" destination="Cv1-1F-LOx" id="hoO-ug-QSL"/>
                         <outlet property="btn_Trajectory" destination="xMs-ZR-0PN" id="7g0-5h-zRH"/>
                         <outlet property="btn_external_force" destination="lMd-ax-S2Z" id="ciG-xa-9Q0"/>
                         <outlet property="connect_btn" destination="jFU-Dn-wpg" id="xep-Gg-NV8"/>

@@ -15,14 +15,22 @@
 #import "MBProgressHUD.h"
 
 @implementation DebugConsoleViewController
+{
+   NSMutableData* filtered_packet_Data;
+    NSMutableSet* _filterSet;
+    float offset;
+    DataSimulator* dataSimulator;
+    BOOL b_filter9axis,b_filterquaternion,b_filtereuler,b_filterexternal,b_filterheading,b_filtermagnetometer,b_filterpedometer,b_filtertrajectory,b_filtertrajdistance,b_filtermotion,b_filterrecord;
+    
+
+}
 
 @synthesize logging_btn, connect_btn;
 @synthesize switch_9axis, switch_euler, switch_external, switch_heading, switch_magnetometer, switch_motindata, switch_pedometer,switch_quaternion, switch_record, switch_traj_distance, switch_traj_record;
 @synthesize QuaternionA_lbl, QuaternionB_lbl, QuaternionC_lbl, QuaternionD_lbl;
 
 
-DataSimulator* dataSimulator;
-BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_showmagnetometer,b_showpedometer,b_showtrajectory,b_showtrajdistance,b_showmotion,b_showrecord;
+
 
 #pragma mark View's defaults methods
 
@@ -30,6 +38,10 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
 {
     [super viewDidLoad];
     
+    filtered_packet_Data = [[NSMutableData alloc] init];
+    _filterSet = [[NSMutableSet alloc] init];
+   
+
     start_flag = false;
     
     self.logger_tbl.layer.borderWidth = 2;
@@ -43,24 +55,24 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
     _btnEmail.enabled = true;
     
     dataSimulator = [DataSimulator sharedInstance];
-    [self initDebugflags];
+    
 
  }
 
 -(void) initDebugflags
 {
-    b_show9axis = true;
-    b_showexternal = true;
-    b_showheading = true;
-    b_showmagnetometer = true;
-    b_showmotion = true;
-    b_showpedometer = true;
-    b_showquaternion = true;
-    b_showeuler = true;
-    b_showtrajectory = true;
-    b_showtrajdistance = true;
-    b_showrecord = true;
-    b_showheading = true;
+    b_filter9axis = false;
+    b_filterexternal = false;
+    b_filterheading = false;
+    b_filtermagnetometer = false;
+    b_filtermotion = false;
+    b_filterpedometer = false;
+    b_filterquaternion = false;
+    b_filtereuler = false;
+    b_filtertrajectory = false;
+    b_filtertrajdistance = false;
+    b_filterrecord = false;
+    b_filterheading = false;
 }
 
 -(void) updateLoggingBtnStatus
@@ -85,6 +97,7 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
     [super viewWillAppear:animated];
     
     [self updateLoggingBtnStatus];
+    [self readFilterSettings];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -92,26 +105,35 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
     [super viewDidAppear:YES];
     // get the shared instance of the data simulator
     
-    
-    // if logging stopped, lets plot the last 200 points on the graph
+    start_flag = TRUE;
+
+    // if logging stopped, lets display the saved pkts. we use the datasimulator for saving the state
     if([dataSimulator isLoggingStopped])
     {
-        [self.logger_tbl reloadData];
-        NSIndexPath *lastIndexPath1 = [self lastIndexPath1];
+        [self.logger_tbl setContentOffset:CGPointMake(0, offset)];
         
-        
-        
-        [self.logger_tbl scrollToRowAtIndexPath:lastIndexPath1 atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-        
-        [self.logger_tbl selectRowAtIndexPath:lastIndexPath1 animated:true scrollPosition:UITableViewScrollPositionBottom];
+       // if([self.logger_tbl numberOfRowsInSection:0] == 0)
+        {
+            long nTotalPackets = [dataSimulator getTotalPackets];
+            for (long j=nTotalPackets-50; j<nTotalPackets;j++)
+            {
+                if(j < 0) break;
+                NSData* pkt = [dataSimulator getPacketAt:j];
+                if(pkt)
+                {
+                    [self handleDataAndParse:pkt];
+                }
+            }
+
+        }
+        if([self.logger_tbl numberOfRowsInSection:0] > 0)
+        {
+            [self.logger_tbl scrollToRowAtIndexPath:[self lastIndexPath1] atScrollPosition:UITableViewScrollPositionBottom animated:true];
+        }
         
     }
-    
-    
     dataSimulator.delegate = self;
-    start_flag = TRUE;
   
-    
     
 }
 
@@ -119,6 +141,15 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
 {
     NSInteger lastSectionIndex = MAX(0, [self.logger_tbl numberOfSections] - 1);
     NSInteger lastRowIndex = MAX(0, [self.logger_tbl numberOfRowsInSection:lastSectionIndex] - 1);
+  
+    return [NSIndexPath indexPathForRow:lastRowIndex inSection:lastSectionIndex];
+}
+
+-(NSIndexPath *)nextIndexPath1
+{
+    NSInteger lastSectionIndex = MAX(0, [self.logger_tbl numberOfSections] - 1);
+    NSInteger lastRowIndex = MAX(0, [self.logger_tbl numberOfRowsInSection:lastSectionIndex]);
+    
     return [NSIndexPath indexPathForRow:lastRowIndex inSection:lastSectionIndex];
 }
 
@@ -134,7 +165,14 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
     start_flag = false;
     dataSimulator.delegate = nil;
     
+    [self saveFilterSettings];
+    [dataSimulator saveFilterdData:filtered_packet_Data];
+    
+    offset  = self.logger_tbl.contentOffset.y;
+    
 }
+
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -144,8 +182,16 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
 
 -(void)handleDataAndParse:(NSData *)pktData
 {
-
-    [self.logger_tbl reloadData];
+    int nCmd=0;
+    [pktData getBytes:&nCmd range:NSMakeRange(3,1)];
+    if(![_filterSet containsObject:[NSNumber numberWithInt:nCmd]])
+    {
+        [filtered_packet_Data appendData:pktData];
+        [self.logger_tbl reloadData];
+        
+    }
+        
+   
 
 }
 
@@ -205,18 +251,30 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
     return 1;
 }
 
+-(long) getTotalPackets
+{
+    return [filtered_packet_Data length]/(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t));
+    
+}
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 
-    int nCount = [dataSimulator getTotalPackets];
-    return nCount;
+    return [self getTotalPackets];
     
+}
+
+
+-(NSMutableData*) getReceivedPackets
+{
+    return filtered_packet_Data;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
     NSString *cellidentifire = [NSString stringWithFormat:@"cell_%ld", (long)indexPath.row];
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellidentifire];
     
     if (cell == nil)
@@ -228,26 +286,22 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
     {
 
         
-        Byte single_packet2[20];
+        Byte single_packet2[(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))];
 
-        [[dataSimulator getReceivedPackets] getBytes:single_packet2 range:NSMakeRange(indexPath.row*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
-        //NSLog(@"%@", [NSData dataWithBytes:single_packet2 length:20]);
-        NSData* pktData = [NSData dataWithBytes:single_packet2 length:20];
+        [[self getReceivedPackets] getBytes:single_packet2 range:NSMakeRange(indexPath.row*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)))];
+       
+        NSData* pktData = [NSData dataWithBytes:single_packet2 length:(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))];
         // parse data and diplay on labels
         NSString* debugstr = [self showData:pktData];
-        NSString *myString1 = [NSString stringWithFormat:@"%@",[NSData dataWithBytes:single_packet2 length:20]];
+        NSString *myString1 = [NSString stringWithFormat:@"%@",[NSData dataWithBytes:single_packet2 length:(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))]];
         cell.textLabel.text = myString1;
         cell.detailTextLabel.text = debugstr;
         [cell.textLabel setFont:[UIFont systemFontOfSize:12]];
         [cell.detailTextLabel setFont:[UIFont systemFontOfSize:10]];
         
-        NSLog(@"Index path row is %d",indexPath.row);
-
-        
         if(![dataSimulator isLoggingStopped])
         {
-        
-        [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:([[dataSimulator getReceivedPackets] length]/20)-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            [self.logger_tbl scrollToRowAtIndexPath:[self lastIndexPath1] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         }
 
         
@@ -278,10 +332,10 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    Byte single_packet2[20];
-    [[dataSimulator getReceivedPackets] getBytes:single_packet2 range:NSMakeRange(indexPath.row*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),20)];
+    Byte single_packet2[(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))];
+    [[self getReceivedPackets] getBytes:single_packet2 range:NSMakeRange(indexPath.row*(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)),(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t)))];
     
-    NSData* pktData = [NSData dataWithBytes:single_packet2 length:20];
+    NSData* pktData = [NSData dataWithBytes:single_packet2 length:(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))];
     // parse data and diplay on labels
     [self showData:pktData];
     
@@ -310,7 +364,7 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
     
     switch(nCmd)
     {
-        case 12: // MAG Data
+        case MAG_Data: // MAG Data
             [pktData getBytes:&mag_orient_x range:NSMakeRange(8,2)];
             [pktData getBytes:&mag_orient_y range:NSMakeRange(10,2)];
             [pktData getBytes:&mag_orient_z range:NSMakeRange(12,2)];
@@ -346,7 +400,7 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
             
             break;
             
-        case 4: // Quaternion data
+        case Quaternion: // Quaternion data
             [pktData getBytes:&q0 range:NSMakeRange(8,2)];
             [pktData getBytes:&q1 range:NSMakeRange(10,2)];
             [pktData getBytes:&q2 range:NSMakeRange(12,2)];
@@ -365,7 +419,7 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
             
             break;
             
-        case 5: // Euler
+        case EulerAngle: // Euler
             [pktData getBytes:&yaw range:NSMakeRange(8,2)];
             [pktData getBytes:&pitch range:NSMakeRange(10,2)];
             [pktData getBytes:&roll range:NSMakeRange(12,2)];
@@ -382,7 +436,7 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
             retString = [NSString stringWithFormat:@"Timestamp: %d Euler data Yaw = %f, pitch = %f, Roll = %f", tmstamp,(float)yaw/10.0,(float)pitch/10.0,(float)roll/10.0];
             break;
             
-        case 6: // Ext Force
+        case ExtForce: // Ext Force
             [pktData getBytes:&fext_x range:NSMakeRange(8,2)];
             [pktData getBytes:&fext_y range:NSMakeRange(10,2)];
             [pktData getBytes:&fext_z range:NSMakeRange(12,2)];
@@ -400,7 +454,7 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
             
             break;
             
-        case 11: // Pedometer packets
+        case Pedometer: // Pedometer packets
             [pktData getBytes:&nStepCount range:NSMakeRange(8,2)];
             [pktData getBytes:&nCadence range:NSMakeRange(10,1)];
             [pktData getBytes:&nDirAngle range:NSMakeRange(11,2)];
@@ -423,9 +477,71 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
     return retString;
 }
 
--(void)updateBtn:(UIButton*)sender
+-(void)updateBtn:(UIButton*)sender withSpinner:(BOOL) bWithSpinner
 {
     Neblina *neblina_obj = [[Neblina alloc]init];
+    
+    if([sender.titleLabel.text isEqualToString:@"Quaternion"])
+    {
+        (sender.tag ==1) ? (b_filterquaternion = true):(b_filterquaternion = false);
+        [self applyFilter:Quaternion enable:b_filterquaternion];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"9 Axis IMU"])
+    {
+        (sender.tag ==1) ? (b_filter9axis = true):(b_filter9axis = false);
+        [self applyFilter:IMU_Data enable:b_filter9axis];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Euler Angles"])
+    {
+        (sender.tag ==1) ? (b_filtereuler = true):(b_filtereuler = false);
+        [self applyFilter:EulerAngle enable:b_filtereuler];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"External Force"])
+    {
+        (sender.tag ==1) ? (b_filterexternal = true):(b_filterexternal = false);
+        [self applyFilter:ExtForce enable:b_filterexternal];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Pedometer"])
+    {
+        (sender.tag ==1) ? (b_filterpedometer = true):(b_filterpedometer = false);
+        [self applyFilter:Pedometer enable:b_filterpedometer];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Trajectory"])
+    {
+        (sender.tag ==1) ? (b_filtertrajectory = true):(b_filtertrajectory = false);
+        [self applyFilter:TrajectoryRecStart enable:b_filtertrajectory];
+        [self applyFilter:TrajectoryRecStop enable:b_filtertrajectory];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Trajectory Distance"])
+    {
+        (sender.tag ==1) ? (b_filtertrajdistance = true):(b_filtertrajdistance = false);
+        [self applyFilter:TrajectoryDistance enable:b_filtertrajdistance];
+    }
+    
+    else if ([sender.titleLabel.text isEqualToString:@"Magnetometer"])
+    {
+        (sender.tag ==1) ? (b_filtermagnetometer = true):(b_filtermagnetometer = false);
+        [self applyFilter:MAG_Data enable:b_filtermagnetometer];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Motion"])
+    {
+        (sender.tag ==1) ? (b_filtermotion = true):(b_filtermotion = false);
+        [self applyFilter:MotionState enable:b_filtermotion];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Record"])
+    {
+        (sender.tag ==1) ? (b_filterrecord = true):(b_filterrecord = false);
+        [self applyFilter:Erase_Recorder enable:b_filterrecord];
+        [self applyFilter:Start_Recorder enable:b_filterrecord];
+        [self applyFilter:Stop_Recorder enable:b_filterrecord];
+       
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"Heading"])
+    {
+        (sender.tag ==1) ? (b_filterheading = true):(b_filterheading = false);
+        
+    }
+    
     if(sender.tag == 1)
     {
         sender.tag = 2;
@@ -441,72 +557,15 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
         [sender setTitleColor:[UIColor whiteColor] forState:normal];
         
     }
-    
-    if([sender.titleLabel.text isEqualToString:@"Quaternion"])
-    {
-        (sender.tag ==1) ? (b_showquaternion = true):(b_showquaternion = false);
-        //[neblina_obj QuaternionStream:(sender.tag ==1)?1:0];
-    }
-    else if ([sender.titleLabel.text isEqualToString:@"9 Axis IMU"])
-    {
-        (sender.tag ==1) ? (b_show9axis = true):(b_show9axis = false);
-        //[neblina_obj SixAxisIMU_Stream:(sender.tag ==1)?1:0];
-    }
-    else if ([sender.titleLabel.text isEqualToString:@"Euler Angles"])
-    {
-        (sender.tag ==1) ? (b_showeuler = true):(b_showeuler = false);
-        //[neblina_obj EulerAngleStream:(sender.tag ==1)?1:0];
-    }
-    else if ([sender.titleLabel.text isEqualToString:@"External Force"])
-    {
-        (sender.tag ==1) ? (b_showexternal = true):(b_showexternal = false);
-        //[neblina_obj ExternalForceStream:(sender.tag ==1)?1:0];
-    }
-    else if ([sender.titleLabel.text isEqualToString:@"Pedometer"])
-    {
-        (sender.tag ==1) ? (b_showpedometer = true):(b_showpedometer = false);
-        //[neblina_obj PedometerStream:(sender.tag ==1)?1:0];
-    }
-    else if ([sender.titleLabel.text isEqualToString:@"Trajectory"])
-    {
-        (sender.tag ==1) ? (b_showtrajectory = true):(b_showtrajectory = false);
-        //[neblina_obj TrajectoryRecord:(sender.tag ==1)?1:0];
-    }
-    else if ([sender.titleLabel.text isEqualToString:@"Trajectory Distance"])
-    {
-        (sender.tag ==1) ? (b_showtrajdistance = true):(b_showtrajdistance = false);
-        //[neblina_obj TrajectoryDistanceData:(sender.tag ==1)?1:0];
-    }
-    
-    else if ([sender.titleLabel.text isEqualToString:@"Magnetometer"])
-    {
-        (sender.tag ==1) ? (b_showmagnetometer = true):(b_showmagnetometer = false);
-        //[neblina_obj MagStream:(sender.tag ==1)?1:0];
-    }
-    else if ([sender.titleLabel.text isEqualToString:@"Motion"])
-    {
-        (sender.tag ==1) ? (b_showmotion = true):(b_showmotion = false);
-        //[neblina_obj MotionStream:(sender.tag ==1)?1:0];
-    }
-    else if ([sender.titleLabel.text isEqualToString:@"Record"])
-    {
-        (sender.tag ==1) ? (b_showrecord = true):(b_showrecord = false);
-        //[neblina_obj RecorderErase:(sender.tag ==1)?1:0];
-    }
-    else if ([sender.titleLabel.text isEqualToString:@"Heading"])
-    {
-        (sender.tag ==1) ? (b_showheading = true):(b_showheading = false);
-       
-        //[neblina_obj Recorder:(sender.tag ==1)?1:0];
-        
-    }
-    
+    if(bWithSpinner)
+        [self displaySpinner:@"Applying filter changes..." time:1.5];
 }
+
 
 
 -(IBAction)OptionSwitched:(UIButton*)sender
 {
-    [self updateBtn:sender];
+    [self updateBtn:sender withSpinner:true];
     
 }
 
@@ -528,17 +587,6 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
     
     [self dismissViewControllerAnimated:YES completion:NULL];
 
-    
-//    // Close the Mail Interface
-//    if (!app) { app = (AppDelegate *)[[UIApplication sharedApplication] delegate]; }
-//    if (!currentSplitViewController) {
-//        currentSplitViewController  = (UISplitViewController *) app.window.rootViewController;
-//    }
-//    
-//    navController        = [currentSplitViewController.viewControllers lastObject];
-//    
-//    [[navController topViewController] dismissViewControllerAnimated:YES completion:NULL];
-//    
 }
 
 
@@ -647,5 +695,122 @@ BOOL b_show9axis,b_showquaternion,b_showeuler,b_showexternal,b_showheading,b_sho
     
     return [NSURL fileURLWithPath:filePath];
 }
+
+// append to the filters array and return
+-(void) applyFilter:(int) nFilterType enable:(int) nEnable
+{
+    if(nEnable)
+    {
+        [_filterSet addObject:[NSNumber numberWithInt:nFilterType]];
+    
+    }
+    else
+    {
+        [_filterSet removeObject:[NSNumber numberWithInt:nFilterType]];
+    }
+}
+
+// remove all the filters
+-(void) clearAllFilters
+{
+    [_filterSet removeAllObjects];
+}
+
+-(void) saveFilterSettings
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:b_filter9axis forKey:@"filter9axis"];
+    [defaults setBool:b_filtereuler forKey:@"filtereuler"];
+    [defaults setBool:b_filterexternal forKey:@"filterexternal"];
+    [defaults setBool:b_filtermagnetometer forKey:@"filtermagnetometer"];
+    [defaults setBool:b_filtermotion forKey:@"filtermotion"];
+    [defaults setBool:b_filterpedometer forKey:@"filterpedometer"];
+    [defaults setBool:b_filterquaternion forKey:@"filterquaternion"];
+    [defaults setBool:b_filterrecord forKey:@"filterrecord"];
+    [defaults setBool:b_filtertrajdistance forKey:@"filtertrajdistance"];
+    [defaults setBool:b_filtertrajectory forKey:@"filtertrajectory"];
+    
+    
+    [defaults synchronize];
+    
+}
+
+-(void) readFilterSettings
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL bWithSpinner = false;
+    b_filter9axis = [defaults boolForKey:@"filter9axis"];
+    if(b_filter9axis || [defaults boolForKey:@"g_filter9axis"])
+    {
+        _btn_9_Axis.tag = 1;
+        [self updateBtn:_btn_9_Axis withSpinner:bWithSpinner];
+    }
+    
+    b_filtereuler = [defaults boolForKey:@"filtereuler"];
+    if(b_filtereuler || [defaults boolForKey:@"g_filtereuler"])
+    {
+        _btn_EulerAngles.tag = 1;
+        [self updateBtn:_btn_EulerAngles withSpinner:bWithSpinner];
+    }
+    
+    b_filterexternal = [defaults boolForKey:@"filterexternal"];
+    if(b_filterexternal || [defaults boolForKey:@"g_filterexternal"])
+    {
+        _btn_external_force.tag = 1;
+        [self updateBtn:_btn_external_force withSpinner:bWithSpinner];
+    }
+    
+    b_filtermagnetometer = [defaults boolForKey:@"filtermagnetometer"];
+    if(b_filtermagnetometer || [defaults boolForKey:@"g_filtermagnetometer"])
+    {
+        _btn_Magnetometer.tag = 1;
+        [self updateBtn:_btn_Magnetometer withSpinner:bWithSpinner];
+    }
+    
+    b_filtermotion = [defaults boolForKey:@"filtermotion"];
+    if(b_filtermotion || [defaults boolForKey:@"g_filtermotion"])
+    {
+        _btn_Motion.tag = 1;
+        [self updateBtn:_btn_Motion withSpinner:bWithSpinner];
+    }
+    
+    b_filterpedometer = [defaults boolForKey:@"filterpedometer"];
+    if(b_filterpedometer || [defaults boolForKey:@"g_filterpedometer"])
+    {
+        _btn_Pedometer.tag = 1;
+        [self updateBtn:_btn_Pedometer withSpinner:bWithSpinner];
+    }
+    
+    b_filterquaternion = [defaults boolForKey:@"filterquaternion"];
+    if(b_filterquaternion || [defaults boolForKey:@"g_filterquaternion"])
+    {
+        _btn_Quaternion.tag = 1;
+        [self updateBtn:_btn_Quaternion withSpinner:bWithSpinner];
+    }
+    
+    b_filterrecord = [defaults boolForKey:@"filterrecord"];
+    if(b_filterrecord || [defaults boolForKey:@"g_filterrecord"])
+    {
+        _btn_Record.tag = 1;
+        [self updateBtn:_btn_Record withSpinner:bWithSpinner];
+    }
+    
+    b_filtertrajdistance = [defaults boolForKey:@"filtertrajdistance"];
+    if(b_filtertrajdistance || [defaults boolForKey:@"g_filtertrajdistance"])
+    {
+        _btn_Traj_distance.tag = 1;
+        [self updateBtn:_btn_Traj_distance withSpinner:bWithSpinner];
+    }
+    
+    b_filtertrajectory = [defaults boolForKey:@"filtertrajectory"];
+    if(b_filtertrajectory || [defaults boolForKey:@"g_filtertrajectory"])
+    {
+        _btn_Trajectory.tag = 1;
+        [self updateBtn:_btn_Trajectory withSpinner:bWithSpinner];
+    }
+    
+    
+}
+
 
 @end

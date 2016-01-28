@@ -7,6 +7,10 @@
 //
 
 #import "9AxisViewController.h"
+#import "neblina.h"
+#import "FusionEngineDataTypes.h"
+#import "Pro_Motion_App-Swift.h"
+
 @import GLKit;
 
 @interface _AxisViewController ()
@@ -103,7 +107,7 @@ NSData* lastPacket;
     
     switch(nCmd)
     {
-        case 12: // MAG Data
+        case MAG_Data: // MAG Data
             [pktData getBytes:&mag_orient_x range:NSMakeRange(8,2)];
             [pktData getBytes:&mag_orient_y range:NSMakeRange(10,2)];
             [pktData getBytes:&mag_orient_z range:NSMakeRange(12,2)];
@@ -136,7 +140,7 @@ NSData* lastPacket;
             
             break;
             
-        case 4: // Quaternion data
+        case Quaternion: // Quaternion data
             [pktData getBytes:&q0 range:NSMakeRange(8,2)];
             [pktData getBytes:&q1 range:NSMakeRange(10,2)];
             [pktData getBytes:&q2 range:NSMakeRange(12,2)];
@@ -169,7 +173,7 @@ NSData* lastPacket;
             
             break;
             
-        case 5: // Euler
+        case EulerAngle: // Euler
             [pktData getBytes:&yaw range:NSMakeRange(8,2)];
             [pktData getBytes:&pitch range:NSMakeRange(10,2)];
             [pktData getBytes:&roll range:NSMakeRange(12,2)];
@@ -202,7 +206,7 @@ NSData* lastPacket;
             
             break;
             
-        case 6: // Ext Force
+        case ExtForce: // Ext Force
             [pktData getBytes:&fext_x range:NSMakeRange(8,2)];
             [pktData getBytes:&fext_y range:NSMakeRange(10,2)];
             [pktData getBytes:&fext_z range:NSMakeRange(12,2)];

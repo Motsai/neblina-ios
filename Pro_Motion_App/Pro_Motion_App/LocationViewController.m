@@ -8,6 +8,9 @@
 
 #import "LocationViewController.h"
 #import "GeoPointCompass.h"
+#import "neblina.h"
+#import "FusionEngineDataTypes.h"
+#import "Pro_Motion_App-Swift.h"
 
 #define RadiansToDegrees(radians)(radians * 180.0/M_PI)
 #define DegreesToRadians(degrees)(degrees * M_PI / 180.0)
@@ -214,7 +217,7 @@ int16_t xmin, xmax, ymin, ymax;
     
     switch(nCmd)
     {
-        case 11: // Pedometer data
+        case Pedometer: // Pedometer data
             [pktData getBytes:&nStepCount range:NSMakeRange(8,2)];
             [pktData getBytes:&nCadence range:NSMakeRange(10,1)];
             [pktData getBytes:&nDirAngle range:NSMakeRange(11,2)];
