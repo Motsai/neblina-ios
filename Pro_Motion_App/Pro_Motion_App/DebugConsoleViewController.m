@@ -8,10 +8,8 @@
 
 #import "DebugConsoleViewController.h"
 #import "IMUStreamViewController.h"
-#import "neblina.h"
-#import "FusionEngineDataTypes.h"
-#import "Pro_Motion_App-Swift.h"
-#import "DataSimulator.h"
+#import "ViewController.h"
+
 #import "MBProgressHUD.h"
 
 @implementation DebugConsoleViewController
@@ -38,6 +36,11 @@
 {
     [super viewDidLoad];
     
+    CAGradientLayer* bkLayer = [ViewController getbkGradient];
+    bkLayer.frame = self.view.bounds;
+    [[self.view layer] insertSublayer:bkLayer atIndex:0];
+
+     
     filtered_packet_Data = [[NSMutableData alloc] init];
     _filterSet = [[NSMutableSet alloc] init];
    
@@ -75,6 +78,7 @@
     b_filterheading = false;
 }
 
+
 -(void) updateLoggingBtnStatus
 {
     if([dataSimulator isLoggingStopped])
@@ -96,8 +100,20 @@
 {
     [super viewWillAppear:animated];
     
+    //[self selectDatastream];
+    
     [self updateLoggingBtnStatus];
     [self readFilterSettings];
+}
+
+-(void) selectDatastream
+{
+    [dataSimulator.neblina_dev SendCmdQuaternionStream:TRUE];
+    [dataSimulator.neblina_dev SendCmdPedometerStream:TRUE];
+    [dataSimulator.neblina_dev SendCmdEulerAngleStream:TRUE];
+    [dataSimulator.neblina_dev SendCmdExternalForceStream:TRUE];
+    [dataSimulator.neblina_dev SendCmdMagStream:TRUE];
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -133,6 +149,7 @@
         
     }
     dataSimulator.delegate = self;
+    //[dataSimulator start];
   
     
 }
@@ -180,16 +197,73 @@
 }
 
 
+
+-(void)handleDataAndParsefortype:(UInt8)type data:(NSData*) data
+{
+    
+    dispatch_async(dispatch_get_main_queue(),
+                   ^{
+    int nCmd = type;
+    Byte single_header[sizeof(NEB_PKTHDR)];
+    single_header[0] = 0;
+    single_header[1] = 0;
+    single_header[2] = 0;
+    single_header[3] = type;
+    
+    if(![_filterSet containsObject:[NSNumber numberWithInt:nCmd]])
+    {
+        if([self getTotalPackets] > 1000)
+        {
+            NSRange range = NSMakeRange(0, 10000);
+            [filtered_packet_Data replaceBytesInRange:range withBytes:NULL length:0];
+            [self.logger_tbl reloadData];
+            
+        }
+        [filtered_packet_Data appendBytes:single_header length:sizeof(NEB_PKTHDR)];
+        [filtered_packet_Data appendData:data];
+        
+       
+                           //[self.logger_tbl beginUpdates];
+                           NSMutableArray *arCells=[NSMutableArray array];
+                           [arCells addObject:[self nextIndexPath1]];
+                           
+                           [self.logger_tbl insertRowsAtIndexPaths:arCells withRowAnimation:UITableViewScrollPositionNone];
+        
+        [self.logger_tbl scrollToRowAtIndexPath:[self lastIndexPath1] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                           //[self.logger_tbl endUpdates];
+                           
+                           
+        
+        
+       //[self performSelectorOnMainThread:@selector(reloadData1) withObject:nil waitUntilDone:NO];
+
+        
+    }
+                         });
+}
+
+-(void) reloadData1
+{
+    [self.logger_tbl reloadData];
+}
+
+
 -(void)handleDataAndParse:(NSData *)pktData
 {
     int nCmd=0;
     [pktData getBytes:&nCmd range:NSMakeRange(3,1)];
+    
     if(![_filterSet containsObject:[NSNumber numberWithInt:nCmd]])
     {
         [filtered_packet_Data appendData:pktData];
         [self.logger_tbl reloadData];
         
+        
     }
+    
+    //NSMakeRange(sizeof(NEB_PKTHDR), sizeof(Fusion_DataPacket_t)
+    //[self handleDataAndParsefortype:nCmd data:]
+   
         
    
 
@@ -293,7 +367,8 @@
         NSData* pktData = [NSData dataWithBytes:single_packet2 length:(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))];
         // parse data and diplay on labels
         NSString* debugstr = [self showData:pktData];
-        NSString *myString1 = [NSString stringWithFormat:@"%@",[NSData dataWithBytes:single_packet2 length:(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))]];
+        NSString *myString1 = [NSString stringWithFormat:@"%@", [NSData dataWithBytes:single_packet2 length:(sizeof(NEB_PKTHDR)+sizeof(Fusion_DataPacket_t))]];
+        
         cell.textLabel.text = myString1;
         cell.detailTextLabel.text = debugstr;
         [cell.textLabel setFont:[UIFont systemFontOfSize:12]];
@@ -303,7 +378,7 @@
         {
             [self.logger_tbl scrollToRowAtIndexPath:[self lastIndexPath1] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         }
-
+       
         
     }
     
@@ -356,10 +431,11 @@
     int16_t q0, q1,q2,q3;
     int16_t yaw,pitch,roll;
     int16_t fext_x,fext_y,fext_z;
+    int16_t traj_repeat;
     NSString* retString;
     
     int16_t nStepCount, nDirAngle;
-    int8_t nCadence;
+    int8_t nCadence, traj_progress;
     float f_DirAngle;
     
     switch(nCmd)
@@ -468,7 +544,31 @@
             
             // NSLog(@"Timestamp: %d StepCount: %d, Cadence: %d, DirectionAngle: %f", tmstamp,nStepCount,nCadence,f_DirAngle);
             retString = [NSString stringWithFormat:@"Timestamp: %d StepCount = %d, Cadence = %d, DirectionAngle = %f", tmstamp,nStepCount,nCadence,f_DirAngle];
+            break;
 
+            
+        case 9: // Trajectory Distance
+            [pktData getBytes:&yaw range:NSMakeRange(8,2)];
+            [pktData getBytes:&pitch range:NSMakeRange(10,2)];
+            [pktData getBytes:&roll range:NSMakeRange(12,2)];
+            
+            [pktData getBytes:&traj_repeat range:NSMakeRange(14,2)];
+            [pktData getBytes:&traj_progress range:NSMakeRange(16,1)];
+            
+            
+            yaw = (int16_t)CFSwapInt16HostToLittle(yaw);
+            pitch = (int16_t)CFSwapInt16HostToLittle(pitch);
+            roll = (int16_t)CFSwapInt16HostToLittle(roll);
+            traj_repeat = (int16_t)CFSwapInt16HostToLittle(traj_repeat);
+            
+            
+            NSLog(@"Timestamp: %d Trajectory Delta Angles Yaw = %f, pitch = %f, Roll = %f ,Repetition = %d, Progress = %d", tmstamp,(float)yaw/10.0,(float)pitch/10.0,(float)roll/10.0, traj_repeat,traj_progress);
+            
+            _Pitch_lbl.text = [NSString stringWithFormat:@"%f",(float)pitch/10.0];
+            _Yaw_lbl.text = [NSString stringWithFormat:@"%f",(float)yaw/10.0];
+            _Roll_lbl.text = [NSString stringWithFormat:@"%f",(float)roll/10.0];
+            retString = [NSString stringWithFormat:@"Timestamp: %d Trajectory Delta Angles Yaw = %f, pitch = %f, Roll = %f ,Repetition = %d, Progress = %d", tmstamp,(float)yaw/10.0,(float)pitch/10.0,(float)roll/10.0, traj_repeat,traj_progress];
+            break;
             
         default:
             break;
@@ -509,8 +609,9 @@
     else if ([sender.titleLabel.text isEqualToString:@"Trajectory"])
     {
         (sender.tag ==1) ? (b_filtertrajectory = true):(b_filtertrajectory = false);
-        [self applyFilter:TrajectoryRecStart enable:b_filtertrajectory];
-        [self applyFilter:TrajectoryRecStop enable:b_filtertrajectory];
+        [self applyFilter:TrajectoryRecStartStop enable:b_filtertrajectory];
+       // [self applyFilter:TrajectoryRecStart enable:b_filtertrajectory];
+       // [self applyFilter:TrajectoryRecStop enable:b_filtertrajectory];
     }
     else if ([sender.titleLabel.text isEqualToString:@"Trajectory Distance"])
     {
@@ -531,30 +632,36 @@
     else if ([sender.titleLabel.text isEqualToString:@"Record"])
     {
         (sender.tag ==1) ? (b_filterrecord = true):(b_filterrecord = false);
-        [self applyFilter:Erase_Recorder enable:b_filterrecord];
-        [self applyFilter:Start_Recorder enable:b_filterrecord];
-        [self applyFilter:Stop_Recorder enable:b_filterrecord];
+//        [self applyFilter:Erase_Recorder enable:b_filterrecord];
+//        [self applyFilter:Start_Recorder enable:b_filterrecord];
+//        [self applyFilter:Stop_Recorder enable:b_filterrecord];
        
     }
     else if ([sender.titleLabel.text isEqualToString:@"Heading"])
     {
         (sender.tag ==1) ? (b_filterheading = true):(b_filterheading = false);
         
+        
     }
     
     if(sender.tag == 1)
     {
         sender.tag = 2;
-        [sender setBackgroundColor:[UIColor whiteColor]];
-        [sender setTitleColor:[UIColor grayColor] forState:normal];
+//        [sender setBackgroundColor:[UIColor whiteColor]];
+//        [sender setTitleColor:[UIColor grayColor] forState:normal];
+        [sender setBackgroundColor:[UIColor colorWithRed:224.0/255.0 green:224.0/255.0 blue:224.0/255.0 alpha:1]];
+        [sender setTitleColor:[UIColor darkGrayColor] forState:normal];
         
         NSLog(@"%@",sender.titleLabel.text);
         
     }
     else{
         sender.tag = 1;
-        [sender setBackgroundColor:[UIColor colorWithRed:255.0/255.0 green:96.0/255.0 blue:25.0/255.0 alpha:1]];
-        [sender setTitleColor:[UIColor whiteColor] forState:normal];
+        //[sender setBackgroundColor:[UIColor colorWithRed:255.0/255.0 green:96.0/255.0 blue:25.0/255.0 alpha:1]];
+        [sender setBackgroundColor:[UIColor colorWithRed:0.0/255.0 green:255.0/255.0 blue:0.0/255.0 alpha:1]];
+        
+        //[sender setTitleColor:[UIColor whiteColor] forState:normal];
+        [sender setTitleColor:[UIColor darkGrayColor] forState:normal];
         
     }
     if(bWithSpinner)
@@ -739,75 +846,151 @@
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     BOOL bWithSpinner = false;
+    
+    _btn_9_Axis.tag = 1;
     b_filter9axis = [defaults boolForKey:@"filter9axis"];
-    if(b_filter9axis || [defaults boolForKey:@"g_filter9axis"])
+    if(![defaults boolForKey:@"g_filter9axis"])
+    {
+       _btn_9_Axis.tag = 2;
+    }
+    else if(b_filter9axis )
     {
         _btn_9_Axis.tag = 1;
-        [self updateBtn:_btn_9_Axis withSpinner:bWithSpinner];
     }
+    [self updateBtn:_btn_9_Axis withSpinner:bWithSpinner];
     
+    
+    _btn_EulerAngles.tag = 1;
     b_filtereuler = [defaults boolForKey:@"filtereuler"];
-    if(b_filtereuler || [defaults boolForKey:@"g_filtereuler"])
+    if(![defaults boolForKey:@"g_filtereuler"])
+    {
+       _btn_EulerAngles.tag = 2;
+    }
+    else if(b_filtereuler)
     {
         _btn_EulerAngles.tag = 1;
-        [self updateBtn:_btn_EulerAngles withSpinner:bWithSpinner];
+       
     }
+    [self updateBtn:_btn_EulerAngles withSpinner:bWithSpinner];
     
+    
+    _btn_external_force.tag = 1;
     b_filterexternal = [defaults boolForKey:@"filterexternal"];
-    if(b_filterexternal || [defaults boolForKey:@"g_filterexternal"])
+    
+    if(![defaults boolForKey:@"g_filterexternal"])
+    {
+       _btn_external_force.tag = 2;
+    }
+    else if(b_filterexternal)
     {
         _btn_external_force.tag = 1;
-        [self updateBtn:_btn_external_force withSpinner:bWithSpinner];
     }
+    [self updateBtn:_btn_external_force withSpinner:bWithSpinner];
     
+    _btn_Magnetometer.tag = 1;
     b_filtermagnetometer = [defaults boolForKey:@"filtermagnetometer"];
-    if(b_filtermagnetometer || [defaults boolForKey:@"g_filtermagnetometer"])
+   
+    if(![defaults boolForKey:@"g_filtermagnetometer"])
+    {
+        _btn_Magnetometer.tag = 2;
+    }
+        
+    else if(b_filtermagnetometer)
     {
         _btn_Magnetometer.tag = 1;
-        [self updateBtn:_btn_Magnetometer withSpinner:bWithSpinner];
     }
     
+    [self updateBtn:_btn_Magnetometer withSpinner:bWithSpinner];
+    
+    
+    
+    _btn_Motion.tag = 1;
     b_filtermotion = [defaults boolForKey:@"filtermotion"];
-    if(b_filtermotion || [defaults boolForKey:@"g_filtermotion"])
+    if(![defaults boolForKey:@"g_filtermotion"])
+    {
+        _btn_Motion.tag = 2;
+    }
+    else if(b_filtermotion )
     {
         _btn_Motion.tag = 1;
-        [self updateBtn:_btn_Motion withSpinner:bWithSpinner];
     }
+    [self updateBtn:_btn_Motion withSpinner:bWithSpinner];
     
+    
+    _btn_Pedometer.tag = 1;
     b_filterpedometer = [defaults boolForKey:@"filterpedometer"];
-    if(b_filterpedometer || [defaults boolForKey:@"g_filterpedometer"])
+    if(![defaults boolForKey:@"g_filterpedometer"])
+    {
+        _btn_Pedometer.tag = 2;
+    }
+    else if(b_filterpedometer)
     {
         _btn_Pedometer.tag = 1;
-        [self updateBtn:_btn_Pedometer withSpinner:bWithSpinner];
     }
+    [self updateBtn:_btn_Pedometer withSpinner:bWithSpinner];
     
+    _btn_Quaternion.tag = 1;
     b_filterquaternion = [defaults boolForKey:@"filterquaternion"];
-    if(b_filterquaternion || [defaults boolForKey:@"g_filterquaternion"])
+    if(![defaults boolForKey:@"g_filterquaternion"])
+    {
+        _btn_Quaternion.tag = 2;
+    }
+    else if(b_filterquaternion)
     {
         _btn_Quaternion.tag = 1;
-        [self updateBtn:_btn_Quaternion withSpinner:bWithSpinner];
+        
     }
+    [self updateBtn:_btn_Quaternion withSpinner:bWithSpinner];
     
+    _btn_Record.tag = 1;
     b_filterrecord = [defaults boolForKey:@"filterrecord"];
-    if(b_filterrecord || [defaults boolForKey:@"g_filterrecord"])
+    if(![defaults boolForKey:@"g_filterrecord"])
+    {
+        _btn_Record.tag = 2;
+    }
+    else if(b_filterrecord)
     {
         _btn_Record.tag = 1;
-        [self updateBtn:_btn_Record withSpinner:bWithSpinner];
+        
     }
+    [self updateBtn:_btn_Record withSpinner:bWithSpinner];
     
+    _btn_Traj_distance.tag = 1;
     b_filtertrajdistance = [defaults boolForKey:@"filtertrajdistance"];
-    if(b_filtertrajdistance || [defaults boolForKey:@"g_filtertrajdistance"])
+    if(![defaults boolForKey:@"g_filtertrajdistance"])
+    {
+        _btn_Traj_distance.tag = 2;
+    }
+    else if(b_filtertrajdistance)
     {
         _btn_Traj_distance.tag = 1;
-        [self updateBtn:_btn_Traj_distance withSpinner:bWithSpinner];
     }
+    [self updateBtn:_btn_Traj_distance withSpinner:bWithSpinner];
     
+    
+    _btn_Trajectory.tag = 1;
     b_filtertrajectory = [defaults boolForKey:@"filtertrajectory"];
-    if(b_filtertrajectory || [defaults boolForKey:@"g_filtertrajectory"])
+    if(![defaults boolForKey:@"g_filtertrajectory"])
+    {
+        _btn_Trajectory.tag = 2;
+    }
+    else if(b_filtertrajectory)
     {
         _btn_Trajectory.tag = 1;
-        [self updateBtn:_btn_Trajectory withSpinner:bWithSpinner];
     }
+    [self updateBtn:_btn_Trajectory withSpinner:bWithSpinner];
+    
+   _btn_Heading.tag = 1;
+    b_filterheading = [defaults boolForKey:@"filterheading"];
+    if(![defaults boolForKey:@"g_filterheading"])
+    {
+        _btn_Heading.tag = 2;
+    }
+    else if(b_filterheading)
+    {
+        _btn_Heading.tag = 1;
+    }
+    [self updateBtn:_btn_Heading withSpinner:bWithSpinner];
     
     
 }

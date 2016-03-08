@@ -13,6 +13,7 @@
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *setting_button;
 - (IBAction)changeSimulatorFile:(id)sender;
 @property (weak, nonatomic) IBOutlet UILabel *lbl_SimFile;
++ (CAGradientLayer*) getbkGradient;
 
 @end
 

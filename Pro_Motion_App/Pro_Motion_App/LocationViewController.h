@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 //#import "APLGraphView.h"
-#import "Pro_Motion_App-Swift.h"
+//#import "Pro_Motion_App-Swift.h"
 #import "DataSimulator.h"
 #import "CorePlot-CocoaTouch.h"
 

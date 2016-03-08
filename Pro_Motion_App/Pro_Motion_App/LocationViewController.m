@@ -8,9 +8,10 @@
 
 #import "LocationViewController.h"
 #import "GeoPointCompass.h"
-#import "neblina.h"
-#import "FusionEngineDataTypes.h"
-#import "Pro_Motion_App-Swift.h"
+#import "ViewController.h"
+//#import "neblina.h"
+//#import "FusionEngineDataTypes.h"
+//#import "Pro_Motion_App-Swift.h"
 
 #define RadiansToDegrees(radians)(radians * 180.0/M_PI)
 #define DegreesToRadians(degrees)(degrees * M_PI / 180.0)
@@ -37,6 +38,11 @@ int16_t xmin, xmax, ymin, ymax;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    CAGradientLayer* bkLayer = [ViewController getbkGradient];
+    bkLayer.frame = self.view.bounds;
+    [[self.view layer] insertSublayer:bkLayer atIndex:0];
+    
+    
     geoPointCompass = [[GeoPointCompass alloc] init];
     
     
@@ -131,6 +137,12 @@ int16_t xmin, xmax, ymin, ymax;
     plot.dataSource = self;
     plot.delegate = self;
     plot.identifier = graph.title;
+    
+    CPTMutableLineStyle *lineStyle = plot.dataLineStyle;
+    lineStyle.lineColor = [CPTColor greenColor];
+    lineStyle.lineWidth = 3.0;
+    plot.dataLineStyle = lineStyle;
+    
     [graph addPlot:plot];
     
 
@@ -183,17 +195,89 @@ int16_t xmin, xmax, ymin, ymax;
     dataSim2 = [DataSimulator sharedInstance];
     dataSim2.delegate = self;
     
+    //[self selectDatastream];
+    
     
     [self updateLoggingBtnStatus];
     
     
 }
 
+
+-(void) selectDatastream
+{
+    [dataSim2.neblina_dev SendCmdQuaternionStream:FALSE];
+    [dataSim2.neblina_dev SendCmdEulerAngleStream:FALSE];
+    [dataSim2.neblina_dev SendCmdPedometerStream:TRUE];
+}
+
+
 -(void) viewWillDisappear:(BOOL)animated
 {
     dataSim2.delegate = nil;
     [self stopAnimation];
     
+}
+
+-(void)handleDataAndParsefortype:(UInt8)type data:(NSData*)pktData
+{
+    int nCmd = type;
+    
+    
+    //Byte 0	Byte 1	Byte 2	Byte 3	Byte 4-7	Byte 8-9	Byte 10     Byte 11-12          Bytes 13-19
+    //0x01      0x10	CRC     0x0A	TimeStamp	step count	cadence     direction angle     Reserved
+    
+    //[pktData getBytes:&nCmd range:NSMakeRange(3,1)];
+    int32_t tmstamp;
+    [pktData getBytes:&tmstamp range:NSMakeRange(0,4)];
+    tmstamp = (int32_t)CFSwapInt32HostToLittle(tmstamp);
+    
+    int16_t nStepCount;
+    int8_t nCadence;
+    int16_t nDirAngle;
+    float f_DirAngle;
+    
+    switch(nCmd)
+    {
+        case Pedometer: // Pedometer data
+            [pktData getBytes:&nStepCount range:NSMakeRange(4,2)];
+            [pktData getBytes:&nCadence range:NSMakeRange(6,1)];
+            [pktData getBytes:&nDirAngle range:NSMakeRange(7,2)];
+            
+            
+            
+            nStepCount = (int16_t)CFSwapInt16HostToLittle(nStepCount);
+            
+            nDirAngle = (int16_t)CFSwapInt16HostToLittle(nDirAngle);
+            f_DirAngle = nDirAngle/10.0;
+            
+            // NSLog(@"Timestamp: %d StepCount: %d, Cadence: %d, DirectionAngle: %f", tmstamp,nStepCount,nCadence,f_DirAngle);
+            
+            // Ignore these packets...
+            if((nCadence == 0) && (f_DirAngle == 0))
+                return;
+            
+            
+            // update the cadence and spm labels
+            [self updateLabelsWithCadence:nCadence count:nStepCount headingAngle:f_DirAngle];
+            // update the compass
+            //[geoPointCompass updateCompasswithDegress:f_DirAngle];
+            // update the running man
+            [self updateAnimationwithcadence:nCadence];
+            // draw on the map
+            [self updateMapwithWalking:f_DirAngle steps:nStepCount ts:tmstamp];
+            
+            //nLastSteps = nStepCount;
+            break;
+            
+            
+            
+        default:
+            break;
+            
+    }
+
+   
 }
 
 // This is called on the delegate to handle the data packet
@@ -235,7 +319,7 @@ int16_t xmin, xmax, ymin, ymax;
             // update the cadence and spm labels
             [self updateLabelsWithCadence:nCadence count:nStepCount headingAngle:f_DirAngle];
             // update the compass
-            [geoPointCompass updateCompasswithDegress:f_DirAngle];
+            //[geoPointCompass updateCompasswithDegress:f_DirAngle];
             // update the running man
             [self updateAnimationwithcadence:nCadence];
             // draw on the map
@@ -270,6 +354,9 @@ int16_t xmin, xmax, ymin, ymax;
 
 -(void) updateAnimationwithcadence:(int) nCadence
 {
+    
+    dispatch_async(dispatch_get_main_queue(),
+                   ^{
     if(abs(nCadence - nLastCadence) > 6)
     {
         [self stopAnimation];
@@ -281,6 +368,7 @@ int16_t xmin, xmax, ymin, ymax;
         nLastCadence = nCadence;
         
     }
+                   });
     
 }
 
@@ -296,9 +384,14 @@ int16_t xmin, xmax, ymin, ymax;
 
 -(void) updateLabelsWithCadence:(int)nCadence count:(int)nStepCount headingAngle:(float) f_DirAngle
 {
+    dispatch_async(dispatch_get_main_queue(),
+                   ^{
     _steps_lbl.text = [NSString stringWithFormat:@"%d",nStepCount];
     _cadense_lbl.text = [NSString stringWithFormat:@"%d",nCadence];
     _headingAngle_lbl.text = [NSString stringWithFormat:@"%.1f",f_DirAngle];
+                       
+        [geoPointCompass updateCompasswithDegress:f_DirAngle];
+                   });
     
 }
 
@@ -382,7 +475,7 @@ int16_t xmin, xmax, ymin, ymax;
 {
     CGPoint pt = [graphPoints[index] CGPointValue];
     
-   // NSLog(@"X[%d] Y[%d]  is (%d, %d)",index,index,pt.x,pt.y);
+   NSLog(@"X[%d] Y[%d]  is (%f, %f)",index,index,pt.x,pt.y);
     if(fieldEnum == CPTScatterPlotFieldX)
     {
         return [NSNumber numberWithFloat:pt.x];
@@ -396,17 +489,28 @@ int16_t xmin, xmax, ymin, ymax;
 
 -(void) updateMapwithWalking:(float) angle steps:(int)nStepCount ts:(NSUInteger) ts
 {
+    angle = 0 - angle;
+    
+ 
+    
+    dispatch_async(dispatch_get_main_queue(),
+   ^{
+   if((nStepCount - nLastSteps) == 0)
+   {
+       NSLog(@"Received the same stepCount again, not processing this...");
+       return;
+   }
     int nLen = nStepCount - nLastSteps;
     //calculate the endpoint
     
-    angle = 0 - angle;
+    
     CGPoint endPoint = [self getEndPointforangle:DegreesToRadians( angle ) length:nLen startpoint:startpoint];
     
     CPTGraph *graph = _hostView.hostedGraph;
     
     CPTXYPlotSpace* plotSpace = (CPTXYPlotSpace*) graph.defaultPlotSpace;
     
-    int nfactor = 2;
+    int nfactor = 3;
     
     if(endPoint.x < xmin)
     {
@@ -439,11 +543,15 @@ int16_t xmin, xmax, ymin, ymax;
     }
     
     [graphPoints addObject:[NSValue valueWithCGPoint:endPoint]];
+                       NSLog(@"Startpoint: %f, %f Endpoint: %f, %f",startpoint.x,startpoint.y,endPoint.x,endPoint.y);
+                       
+                       startpoint = endPoint;
     [graph reloadData];
+       
+    nLastSteps = nStepCount;
     
-    NSLog(@"Startpoint: %.0f, %.0f Endpoint: %.0f, %0f",startpoint.x,startpoint.y,endPoint.x,endPoint.y);
     
-    startpoint = endPoint;
+   });
     
 }
 

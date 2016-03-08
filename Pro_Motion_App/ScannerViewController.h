@@ -19,9 +19,10 @@
 }
 
 @property (nonatomic, retain) NSArray *arrayOriginal;
-@property (nonatomic, retain) NSMutableArray *arForTable;
+//@property (nonatomic, retain) NSMutableArray *arForTable;
 
-@property (strong, nonatomic) CBCentralManager *bluetoothManager;
+
+
 @property (weak, nonatomic) IBOutlet UITableView *devicesTable;
 @property (weak, nonatomic) IBOutlet UIButton *start_stop_scanning_lbl;
 
@@ -52,6 +53,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *btn_EulerAngles;
 
 @property (weak, nonatomic) IBOutlet UIButton *btn_external_force;
+
+-(void) readFilterSettings;
 
 
 

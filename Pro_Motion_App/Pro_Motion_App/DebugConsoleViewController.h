@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreBluetooth/CoreBluetooth.h>
-#import "Pro_Motion_App-Bridging-Header.h"
-#import "Pro_Motion_App-Swift.h"
 #import "DataSimulator.h"
 #import <MessageUI/MessageUI.h>
 

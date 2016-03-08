@@ -9,6 +9,12 @@
 import Cocoa
 import CoreBluetooth
 
+import "Neblina-Bridging-Header.h"
+
+#import "neblina.h"
+#import "FusionEngineDataTypes.h"
+
+
 struct NebDevice {
 	let id : UInt64
 	let peripheral : CBPeripheral

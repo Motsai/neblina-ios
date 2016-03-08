@@ -7,10 +7,11 @@
 //
 
 #import "IMUStreamViewController.h"
-#import "neblina.h"
-#import "FusionEngineDataTypes.h"
-#import "Pro_Motion_App-Swift.h"
-#import "DataSimulator.h"
+#import "ViewController.h"
+//#import "neblina.h"
+//#import "FusionEngineDataTypes.h"
+//#import "Pro_Motion_App-Swift.h"
+//#import "DataSimulator.h"
 
 @implementation IMUStreamViewController
 {
@@ -31,8 +32,8 @@
     [pktData getBytes:&tmstamp range:NSMakeRange(4,4)];
     tmstamp = (int32_t)CFSwapInt32HostToLittle(tmstamp);
     NSLog(@"IMUhandleData&Parse Timestamp is %d",tmstamp);
-
-
+    
+    
     // checking for MAG packet
     if(nCmd == 12)
     {
@@ -43,6 +44,66 @@
         [pktData getBytes:&mag_accel_x range:NSMakeRange(14,2)];
         [pktData getBytes:&mag_accel_y range:NSMakeRange(16,2)];
         [pktData getBytes:&mag_accel_z range:NSMakeRange(18,2)];
+        
+        
+        mag_orient_x = (int16_t)CFSwapInt16HostToLittle(mag_orient_x);
+        mag_orient_y = (int16_t)CFSwapInt16HostToLittle(mag_orient_y);
+        mag_orient_z = (int16_t)CFSwapInt16HostToLittle(mag_orient_z);
+        
+        mag_accel_x = (int16_t)CFSwapInt16HostToLittle(mag_accel_x);
+        mag_accel_y = (int16_t)CFSwapInt16HostToLittle(mag_accel_y);
+        mag_accel_z = (int16_t)CFSwapInt16HostToLittle(mag_accel_z);
+        
+        NSLog(@"%d IMU Accel is = %d, %d, %d", tmstamp,mag_accel_x,mag_accel_y,mag_accel_z);
+        NSLog(@"%d IMU Mag is = %d, %d, %d", tmstamp,mag_orient_x,mag_orient_y,mag_orient_z);
+        
+        int scalefactor = 1;
+        mag_orient_x = mag_orient_x/scalefactor;
+        mag_orient_y = mag_orient_y/scalefactor;
+        mag_orient_z = mag_orient_z/scalefactor;
+        
+        mag_accel_x = mag_accel_x/scalefactor;
+        mag_accel_y = mag_accel_y/scalefactor;
+        mag_accel_z = mag_accel_z/scalefactor;
+        
+        
+        //NSLog(@"Scaled down Accel is = %d, %d, %d", accel_x,accel_y,accel_z);
+        //NSLog(@"Scaled down Mag is = %d, %d, %d", orient_x,orient_y,orient_z);
+        
+        // update the graphs
+        [self updateGraphswithAccel_x:mag_accel_x accel_y:mag_accel_y accel_z:mag_accel_z gryro_x:mag_orient_x gyro_y:mag_orient_y gyro_z:mag_orient_z ts:tmstamp];
+        count++;
+    }
+    else
+    {
+        NSLog(@"Not a MAG packet");
+    }
+    
+}
+
+
+-(void)handleDataAndParsefortype:(UInt32)type data:(NSData*) pktData
+{
+    int nCmd = type;
+    int16_t mag_orient_x,mag_orient_y,mag_orient_z,mag_accel_x,mag_accel_y,mag_accel_z;
+    
+
+    int32_t tmstamp;
+    [pktData getBytes:&tmstamp range:NSMakeRange(0,4)];
+    tmstamp = (int32_t)CFSwapInt32HostToLittle(tmstamp);
+    NSLog(@"IMUhandleData&Parse Timestamp is %d",tmstamp);
+
+
+    // checking for MAG packet
+    if(nCmd == MAG_Data)
+    {
+        
+        [pktData getBytes:&mag_orient_x range:NSMakeRange(4,2)];
+        [pktData getBytes:&mag_orient_y range:NSMakeRange(6,2)];
+        [pktData getBytes:&mag_orient_z range:NSMakeRange(8,2)];
+        [pktData getBytes:&mag_accel_x range:NSMakeRange(10,2)];
+        [pktData getBytes:&mag_accel_y range:NSMakeRange(12,2)];
+        [pktData getBytes:&mag_accel_z range:NSMakeRange(14,2)];
         
         
         mag_orient_x = (int16_t)CFSwapInt16HostToLittle(mag_orient_x);
@@ -120,6 +181,7 @@
     leftAxis.drawGridLinesEnabled=false;
     _accel_view.xAxis.drawGridLinesEnabled = false;
     [_accel_view.xAxis setAvoidFirstLastClippingEnabled:true];
+    [_accel_view.xAxis setLabelsToSkip:4];
     
 
     _accel_view.rightAxis.enabled = false;
@@ -225,7 +287,7 @@
     leftAxis.drawGridLinesEnabled=false;
     _gyros_view.xAxis.drawGridLinesEnabled = false;
     [_gyros_view.xAxis setAvoidFirstLastClippingEnabled:true];
-    [_gyros_view.xAxis setLabelsToSkip:2];
+    [_gyros_view.xAxis setLabelsToSkip:4];
     
     _gyros_view.rightAxis.enabled = false;
     _gyros_view.autoScaleMinMaxEnabled = true;
@@ -291,6 +353,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    CAGradientLayer* bkLayer = [ViewController getbkGradient];
+    bkLayer.frame = self.view.bounds;
+    [[self.view layer] insertSublayer:bkLayer atIndex:0];
     // Do any additional setup after loading the view.
     count = 0;
     self.title = @"IMU Streaming";
@@ -308,6 +374,7 @@
     dataSimulator.delegate = self;
     //[dataSimulator start];
     [self updateLoggingBtnStatus];
+    //[self selectDatastream];
     
     // if logging stopped, lets plot the last 200 points on the graph
     if([dataSimulator isLoggingStopped])
@@ -325,6 +392,17 @@
     }
 }
 
+-(void) selectDatastream
+{
+    [dataSimulator.neblina_dev SendCmdQuaternionStream:FALSE];
+    [dataSimulator.neblina_dev SendCmdPedometerStream:FALSE];
+    [dataSimulator.neblina_dev SendCmdEulerAngleStream:FALSE];
+     [dataSimulator.neblina_dev SendCmdExternalForceStream:FALSE];
+    [dataSimulator.neblina_dev SendCmdMotionStream:FALSE];
+    [dataSimulator.neblina_dev SendCmdSixAxisIMUStream:FALSE];
+    [dataSimulator.neblina_dev SendCmdMagStream:TRUE];
+}
+
 -(void) viewWillDisappear:(BOOL)animated
 {
     //[dataSimulator pause];
@@ -334,6 +412,9 @@
 
 -(void)updateGraphswithAccel_x:(float)a_x accel_y:(float)a_y accel_z:(float)a_z gryro_x:(float)g_x gyro_y:(float)g_y gyro_z:(float)g_z ts:(NSUInteger) ts
 {
+    dispatch_async(dispatch_get_main_queue(),^
+                   {
+    
     // update the accel graph data sets
     LineChartData* data_accel = [_accel_view data];
     LineChartDataSet* set_accel_x = [[data_accel dataSets] objectAtIndex:0];
@@ -374,6 +455,7 @@
 
         
     }
+                   });
 }
 
 

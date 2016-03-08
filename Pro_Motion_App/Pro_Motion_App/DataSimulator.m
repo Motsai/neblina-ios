@@ -7,11 +7,6 @@
 //
 
 #import "DataSimulator.h"
-#import "neblina.h"
-#import "FusionEngineDataTypes.h"
-#import "Pro_Motion_App-Swift.h"
-
-
 
 
 @implementation DataSimulator
@@ -31,6 +26,10 @@ NSFileHandle *myHandle;
 NSMutableData* tempFilterData;
 int nPktSize = sizeof(Fusion_DataPacket_t)+sizeof(NEB_PKTHDR);
 
+CBPeripheral* connPeri;
+
+//static NSMutableArray *arForTable;
+
 
 
 + (DataSimulator*)sharedInstance
@@ -41,15 +40,142 @@ int nPktSize = sizeof(Fusion_DataPacket_t)+sizeof(NEB_PKTHDR);
     // 2
     static dispatch_once_t oncePredicate;
     
+    
     // 3
     dispatch_once(&oncePredicate, ^{
         _sharedInstance = [[DataSimulator alloc] init];
         _mutable_packet_Data = [[NSMutableData alloc] init];
         tempFilterData = [[NSMutableData alloc] init];
         
+        //arForTable = [[NSMutableArray alloc] init];
+      
     });
     return _sharedInstance;
 }
+
+-(void) setNeblinaperipheral:(CBPeripheral*) obj
+{
+    
+    _neblina_dev = [[Neblina alloc] init];
+    connPeri = obj;
+    [_neblina_dev setPeripheral:obj];
+    _neblina_dev.delegate = self;
+    
+    [self start];
+    //return _mutable_packet_Data;
+    //return filtered_packet_Data;
+}
+
+//-(NSMutableArray*) getSensorsArray
+//{
+//    return arForTable;
+//}
+
+- (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
+{
+    NSLog(@"DataManager - Connected to Peripheral");
+    //[peripheral discoverServices:nil];
+    
+    
+}
+- (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
+{
+    NSLog(@"DataManager - Peripheral disconnected");
+}
+
+-(void)didConnectNeblina
+{
+    NSLog(@"DataManager - Peripheral connected");
+    // Enable the streams as per the settings
+    
+   dispatch_async(dispatch_get_main_queue(), ^{
+       if(self.scanner)
+           [self.scanner readFilterSettings];
+   });
+    
+    // Enable all streams
+    //[_neblina_dev setPeripheral:connPeri];
+     //_neblina_dev.delegate = self;
+    
+    //[self start];
+    
+    
+//    [self.neblina_dev SendCmdQuaternionStream:1];
+//    [self.neblina_dev SendCmdSixAxisIMUStream:1];
+//    
+//    [self.neblina_dev SendCmdEulerAngleStream:1];
+//    
+//    [self.neblina_dev SendCmdExternalForceStream:1];
+//    
+//    [self.neblina_dev SendCmdPedometerStream:1];
+//    
+//    [self.neblina_dev SendCmdTrajectoryRecord:1];
+//    
+//    [self.neblina_dev SendCmdTrajectoryInfo:1];
+//    
+//    [self.neblina_dev SendCmdMagStream:1];
+//    
+//    [self.neblina_dev SendCmdMotionStream:1];
+    //    [self.neblina_dev SendCmdFlashRecord:1];
+    //
+    //    [self.neblina_dev SendCmdLockHeading:1];
+    
+
+    
+}
+
+- (void)didReceiveFusionData:(int32_t)type data:(Fusion_DataPacket_t)data errFlag:(BOOL)errFlag
+{
+    
+  //  NSLog(@"DM - Received Fusion data");
+    
+    Byte single_header[sizeof(NEB_PKTHDR)];
+    single_header[0] = 0;
+    single_header[1] = 0;
+    single_header[2] = 0;
+    single_header[3] = type;
+    
+    // If logging is started, then only do this, else ignore the packets
+   
+    if(timer_fired)
+    {
+    
+    
+        [_mutable_packet_Data appendBytes:single_header length:sizeof(NEB_PKTHDR)];
+        [_mutable_packet_Data appendData:[NSData dataWithBytes:&data length:sizeof(Fusion_DataPacket_t)]];
+        
+        // Writing data to DataLogger File
+        
+        NSData *data1 = [[NSData alloc] initWithBytes:single_header length:sizeof(NEB_PKTHDR)];
+        NSData *data2 = [NSData dataWithBytes:&data length:sizeof(Fusion_DataPacket_t)];
+        
+        if(![[NSFileManager defaultManager] fileExistsAtPath:appFile_path])
+        {
+            [[NSFileManager defaultManager] createFileAtPath:appFile_path contents:nil attributes:nil];
+            [data1 writeToFile:appFile_path atomically:YES];
+            [data2 writeToFile:appFile_path atomically:YES];
+            
+        }
+        else
+        {
+            myHandle = [NSFileHandle fileHandleForWritingAtPath:appFile_path];
+            [myHandle seekToEndOfFile];
+            [myHandle writeData:data1];
+            [myHandle writeData:data2];
+            
+            //[myHandle closeFile];
+        }
+    
+        if(_delegate)
+        {
+            [_delegate handleDataAndParsefortype:type data:[NSData dataWithBytes:&data length:(sizeof(Fusion_DataPacket_t))]];
+            //[_delegate handleDataAndParse:[NSData dataWithBytes:single_packet1 length:nPktSize]];
+        }
+    }
+     //sleep(1);
+}
+
+
 
 -(NSMutableData*) getReceivedPackets
 {
@@ -59,7 +185,7 @@ int nPktSize = sizeof(Fusion_DataPacket_t)+sizeof(NEB_PKTHDR);
 
 -(void)timerFireMethod
 {
- //   NSLog(@"Count = %lu = %lu", (unsigned long)count, deactivate_var);
+    //NSLog(@"Count = %lu = %lu", (unsigned long)count, deactivate_var);
     
     if (count == deactivate_var)
     {
@@ -128,16 +254,16 @@ int nPktSize = sizeof(Fusion_DataPacket_t)+sizeof(NEB_PKTHDR);
      */
     
     [self createLoggerFile];
-    [self reset];
-    
-    // Read Data File
-    NSString *path = [[NSBundle mainBundle] pathForResource:filename ofType:@"bin"];//put the path to your file here
-    fileData = [NSData dataWithContentsOfFile: path];
-    length = [fileData length];
-    NSLog(@"Length = %lu", (unsigned long)length);
-    
-    deactivate_var = length/nPktSize;
-    [self start];
+//    [self reset];
+//    
+//    // Read Data File
+//    NSString *path = [[NSBundle mainBundle] pathForResource:filename ofType:@"bin"];//put the path to your file here
+//    fileData = [NSData dataWithContentsOfFile: path];
+//    length = [fileData length];
+//    NSLog(@"Length = %lu", (unsigned long)length);
+//    
+//    deactivate_var = length/nPktSize;
+//    [self start];
 }
 
 -(NSData *) getPacketAt:(int) i
@@ -183,7 +309,7 @@ int nPktSize = sizeof(Fusion_DataPacket_t)+sizeof(NEB_PKTHDR);
     if(timer_fired)
     {
         timer_fired = FALSE;
-        [timer invalidate];
+        //[timer invalidate];
     }
     
 }
@@ -193,7 +319,7 @@ int nPktSize = sizeof(Fusion_DataPacket_t)+sizeof(NEB_PKTHDR);
     if(!timer_fired)
     {
         timer_fired = TRUE;
-        timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timerFireMethod) userInfo:nil repeats:YES];
+        //timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timerFireMethod) userInfo:nil repeats:YES];
     }
 }
 

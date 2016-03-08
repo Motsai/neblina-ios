@@ -14,8 +14,12 @@
 @property (strong, nonatomic) CBPeripheral* peripheral;
 @property (assign, nonatomic) int RSSI;
 @property (nonatomic) BOOL isConnected;
+@property UInt64 id;
 
 + (ScannedPeripheral*) initWithPeripheral:(CBPeripheral*)peripheral rssi:(int)RSSI isPeripheralConnected:(BOOL)isConnected;
+-(void)setDict:(NSDictionary*) advData;
+-(NSDictionary*) getDict;
+
 
 - (NSString*) name;
 

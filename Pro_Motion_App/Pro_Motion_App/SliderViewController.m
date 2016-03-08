@@ -11,6 +11,7 @@
 #import "ViewController.h"
 #import "DebugConsoleViewController.h"
 #import "ScannerViewController.h"
+#import "ViewController.h"
 
 @implementation SliderViewController
 
@@ -72,12 +73,27 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     cell.textLabel.text = mutable_array[indexPath.row];
+    
+    CAGradientLayer* bkLayer = [ViewController getbkGradient];
+    bkLayer.frame = cell.bounds;
+    UIView* backView = [[UIView alloc] initWithFrame:cell.bounds];
+    //let backgroundView = UIView(frame: sender.tableView.bounds)
+    [[backView layer] insertSublayer:bkLayer atIndex:0];
+    //cell.backgroundView = backView;
+    
+    
+    UIView* backSelView = [[UIView alloc] initWithFrame:cell.bounds];
+    //let backgroundView = UIView(frame: sender.tableView.bounds)
+    backSelView.backgroundColor = [UIColor colorWithRed:(0/255.0)  green:(85/255.0)  blue:(140/255.0)  alpha:0.5];
+    [cell setSelectedBackgroundView:backSelView];
 
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    
     if (indexPath.row == 0)
     {
         ViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerdentifire"];
