@@ -55,6 +55,9 @@ static NSDictionary* lastadvData;
 {
     [super viewDidLoad];
     
+    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(doneClicked)];
+    self.navigationItem.rightBarButtonItem = rightBarButton;
+    
     CAGradientLayer* bkLayer = [ViewController getbkGradient];
     bkLayer.frame = self.devicesTable.bounds;
     UIView* backView = [[UIView alloc] initWithFrame:self.devicesTable.bounds];
@@ -97,10 +100,16 @@ static NSDictionary* lastadvData;
     //[self readFilterSettings];
 }
 
+- (IBAction)doneClicked {
+    // pop a view
+    [self.navigationController popViewControllerAnimated:YES];
+    
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self saveFilterSettings];
+    //[self saveFilterSettings];
    // [self scanForPeripherals:NO];
     [bluetoothManager stopScan];
    // [arForTable removeAllObjects];
@@ -725,7 +734,7 @@ static NSDictionary* lastadvData;
     
 }
 
-
+// Tag = 1 means disabled
 -(void)updateBtn:(UIButton*)sender withSpinner:(BOOL) bWithSpinner
 {
     Neblina *neblina_obj = dm.neblina_dev;
@@ -741,10 +750,12 @@ static NSDictionary* lastadvData;
     }
     NSLog(@"Sender tag is %d",sender.tag);
     
+    
     if([sender.titleLabel.text isEqualToString:@"Quaternion"])
     {
         (sender.tag ==1) ? (b_filterquaternion = true):(b_filterquaternion = false);
         [neblina_obj SendCmdQuaternionStream:(sender.tag ==1)?0:1];
+        [self saveFilterSetting:@"g_filterquaternion" value:b_filterquaternion];
 
     }
     else if ([sender.titleLabel.text isEqualToString:@"9 Axis IMU"])
@@ -752,34 +763,42 @@ static NSDictionary* lastadvData;
         (sender.tag ==1) ? (b_filter9axis = true):(b_filter9axis = false);
         
         [neblina_obj SendCmdSixAxisIMUStream:(sender.tag ==1)?0:1];
+        [self saveFilterSetting:@"g_filter9axis" value:b_filter9axis];
     }
     else if ([sender.titleLabel.text isEqualToString:@"Euler Angles"])
     {
         (sender.tag ==1) ? (b_filtereuler = true):(b_filtereuler = false);
        
         [neblina_obj SendCmdEulerAngleStream:(sender.tag ==1)?FALSE:TRUE];
+        [self saveFilterSetting:@"g_filtereuler" value:b_filtereuler];
     }
     else if ([sender.titleLabel.text isEqualToString:@"External Force"])
     {
         (sender.tag ==1) ? (b_filterexternal = true):(b_filterexternal = false);
        
         [neblina_obj SendCmdExternalForceStream:(sender.tag ==1)?0:1];
+        [self saveFilterSetting:@"g_filterexternal" value:b_filterexternal];
     }
     else if ([sender.titleLabel.text isEqualToString:@"Pedometer"])
     {
         (sender.tag ==1) ? (b_filterpedometer = true):(b_filterpedometer = false);
         [neblina_obj SendCmdPedometerStream:(sender.tag ==1)?0:1];
+        [self saveFilterSetting:@"g_filterpedometer" value:b_filterpedometer];
+        
     }
     else if ([sender.titleLabel.text isEqualToString:@"Trajectory"])
     {
         (sender.tag ==1) ? (b_filtertrajectory = true):(b_filtertrajectory = false);
        
         [neblina_obj SendCmdTrajectoryRecord:(sender.tag ==1)?0:1];
+        [self saveFilterSetting:@"g_filtertrajectory" value:b_filtertrajectory];
+        
     }
     else if ([sender.titleLabel.text isEqualToString:@"Trajectory Distance"])
     {
         (sender.tag ==1) ? (b_filtertrajdistance = true):(b_filtertrajdistance = false);
         [neblina_obj SendCmdTrajectoryInfo:(sender.tag ==1)?0:1];
+        [self saveFilterSetting:@"g_filtertrajdistance" value:b_filtertrajdistance];
        
     }
     
@@ -787,12 +806,14 @@ static NSDictionary* lastadvData;
     {
         (sender.tag ==1) ? (b_filtermagnetometer = true):(b_filtermagnetometer = false);
         [neblina_obj SendCmdMagStream:(sender.tag ==1)?0:1];
+         [self saveFilterSetting:@"g_filtermagnetometer" value:b_filtermagnetometer];
        
     }
     else if ([sender.titleLabel.text isEqualToString:@"Motion"])
     {
         (sender.tag ==1) ? (b_filtermotion = true):(b_filtermotion = false);
         [neblina_obj SendCmdMotionStream:(sender.tag ==1)?0:1];
+        [self saveFilterSetting:@"g_filtermotion" value:b_filtermotion];
         
     }
     else if ([sender.titleLabel.text isEqualToString:@"Record"])
@@ -800,12 +821,14 @@ static NSDictionary* lastadvData;
         (sender.tag ==1) ? (b_filterrecord = true):(b_filterrecord = false);
        
         [neblina_obj SendCmdFlashRecord:(sender.tag ==1)?0:1];
+        [self saveFilterSetting:@"g_filterrecord" value:b_filterrecord];
     }
     else if ([sender.titleLabel.text isEqualToString:@"Heading"])
     {
         (sender.tag ==1) ? (b_filterheading = true):(b_filterheading = false);
         
         [neblina_obj SendCmdLockHeading:(sender.tag ==1)?0:1];
+        [self saveFilterSetting:@"g_filterheading" value:b_filterheading];
         
     }
     
@@ -854,9 +877,10 @@ static NSDictionary* lastadvData;
 -(IBAction)OptionSwitched:(UIButton*)sender
 {
     [self updateBtn:sender withSpinner:true];
+   // [self saveFilterSettings];
+    
     
 }
-
 
 
 -(void) saveFilterSettings
@@ -878,9 +902,45 @@ static NSDictionary* lastadvData;
     [defaults synchronize];
     
 }
+
+-(void) saveFilterSetting:(NSString *)settingName value:(BOOL) bValue
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:bValue forKey:settingName];
+    [defaults synchronize];
+    
+}
+
 - (IBAction)refreshSettings:(id)sender {
     [self readFilterSettings];
 }
+
+
+-(void)updateBtn:(UIButton*)sender withState:(BOOL) bEnable
+{
+    NSLog(@"Sender tag is %d",sender.tag);
+    
+    if(sender.tag == 1)
+    {
+        sender.tag = 2;
+        [sender setBackgroundColor:[UIColor colorWithRed:224.0/255.0 green:224.0/255.0 blue:224.0/255.0 alpha:1]];
+        [sender setTitleColor:[UIColor darkGrayColor] forState:normal];
+        
+        NSLog(@"%@",sender.titleLabel.text);
+        
+    }
+    else{
+        sender.tag = 1;
+        //[sender setBackgroundColor:[UIColor colorWithRed:255.0/255.0 green:96.0/255.0 blue:25.0/255.0 alpha:1]];
+        
+        [sender setBackgroundColor:[UIColor colorWithRed:0.0/255.0 green:255.0/255.0 blue:0.0/255.0 alpha:1]];
+        [sender setTitleColor:[UIColor darkGrayColor] forState:normal];
+        
+    }
+   
+    
+}
+
 
 -(void) readFilterSettings
 {
@@ -889,12 +949,8 @@ static NSDictionary* lastadvData;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     BOOL bWithSpinner = false;
     
-    
-    
-    BOOL b_Settingssaved = [defaults boolForKey:@"g_settingssaved"];
-    
-    b_filter9axis = [defaults boolForKey:@"g_filter9axis"];
-    if(b_filter9axis || !b_Settingssaved)
+    NSNumber *n_filter9axis = [defaults objectForKey:@"g_filter9axis"];
+    if(([n_filter9axis intValue] == 1) || (n_filter9axis == nil))
     {
         _btn_9_Axis.tag = 1;
     }else
@@ -902,11 +958,12 @@ static NSDictionary* lastadvData;
         _btn_9_Axis.tag = 2;
     }
     
-    [self updateBtn:_btn_9_Axis withSpinner:bWithSpinner];
+    [self updateBtn:_btn_9_Axis withState:(([n_filter9axis intValue] == 1) || (n_filter9axis == nil))? 0:1];
+    
 
     
-    b_filtereuler = [defaults boolForKey:@"g_filtereuler"];
-    if(b_filtereuler || !b_Settingssaved)
+    NSNumber *n_filtereuler = [defaults objectForKey:@"g_filtereuler"];
+    if(([n_filtereuler intValue] == 1) || (n_filtereuler == nil))
     {
         _btn_EulerAngles.tag = 1;
     }
@@ -914,11 +971,11 @@ static NSDictionary* lastadvData;
     {
         _btn_EulerAngles.tag = 2;
     }
-    [self updateBtn:_btn_EulerAngles withSpinner:bWithSpinner];
+    [self updateBtn:_btn_EulerAngles withState:(([n_filtereuler intValue] == 1) || (n_filtereuler == nil))?0:1];
     
     
-    b_filterexternal = [defaults boolForKey:@"g_filterexternal"];
-    if(b_filterexternal || !b_Settingssaved)
+    NSNumber *n_filterexternal = [defaults objectForKey:@"g_filterexternal"];
+    if(([n_filterexternal intValue] == 1) || (n_filterexternal == nil))
     {
         _btn_external_force.tag = 1;
     }
@@ -926,11 +983,11 @@ static NSDictionary* lastadvData;
     {
         _btn_external_force.tag = 2;
     }
-    [self updateBtn:_btn_external_force withSpinner:bWithSpinner];
+    [self updateBtn:_btn_external_force withState:(([n_filterexternal intValue] == 1) || (n_filterexternal == nil))?0:1];
     
     
-    b_filtermagnetometer = [defaults boolForKey:@"g_filtermagnetometer"];
-    if(b_filtermagnetometer || !b_Settingssaved)
+    NSNumber *n_filtermagnetometer = [defaults objectForKey:@"g_filtermagnetometer"];
+    if(([n_filtermagnetometer intValue] == 1) || (n_filtermagnetometer == nil))
     {
         _btn_Magnetometer.tag = 1;
     }
@@ -939,11 +996,11 @@ static NSDictionary* lastadvData;
         _btn_Magnetometer.tag = 2;
 
     }
-    [self updateBtn:_btn_Magnetometer withSpinner:bWithSpinner];
+    [self updateBtn:_btn_Magnetometer withState:(([n_filtermagnetometer intValue] == 1) || (n_filtermagnetometer == nil))?0:1];
     
     
-    b_filtermotion = [defaults boolForKey:@"g_filtermotion"];
-    if(b_filtermotion || !b_Settingssaved)
+    NSNumber *n_filtermotion = [defaults objectForKey:@"g_filtermotion"];
+    if(([n_filtermotion intValue] == 1) || (n_filtermotion == nil))
     {
         _btn_Motion.tag = 1;
     }
@@ -951,11 +1008,11 @@ static NSDictionary* lastadvData;
     {
         _btn_Motion.tag = 2;
     }
-    [self updateBtn:_btn_Motion withSpinner:bWithSpinner];
+    [self updateBtn:_btn_Motion withState:(([n_filtermotion intValue] == 1) || (n_filtermotion == nil))?0:1];
   
     
-    b_filterpedometer = [defaults boolForKey:@"g_filterpedometer"];
-    if(b_filterpedometer || !b_Settingssaved)
+    NSNumber *n_filterpedometer = [defaults objectForKey:@"g_filterpedometer"];
+    if(([n_filterpedometer intValue] == 1) || (n_filterpedometer == nil))
     {
         _btn_Pedometer.tag = 1;
     }
@@ -963,10 +1020,10 @@ static NSDictionary* lastadvData;
     {
         _btn_Pedometer.tag = 2;
     }
-    [self updateBtn:_btn_Pedometer withSpinner:bWithSpinner];
+    [self updateBtn:_btn_Pedometer withState:(([n_filterpedometer intValue] == 1) || (n_filterpedometer == nil))?0:1];
     
-    b_filterquaternion = [defaults boolForKey:@"g_filterquaternion"];
-    if(b_filterquaternion || !b_Settingssaved)
+    NSNumber *n_filterquaternion = [defaults objectForKey:@"g_filterquaternion"];
+    if(([n_filterquaternion intValue] == 1) || (n_filterquaternion == nil))
     {
         _btn_Quaternion.tag = 1;
     }
@@ -974,11 +1031,11 @@ static NSDictionary* lastadvData;
     {
         _btn_Quaternion.tag = 2;
     }
-    [self updateBtn:_btn_Quaternion withSpinner:bWithSpinner];
+    [self updateBtn:_btn_Quaternion withState:(([n_filterquaternion intValue] == 1) || (n_filterquaternion == nil))?0:1];
     
     
-    b_filterrecord = [defaults boolForKey:@"g_filterrecord"];
-    if(b_filterrecord || !b_Settingssaved)
+    NSNumber *n_filterrecord = [defaults objectForKey:@"g_filterrecord"];
+    if(([n_filterrecord intValue] == 1) || (n_filterrecord == nil))
     {
         _btn_Record.tag = 1;
     }
@@ -987,10 +1044,10 @@ static NSDictionary* lastadvData;
         _btn_Record.tag = 2;
        
     }
-    [self updateBtn:_btn_Record withSpinner:bWithSpinner];
+    [self updateBtn:_btn_Record withState:(([n_filterrecord intValue] == 1) || (n_filterrecord == nil))?0:1];
     
-    b_filtertrajdistance = [defaults boolForKey:@"g_filtertrajdistance"];
-    if(b_filtertrajdistance || !b_Settingssaved)
+    NSNumber *n_filtertrajdistance = [defaults objectForKey:@"g_filtertrajdistance"];
+    if(([n_filtertrajdistance intValue] == 1) || (n_filtertrajdistance == nil))
     {
         _btn_Traj_distance.tag = 1;
        
@@ -999,10 +1056,10 @@ static NSDictionary* lastadvData;
     {
         _btn_Traj_distance.tag = 2;
     }
-    [self updateBtn:_btn_Traj_distance withSpinner:bWithSpinner];
+    [self updateBtn:_btn_Traj_distance withState:(([n_filtertrajdistance intValue] == 1) || (n_filtertrajdistance == nil))?0:1];
     
-    b_filtertrajectory = [defaults boolForKey:@"g_filtertrajectory"];
-    if(b_filtertrajectory || !b_Settingssaved)
+    NSNumber *n_filtertrajectory = [defaults objectForKey:@"g_filtertrajectory"];
+    if(([n_filtertrajectory intValue] == 1) || (n_filtertrajectory == nil))
     {
         _btn_Trajectory.tag = 1;
         
@@ -1011,11 +1068,11 @@ static NSDictionary* lastadvData;
     {
        _btn_Trajectory.tag = 2;
     }
-    [self updateBtn:_btn_Trajectory withSpinner:bWithSpinner];
+    [self updateBtn:_btn_Trajectory withState:(([n_filtertrajectory intValue] == 1) || (n_filtertrajectory == nil))?0:1];
     
     
-    b_filterheading = [defaults boolForKey:@"g_filterheading"];
-    if(b_filterheading || !b_Settingssaved)
+    NSNumber *n_filterheading = [defaults objectForKey:@"g_filterheading"];
+    if(([n_filterheading intValue] == 1) || (n_filterheading == nil))
     {
         _btn_Heading.tag = 1;
         
@@ -1024,7 +1081,7 @@ static NSDictionary* lastadvData;
     {
         _btn_Heading.tag = 2;
     }
-    [self updateBtn:_btn_Heading withSpinner:bWithSpinner];
+    [self updateBtn:_btn_Heading withState:(([n_filterheading intValue] == 1) || (n_filterheading == nil))?0:1];
     
 }
 

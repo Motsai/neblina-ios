@@ -69,6 +69,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="gC4-xX-FZL"/>
                     <connections>
                         <outlet property="tbl_view" destination="ShZ-ug-qrB" id="2Pv-dK-v4l"/>
                         <segue destination="uCi-tR-bVe" kind="custom" identifier="" id="dvm-nx-jeL"/>
@@ -363,7 +364,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button" image="Refresh-icon1.png"/>
                                 <connections>
-                                    <action selector="refreshSettings:" destination="uCi-tR-bVe" eventType="touchUpInside" id="mgi-rX-wB4"/>
+                                    <action selector="doneClicked" destination="uCi-tR-bVe" eventType="touchUpInside" id="y56-9v-pMc"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -552,6 +553,19 @@
                                     <action selector="startstopLogging:" destination="bCH-y7-g3L" eventType="touchUpInside" id="dqj-FC-KP0"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="SGs-1b-3o5">
+                                <rect key="frame" x="400" y="662" width="354" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="22"/>
+                                <state key="normal" title="Connect">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="ConnectDevices:" destination="IbR-ym-acK" eventType="touchUpInside" id="ZcE-Cu-Pmw"/>
+                                    <segue destination="uCi-tR-bVe" kind="push" id="1z1-oa-ZB0"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -665,7 +679,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" id="w7V-2h-zIK" customClass="CPTGraphHostingView">
-                                <rect key="frame" x="43" y="552" width="694" height="443"/>
+                                <rect key="frame" x="43" y="552" width="694" height="391"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -685,6 +699,19 @@
                                 <rect key="frame" x="43" y="120" width="287" height="253"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="bH1-hb-Zb1">
+                                <rect key="frame" x="213" y="951" width="354" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="22"/>
+                                <state key="normal" title="Connect">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="ConnectDevices:" destination="IbR-ym-acK" eventType="touchUpInside" id="83v-lw-z3W"/>
+                                    <segue destination="uCi-tR-bVe" kind="push" id="PbA-LE-eX9"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -781,7 +808,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hvZ-MO-4HW">
-                                <rect key="frame" x="207" y="936" width="354" height="60"/>
+                                <rect key="frame" x="44" y="936" width="318" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="22"/>
@@ -804,6 +831,19 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="QCz-6q-9vq">
+                                <rect key="frame" x="400" y="936" width="318" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="22"/>
+                                <state key="normal" title="Connect">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="ConnectDevices:" destination="IbR-ym-acK" eventType="touchUpInside" id="m2t-3B-pPN"/>
+                                    <segue destination="uCi-tR-bVe" kind="push" id="KXT-GR-70i"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -865,7 +905,7 @@
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="SzL-a2-eMX">
-                                <rect key="frame" x="207" y="946" width="354" height="60"/>
+                                <rect key="frame" x="207" y="944" width="354" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="22"/>
@@ -1067,19 +1107,6 @@
                                     <segue destination="n7i-Fi-9bx" kind="push" identifier="IMUIdentifire" id="eBM-AD-6l3"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="jFU-Dn-wpg">
-                                <rect key="frame" x="402" y="847" width="354" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="22"/>
-                                <state key="normal" title="Connect">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="ConnectDevices:" destination="IbR-ym-acK" eventType="touchUpInside" id="A5P-WO-WPA"/>
-                                    <segue destination="uCi-tR-bVe" kind="push" id="eOm-q9-7c7"/>
-                                </connections>
-                            </button>
                             <view opaque="NO" contentMode="scaleToFill" id="uvj-Vf-ulY">
                                 <rect key="frame" x="20" y="69" width="736" height="87"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1229,6 +1256,19 @@
                                 </state>
                                 <connections>
                                     <action selector="sendLogfile:" destination="IbR-ym-acK" eventType="touchUpInside" id="qaY-lj-njp"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="jFU-Dn-wpg">
+                                <rect key="frame" x="402" y="847" width="354" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.33333333329999998" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="22"/>
+                                <state key="normal" title="Connect">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="ConnectDevices:" destination="IbR-ym-acK" eventType="touchUpInside" id="A5P-WO-WPA"/>
+                                    <segue destination="uCi-tR-bVe" kind="push" id="eOm-q9-7c7"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -1394,6 +1434,6 @@
         <image name="ms_menu.png" width="21" height="19"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="dvm-nx-jeL"/>
+        <segue reference="PbA-LE-eX9"/>
     </inferredMetricsTieBreakers>
 </document>

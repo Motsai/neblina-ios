@@ -28,6 +28,7 @@ int16_t xf = 0;
 int16_t yf = 0;
 int16_t zf = 0;
 NSData* lastPacket;
+BOOL bIgnoreEuler;
 
 
 
@@ -94,11 +95,14 @@ NSData* lastPacket;
         [self handleDataAndParse:lastPacket];
     }
     
+    bIgnoreEuler = NO;
+    
 }
 
 -(void) viewWillDisappear:(BOOL)animated
 {
     dataSim1.delegate = nil;
+    bIgnoreEuler = NO;
 }
 
 -(void)handleDataAndParsefortype:(UInt32)type data:(NSData*)pktData
@@ -147,6 +151,7 @@ NSData* lastPacket;
             break;
             
         case Quaternion: // Quaternion data
+            bIgnoreEuler = YES;
             [pktData getBytes:&q0 range:NSMakeRange(4,2)];
             [pktData getBytes:&q1 range:NSMakeRange(6,2)];
             [pktData getBytes:&q2 range:NSMakeRange(8,2)];
@@ -182,34 +187,36 @@ NSData* lastPacket;
             break;
             
         case EulerAngle: // Euler
-            [pktData getBytes:&yaw range:NSMakeRange(4,2)];
-            [pktData getBytes:&pitch range:NSMakeRange(6,2)];
-            [pktData getBytes:&roll range:NSMakeRange(10,2)];
+            if(bIgnoreEuler == NO)
+            {
+                [pktData getBytes:&yaw range:NSMakeRange(4,2)];
+                [pktData getBytes:&pitch range:NSMakeRange(6,2)];
+                [pktData getBytes:&roll range:NSMakeRange(10,2)];
+                
+                yaw = (int16_t)CFSwapInt16HostToLittle(yaw);
+                pitch = (int16_t)CFSwapInt16HostToLittle(pitch);
+                roll = (int16_t)CFSwapInt16HostToLittle(roll);
+                
+                float f_xrot = (float)yaw / 10.0;
+                float f_yrot = (float)pitch / 10.0;
+                float f_zrot = (float)roll / 10.0;
+                
+                
+                NSLog(@"Euler data Yaw = %f, pitch = %f, Roll = %f", f_xrot,f_yrot,f_zrot);
+                
+                [SCNTransaction begin];
+                [SCNTransaction setDisableActions:YES];
+                
+                _viewpoint1.scene.rootNode.eulerAngles = SCNVector3Make(GLKMathDegreesToRadians(180) - GLKMathDegreesToRadians(f_yrot), GLKMathDegreesToRadians(f_xrot), GLKMathDegreesToRadians(180) - GLKMathDegreesToRadians(f_zrot));
+                
+                _viewpoint2.scene.rootNode.eulerAngles = SCNVector3Make(GLKMathDegreesToRadians(180) - GLKMathDegreesToRadians(f_yrot), GLKMathDegreesToRadians(f_xrot), GLKMathDegreesToRadians(180) - GLKMathDegreesToRadians(f_zrot));
+                
+                [SCNTransaction commit];
+                
+                // update the labels
+                [self updateEulerLabelswithX:f_xrot withY:f_yrot withZ:f_zrot];
             
-            yaw = (int16_t)CFSwapInt16HostToLittle(yaw);
-            pitch = (int16_t)CFSwapInt16HostToLittle(pitch);
-            roll = (int16_t)CFSwapInt16HostToLittle(roll);
-            
-            float f_xrot = (float)yaw / 10.0;
-            float f_yrot = (float)pitch / 10.0;
-            float f_zrot = (float)roll / 10.0;
-            
-            
-            NSLog(@"Euler data Yaw = %f, pitch = %f, Roll = %f", f_xrot,f_yrot,f_zrot);
-            
-            [SCNTransaction begin];
-            [SCNTransaction setDisableActions:YES];
-            
-            _viewpoint1.scene.rootNode.eulerAngles = SCNVector3Make(GLKMathDegreesToRadians(180) - GLKMathDegreesToRadians(f_yrot), GLKMathDegreesToRadians(f_xrot), GLKMathDegreesToRadians(180) - GLKMathDegreesToRadians(f_zrot));
-            
-            _viewpoint2.scene.rootNode.eulerAngles = SCNVector3Make(GLKMathDegreesToRadians(180) - GLKMathDegreesToRadians(f_yrot), GLKMathDegreesToRadians(f_xrot), GLKMathDegreesToRadians(180) - GLKMathDegreesToRadians(f_zrot));
-            
-            [SCNTransaction commit];
-            
-            // update the labels
-            [self updateEulerLabelswithX:f_xrot withY:f_yrot withZ:f_zrot];
-            
-            
+            }
             break;
             
         case ExtForce: // Ext Force

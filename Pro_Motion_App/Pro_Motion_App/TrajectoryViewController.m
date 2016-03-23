@@ -228,7 +228,7 @@ static int ii = 0;
 
 -(void)handleDataAndParsefortype:(UInt8)type data:(NSData*)pktData
 {
-    if( ii < 2)
+    if( ii < 3)
     {
         ii++;
         return;
@@ -299,7 +299,7 @@ static int ii = 0;
                     if(bRecordStarted == YES)
                     {
                 
-                        CGPoint pt_1 = CGPointMake(pt.x*20+200, pt.y*20+200);
+                        CGPoint pt_1 = CGPointMake(pt.x*20+250, pt.y*20+200);
                         NSLog(@"BOX Position is = %f, %f ", pt_1.x,pt_1.y );
                         const char *encoding = @encode(CGPoint);
                         //[graphicsView.interpolationPoints addObject:[NSValue valueWithBytes:&pt_1 objCType:encoding]];
@@ -331,7 +331,7 @@ static int ii = 0;
                 
                     SCNVector3 pt = [box convertPosition:SCNVector3Make(box.position.x, box.position.y, box.position.z) toNode:nil];
                 
-                    CGPoint pt_1 = CGPointMake(pt.x*20+200, 200+pt.y*20);
+                    CGPoint pt_1 = CGPointMake(pt.x*20+250, 200+pt.y*20);
                     const char *encoding = @encode(CGPoint);
                     [interpolation_points1 addObject:[NSValue valueWithBytes:&pt_1 objCType:encoding]];
                
