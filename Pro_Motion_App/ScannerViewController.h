@@ -55,6 +55,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *btn_external_force;
 
 -(void) readFilterSettings;
+-(void) setBLEwithQueryStreamStatus;
+- (void)didReceiveDebugData:(int32_t)type data:(const uint8_t *)data errFlag:(BOOL)errFlag;
 
 
 

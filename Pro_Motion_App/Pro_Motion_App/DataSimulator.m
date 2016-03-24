@@ -90,7 +90,10 @@ CBPeripheral* connPeri;
     
    dispatch_async(dispatch_get_main_queue(), ^{
        if(self.scanner)
-           [self.scanner readFilterSettings];
+       {
+           //[self.scanner readFilterSettings];
+           [self.scanner setBLEwithQueryStreamStatus];
+       }
    });
     
     // Enable all streams
@@ -122,6 +125,12 @@ CBPeripheral* connPeri;
     
 
     
+}
+
+- (void)didReceiveDebugData:(int32_t)type data:(const uint8_t *)data errFlag:(BOOL)errFlag
+{
+    _debug_flagData = data[4];
+    [self.scanner didReceiveDebugData:type data:data errFlag:errFlag];
 }
 
 - (void)didReceiveFusionData:(int32_t)type data:(Fusion_DataPacket_t)data errFlag:(BOOL)errFlag

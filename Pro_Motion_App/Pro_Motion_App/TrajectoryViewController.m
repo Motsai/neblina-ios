@@ -210,8 +210,8 @@
     dataSim.delegate = self;
     
     // Stop receiving both the commands
-    [dataSim.neblina_dev SendCmdTrajectoryRecord:0];
-    [dataSim.neblina_dev SendCmdTrajectoryInfo:0];
+    //[dataSim.neblina_dev SendCmdTrajectoryRecord:0];
+    //[dataSim.neblina_dev SendCmdTrajectoryInfo:0];
     //[dataSim start];
     [self updateLoggingBtnStatus];
     
@@ -515,7 +515,7 @@ static int ii = 0;
         
         [self updateLabelswithxdelta:0.0 ydelta:0.0 zdelta:0.0 rep:0];
         
-        [dataSim.neblina_dev SendCmdTrajectoryInfo:1];
+        //[dataSim.neblina_dev SendCmdTrajectoryInfo:1];
         [dataSim.neblina_dev SendCmdTrajectoryRecord:1];
         
         bRecordStarted = YES;

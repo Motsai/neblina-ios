@@ -26,8 +26,11 @@
     
     DataSimulator* dm;
     NSIndexPath* lastIndexPath;
+    
   
 }
+
+static int8_t flagData;
 
 @synthesize devicesTable;
 @synthesize filterUUID;
@@ -124,7 +127,8 @@ static NSDictionary* lastadvData;
     [self scanForPeripherals:YES];
     
     [self.devicesTable reloadData];
-    [self readFilterSettings];
+   // [self readFilterSettings];
+    [self syncupbuttons];
     
 }
 
@@ -909,10 +913,13 @@ static NSDictionary* lastadvData;
     [defaults setBool:bValue forKey:settingName];
     [defaults synchronize];
     
+    // lets ask the status again
+    [dm.neblina_dev SendCmdEngineStatus];
+    
 }
 
 - (IBAction)refreshSettings:(id)sender {
-    [self readFilterSettings];
+    //[self readFilterSettings];
 }
 
 
@@ -941,6 +948,123 @@ static NSDictionary* lastadvData;
     
 }
 
+-(void) setBLEwithQueryStreamStatus
+{
+    
+    // Query the stream status
+    [dm.neblina_dev SendCmdControlInterface:0];
+    [dm.neblina_dev SendCmdEngineStatus];
+    
+}
+
+
+- (void)didReceiveDebugData:(int32_t)type data:(const uint8_t *)data errFlag:(BOOL)errFlag
+{
+    
+//    //all fusion engine commands
+//#define Downsample 				0x01
+//#define MotionState 			0x02
+//#define IMU_Data 				0x03
+//#define Quaternion 				0x04
+//#define EulerAngle 				0x05
+//#define ExtForce 				0x06
+//#define SetFusionType 			0x07
+//#define TrajectoryRecStartStop 	0x08
+//    //#define TrajectoryRecStop 0x09
+//#define TrajectoryInfo 			0x09
+//#define Pedometer 				0x0A
+//#define MAG_Data 				0x0B
+//#define SittingStanding			0x0C
+//#define LockHeadingRef			0x0D
+//#define SetAccRange				0x0E
+//#define DisableAllStreaming		0x0F
+//#define ResetTimeStamp 			0x10
+//    ///////////////////////////////////////////////
+//    
+
+    
+    flagData = data[4];
+    [self syncupbuttons];
+    
+    
+    
+    
+    
+    
+    
+}
+
+-(void) syncupbuttons
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        int8_t n_streamImu = (flagData & 16) >> 4;
+        NSLog(@"Imu Stream is %d",n_streamImu);
+        (n_streamImu == 1)?(_btn_9_Axis.tag = 2) : (_btn_9_Axis.tag = 1);
+        [self updateBtn:_btn_9_Axis withState:n_streamImu];
+        
+        int8_t n_streamQuat = (flagData & 8) >> 3;
+        NSLog(@"Quat Stream is %d",n_streamQuat);
+        (n_streamQuat == 1)?(_btn_Quaternion.tag = 2) : (_btn_Quaternion.tag = 1);
+        [self updateBtn:_btn_Quaternion withState:n_streamQuat];
+        
+        
+        
+        int8_t n_streamEuler = (flagData & 4) >> 2;
+        NSLog(@"Euler Stream is %d",n_streamEuler);
+        (n_streamEuler == 1)?(_btn_EulerAngles.tag = 2) : (_btn_EulerAngles.tag = 1);
+        [self updateBtn:_btn_EulerAngles withState:n_streamEuler];
+        
+        
+        int8_t n_streamExtforce = (flagData & 2) >> 1;
+        NSLog(@"ExtForce Stream is %d",n_streamExtforce);
+        (n_streamExtforce == 1)?(_btn_external_force.tag = 2) : (_btn_external_force.tag = 1);
+        [self updateBtn:_btn_external_force withState:n_streamExtforce];
+        
+        int8_t n_streamMagData = (flagData & 128) >> 7;
+        NSLog(@"MagData stream is %d",n_streamMagData);
+        (n_streamMagData == 1)?(_btn_Magnetometer.tag = 2) : (_btn_Magnetometer.tag = 1);
+        [self updateBtn:_btn_Magnetometer withState:n_streamMagData];
+        
+        
+        int8_t n_streamMotion = (flagData & 32) >> 5;
+        NSLog(@"Motion Stream is %d",n_streamMotion);
+        (n_streamMotion == 1)?(_btn_Motion.tag = 2) : (_btn_Motion.tag = 1);
+        [self updateBtn:_btn_Motion withState:n_streamMotion];
+        
+        
+        
+        int8_t n_streamPedometer = (flagData & 64) >> 6;
+        NSLog(@"Pedometer stream is %d",n_streamPedometer);
+        (n_streamPedometer == 1)?(_btn_Pedometer.tag = 2) : (_btn_Pedometer.tag = 1);
+        [self updateBtn:_btn_Pedometer withState:n_streamPedometer];
+        
+        //    i =[dm.neblina_dev getCmdIdx:NEB_CTRL_SUBSYS_MOTION_ENG cmdId:ExtForce];
+        //    int n_streamExtforce = (flagData & 8) >> 1;
+        //    NSLog(@"Imu ExtForce is %d",n_streamExtforce);
+        _btn_Record.tag = 1;
+        [self updateBtn:_btn_Record withState:0];
+        
+        
+        
+        int8_t n_streamTrajDistance = (flagData & 1);
+        NSLog(@"Traj Distance stream is %d",n_streamTrajDistance);
+        (n_streamTrajDistance == 1)?(_btn_Traj_distance.tag = 2) : (_btn_Traj_distance.tag = 1);
+        (n_streamTrajDistance == 1)?(_btn_Trajectory.tag = 2) : (_btn_Trajectory.tag = 1);
+        [self updateBtn:_btn_Traj_distance withState:n_streamTrajDistance];
+        [self updateBtn:_btn_Trajectory withState:n_streamTrajDistance];
+        
+        
+        
+        //    i =[dm.neblina_dev getCmdIdx:NEB_CTRL_SUBSYS_MOTION_ENG cmdId:ExtForce];
+        //    int n_streamExtforce = (flagData & 8) >> 1;
+        //    NSLog(@"Imu ExtForce is %d",n_streamExtforce);
+        _btn_Heading.tag = 1;
+        [self updateBtn:_btn_Heading withState:0];
+    });
+    
+
+}
 
 -(void) readFilterSettings
 {

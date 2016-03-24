@@ -33,6 +33,7 @@
 -(NSMutableData*) getReceivedPackets;
 @property (nonatomic,strong)id<DataSimulatorDelegate> delegate;
 @property (nonatomic,strong)Neblina * neblina_dev;
+@property int8_t debug_flagData;
 + (DataSimulator*)sharedInstance;
 -(void)readBinaryFile:(NSString *)filename;
 -(void)reset;
