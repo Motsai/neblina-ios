@@ -1113,8 +1113,14 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = "./framework/**";
-				HEADER_SEARCH_PATHS = "./framework/**";
+				FRAMEWORK_SEARCH_PATHS = (
+					"./framework/**",
+					"../../core-plot/**",
+				);
+				HEADER_SEARCH_PATHS = (
+					"./framework/**",
+					"../../core-plot/framework/**",
+				);
 				INFOPLIST_FILE = Pro_Motion_App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1140,8 +1146,14 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = "./framework/**";
-				HEADER_SEARCH_PATHS = "./framework/**";
+				FRAMEWORK_SEARCH_PATHS = (
+					"./framework/**",
+					"../../core-plot/**",
+				);
+				HEADER_SEARCH_PATHS = (
+					"./framework/**",
+					"../../core-plot/framework/**",
+				);
 				INFOPLIST_FILE = Pro_Motion_App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
